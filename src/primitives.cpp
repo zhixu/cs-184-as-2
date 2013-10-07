@@ -2,6 +2,159 @@
 #include <math.h>
 
 /*
+ * Vector class member functions
+ */
+Vector Vector::Vector (float u, float v, float w) {
+    
+    x = u;
+    y = v;
+    z = w;
+    a = 0; //signifies direction
+    
+}
+
+Vector Vector::operator+ (Vector v) {
+    Vector vector;
+    
+    vector.x = x + v.x;
+    vector.y = y + v.y;
+    vector.z = z + v.z;
+    
+    return vector;
+}
+
+Vector Vector::operator- (Vector v) {
+    Vector vector;
+    
+    vector.x = x - v.x;
+    vector.y = y - v.y;
+    vector.z = z - v.z;
+    
+    return vector;
+}
+
+Vector Vector::operator* (float i) {
+    Vector vector;
+    
+    vector.x = x*i;
+    vector.y = y*i;
+    vector.z = z*i;
+    
+    return vector;
+}
+
+Vector Vector::operator/ (float i) {
+    Vector vector;
+    
+    vector.x = x/i;
+    vector.y = y/i;
+    vector.z = z/i;
+    
+    return vector;
+}
+
+Vector Vector::normalize (Vector v) {
+    Vector vector;
+    
+    float distance = sqrt(x*x + y*y + z*z);
+    
+    vector.x = x/distance;
+    vector.y = y/distance;
+    vector.z = z/distance;
+
+    return vector;
+}
+
+Vector Vector::magnitude(Vector v) {
+    Vector w;
+    
+    w.x = abs(v.x);
+    w.y = abs(v.y);
+    w.z = abs(w.z);
+    
+    return w;
+}
+
+/*
+ * Point class member functions
+ */
+Point Point::Point (float u, float v, float w) {
+    
+    x = u;
+    y = v;
+    z = w;
+    a = 1; //signifies point
+    
+}
+
+Point Point::operator+ (Vector v) {
+    Point p;
+    
+    p.x = x + v.x;
+    p.y = y + v.y;
+    p.z = y + v.z;
+    
+    return p;
+}
+
+Point Point::operator- (Vector v) {
+    Point p;
+    
+    p.x = x - v.x;
+    p.y = y - v.y;
+    p.z = y - v.z;
+    
+    return p;
+}
+
+Point Point::operator- (Point p2) {
+    float u, v, w;
+    
+    u = x - p2.x;
+    v = y - p2.y;
+    w = z - p2.z;
+    
+    return Vector(u, v, w);;
+}
+
+/*
+ * Ray class member functions
+ */
+ 
+ Ray Ray::Ray (Point p, Vector v, float min, float max) {
+    
+    pos = p;
+    dir = v;
+    t_min = min;
+    t_max = max;
+    
+ }
+ 
+ /*
+ * Ray class member functions
+ */
+ 
+ Matrix Matrix::rotate() {
+ }
+ 
+ Matrix Matrix::scale() {
+ }
+ 
+ Matrix Matrix::translate() {
+ }
+ 
+ Matrix Matrix::invrotate() {
+ }
+ 
+ Matrix Matrix::invscale() {
+ }
+ 
+ Matrix Matrix::invtranslate() {
+ }
+ 
+ 
+
+/*
  * Transformation class member functions
  */
 

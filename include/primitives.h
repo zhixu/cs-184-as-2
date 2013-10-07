@@ -1,3 +1,62 @@
+class Vector {
+    public:
+        float x, y, z, a;
+        Vector(float, float, float);
+        Vector operator+ (Vector);
+        Vector operator- (Vector);
+        Vector operator* (float);
+        Vector operator/ (float);
+        Vector normalize(Vector);
+        Vector magnitude(Vector);
+        } vector;
+
+/*
+ * 
+ * Not sure if this class is actually needed--can just use vector?
+ * any ideas why a normal class is important?
+ * keeping this commented out for now.
+ * 
+ * 
+class Normal { 
+    
+        int x, y, z, a;
+    public:
+        Normal(float, float, float);
+        
+
+} normal;
+*/
+
+
+class Point {
+    public:
+        float x, y, z, a;
+        Point(float, float, float);
+        Point operator+ (Vector); //point + vector(displacement) = point (displaced)
+        Point operator- (Vector); //point - vector = point
+        Vector operator- (Point); //point - point = vector
+        
+} point;
+
+class Ray {
+        Point pos;
+        Vector dir;
+        float t_min, t_max;
+    public: 
+        Ray(point, vector, float, float); //ray constructor?
+} ray;
+
+class Matrix {
+        float mat[4][4];
+    public:
+        matrix rotate();
+        matrix scale();
+        matrix translate();
+        matrix invrotate();
+        matrix invscale();
+        matrix invtranslate();
+        
+} matrix;
 
 class Transformation {
     private:
