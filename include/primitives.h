@@ -1,12 +1,19 @@
+#ifndef PRIMITIVES_H
+#define PRIMITIVES_H
+
+
 class Vector {
     public:
         float x, y, z, a;
+        Vector();
         Vector(float, float, float);
         Vector operator+ (Vector);
         Vector operator- (Vector);
         Vector operator* (float);
         Vector operator/ (float);
         Vector normalize(Vector);
+        Vector cross(Vector, Vector);
+        float dot(Vector, Vector);
         Vector magnitude(Vector);
         };
 
@@ -31,6 +38,7 @@ class Normal {
 class Point {
     public:
         float x, y, z, a;
+        Point();
         Point(float, float, float);
         Point operator+ (Vector); //point + vector(displacement) = point (displaced)
         Point operator- (Vector); //point - vector = point
@@ -43,19 +51,28 @@ class Ray {
         Vector dir;
         float t_min, t_max;
     public: 
-        Ray(point, vector, float, float); //ray constructor?
+        Ray();
+        Ray(Point, Vector, float, float); //ray constructor?
 };
+
 
 class Matrix {
         float mat[4][4];
     public:
-        matrix rotate();
-        matrix scale();
-        matrix translate();
-        matrix invrotate();
-        matrix invscale();
-        matrix invtranslate();
+        Matrix();
+        Matrix rotate();
+        Matrix scale();
+        Matrix translate();
+        Matrix invrotate();
+        Matrix invscale();
+        Matrix invtranslate();
         
+};
+
+class LocalGeo {
+    public:
+        Point position;
+        //Normal normal;
 };
 
 class Transformation {
@@ -68,13 +85,13 @@ class Transformation {
         Vector operator* (Vector);
         Ray operator* (Ray);
         LocalGeo operator* (LocalGeo);
-        Normal operator* (Normal);
+        //Normal operator* (Normal);
 };
 
 class Color {
     public:
         float r, g, b;
-
+        Color();
         Color (float, float ,float);
         Color operator+ (Color);
         Color operator- (Color);
@@ -87,13 +104,4 @@ class Brdf {
         Color kd, ks, ka, kr;
 };
 
-class Sample {
-    public:
-        float x, y;
-};
-
-class LocalGeo {
-    public:
-        Point position;
-        Normal normal;
-};
+#endif /* PRIMITIVES_H */

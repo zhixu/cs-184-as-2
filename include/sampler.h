@@ -1,9 +1,16 @@
+#include <film.h>
+
+#ifndef SAMPLER_H
+#define SAMPLER_H
+
+
 class Sample {
     public:
         float x, y;
+        Sample();
         Sample(CameraFrame, Film);
         Sample(float, float);
-        getSample(Sample);
+        bool getSample(Sample);
 };
 
 class CameraSpec {
@@ -17,12 +24,16 @@ class CameraSpec {
 class CameraFrame {
     public:
         Vector x, y, z;
-    CameraFrame(Vector, Vector, Vector);
+    CameraFrame();
+    CameraFrame(CameraSpec);
 };
 
 class ScreenCoord {
     public:
         float step_x, step_y;
         Vector LL, UL, LR, UR;
-        ScreenCoord(CameraSpec);
+        ScreenCoord();
+        ScreenCoord(CameraSpec, Film);
 };
+
+#endif

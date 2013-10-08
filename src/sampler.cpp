@@ -1,4 +1,5 @@
 #include "sampler.h"
+#include "primitives.h"
 #include <math.h>
 
 #include <stdio.h>
@@ -9,7 +10,7 @@ ScreenCoord s;
 CameraFrame cameraf;
 Film f;
 
-CameraFrame CameraFrame::CameraFrame(CameraSpec c) {
+CameraFrame::CameraFrame(CameraSpec c) {
     
     Vector adj_v = -(c.lookAt - c.lookFrom);
     
@@ -19,10 +20,10 @@ CameraFrame CameraFrame::CameraFrame(CameraSpec c) {
 
 }
 
-ScreenCoord ScreenCoord::ScreenCoord (CameraSpec c, Film film) {
+ScreenCoord::ScreenCoord (CameraSpec c, Film film) {
     
-    double theta = fov/2;
-    float adj = magnitude(c.lookAt - c.lookFrom);
+    double theta = c.fov/2;
+    float adj = magnitude((Vector) c.lookAt - c.lookFrom);
     float halfHeight = tan(theta)*adj;
     float height = halfHeight*2;
     
@@ -39,7 +40,7 @@ ScreenCoord ScreenCoord::ScreenCoord (CameraSpec c, Film film) {
     
 }
 
-Sample (CameraSpec c, Film film) {
+Sample(CameraSpec c, Film film) {
     
     s = new ScreenCoord(c, film);
     cameraf = new CameraFrame(c);

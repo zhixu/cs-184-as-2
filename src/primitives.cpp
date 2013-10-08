@@ -4,7 +4,7 @@
 /*
  * Vector class member functions
  */
-Vector Vector::Vector (float u, float v, float w) {
+Vector::Vector (float u, float v, float w) {
     
     x = u;
     y = v;
@@ -72,6 +72,25 @@ Vector Vector::magnitude(Vector v) {
     w.y = abs(v.y);
     w.z = abs(w.z);
     
+    return w;
+}
+
+float Vector::dot(Vector u, Vector v) {
+    float w;
+    
+    w = u.x * v.x + u.y * v.y + u.z * y.z;
+    
+    return w;
+}
+
+Vector Vector::cross(Vector u, Vector v) {
+    Vector w;
+    
+    u2 = magnitude(u);
+    v2 = magnitude(v);
+    
+    float cos = dot(u, v)/(u2*v2);
+        
     return w;
 }
 
