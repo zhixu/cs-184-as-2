@@ -8,7 +8,7 @@ class Vector {
         Vector operator/ (float);
         Vector normalize(Vector);
         Vector magnitude(Vector);
-        } vector;
+        };
 
 /*
  * 
@@ -36,7 +36,7 @@ class Point {
         Point operator- (Vector); //point - vector = point
         Vector operator- (Point); //point - point = vector
         
-} point;
+};
 
 class Ray {
         Point pos;
@@ -44,7 +44,7 @@ class Ray {
         float t_min, t_max;
     public: 
         Ray(point, vector, float, float); //ray constructor?
-} ray;
+};
 
 class Matrix {
         float mat[4][4];
@@ -56,7 +56,7 @@ class Matrix {
         matrix invscale();
         matrix invtranslate();
         
-} matrix;
+};
 
 class Transformation {
     private:
@@ -69,7 +69,7 @@ class Transformation {
         Ray operator* (Ray);
         LocalGeo operator* (LocalGeo);
         Normal operator* (Normal);
-}
+};
 
 class Color {
     public:
@@ -80,20 +80,20 @@ class Color {
         Color operator- (Color);
         Color operator* (float);
         Color operator/ (float);
-}
+};
 
 class Brdf {
     public:
         Color kd, ks, ka, kr;
-}
+};
 
 class Sample {
     public:
         float x, y;
-}
+};
 
 class LocalGeo {
     public:
         Point position;
         Normal normal;
-}
+};
