@@ -1,7 +1,9 @@
 class Sample {
     public:
         float x, y;
-        get
+        Sample(CameraFrame, Film);
+        Sample(float, float);
+        getSample(Sample);
 } sample;
 
 class CameraSpec {
@@ -11,8 +13,16 @@ class CameraSpec {
         float fov;
 }
 
+//orthonormal basis for camera
+class CameraFrame {
+    public:
+        Vector x, y, z;
+    CameraFrame(Vector, Vector, Vector);
+}
+
 class ScreenCoord {
     public:
-        float UL, LL, UR, LL;
+        float step_x, step_y;
+        Vector LL, UL, LR, UR;
         ScreenCoord(CameraSpec);
 } screencoord;
