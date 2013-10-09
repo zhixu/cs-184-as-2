@@ -15,10 +15,6 @@ CameraFrame::CameraFrame(CameraSpec c) {
     
     Vector adj_v = -(c.lookAt - c.lookFrom);
     
-    Vector v = Vector(1, 2, 3);
-    
-    normalize(v);
-    
     x = normalize(cross(c.up, adj_v));
     y = normalize(c.up);
     z = normalize(adj_v);

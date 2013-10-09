@@ -53,7 +53,7 @@ class Ray {
         Vector direction;
         float t_min, t_max;
         Ray();
-        Ray(Point, Vector, float, float); //ray constructor?
+        Ray(Point, Vector, float, float);
 };
 
 
