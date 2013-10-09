@@ -6,7 +6,10 @@
 /*
  * Vector class member functions
  */
- 
+
+Vector::Vector(){
+}
+
 Vector::Vector (float u, float v, float w) {
     
     x = u;
@@ -17,75 +20,45 @@ Vector::Vector (float u, float v, float w) {
 }
 
 Vector Vector::operator- () {
-    Vector v;
-    v.x = -x;
-    v.y = -y;
-    v.z = -z;
-    
-    return v;
+    Vector* v = new Vector(-x, -y, -z);
+    return *v;
     
 }
 
-Vector Vector::operator+ (Vector v) {
-    Vector vector;
-    
-    vector.x = x + v.x;
-    vector.y = y + v.y;
-    vector.z = z + v.z;
-    
-    return vector;
+Vector Vector::operator+ (Vector& v) {
+    Vector* vector = new Vector(x + v.x,
+                                y + v.y,
+                                z + v.z);
+    return *vector;
 }
 
-Vector Vector::operator- (Vector v) {
-    Vector vector;
-    
-    vector.x = x - v.x;
-    vector.y = y - v.y;
-    vector.z = z - v.z;
-    
-    return vector;
+Vector Vector::operator- (Vector& v) {
+    Vector *vector = new Vector(x - v.x,
+                                y - v.y,
+                                z - v.z);
+    return *vector;
 }
 
 Vector Vector::operator* (float i) {
-    Vector vector;
-    
-    vector.x = x*i;
-    vector.y = y*i;
-    vector.z = z*i;
-    
-    return vector;
+    Vector* vector = new Vector(x * i, y * i, z * i);
+    return *vector;
 }
 
 Vector Vector::operator/ (float i) {
-    Vector vector;
-    
-    vector.x = x/i;
-    vector.y = y/i;
-    vector.z = z/i;
-    
-    return vector;
+    Vector* vector = new Vector(x/i, y/i, z/i);
+    return *vector;
 }
 
-Vector Vector::normalize (Vector v) {
-    Vector vector;
-    
+Vector Vector::normalize () {
     float distance = sqrt(x*x + y*y + z*z);
-    
-    vector.x = x/distance;
-    vector.y = y/distance;
-    vector.z = z/distance;
+    Vector* vector = new Vector(x/distance, y/distance, z/distance);
 
-    return vector;
+    return *vector;
 }
 
-Vector Vector::magnitude(Vector v) {
-    Vector w;
-    
-    w.x = abs(v.x);
-    w.y = abs(v.y);
-    w.z = abs(w.z);
-    
-    return w;
+Vector Vector::magnitude() {
+    Vector* w = new Vector(abs(x), abs(y), abs(z));
+    return *w;
 }
 
 float Vector::dot(Vector u, Vector v) {
@@ -96,63 +69,57 @@ float Vector::dot(Vector u, Vector v) {
     return w;
 }
 
-Vector Vector::cross(Vector a, Vector b) {
-    Vector w;
-    
-    w.x = a.y*b.z - a.z*b.y;
-    w.y = a.z*b.x - a.x*b.z;
-    w.z = a.x*b.y - a.y*b.z;
-        
-    return w;
+Vector Vector::cross(Vector& b) {
+    Vector* w = new Vector(y * b.z - z * b.y,
+                           z * b.x - x * b.z,
+                           x * b.y - y * b.z);
+    return *w;
 }
 
 /*
  * Point class member functions
  */
+Point::Point(){
+}
+
 Point::Point (float u, float v, float w) {
-    
     x = u;
     y = v;
     z = w;
     a = 1; //signifies point
-    
 }
 
-Point Point::operator+ (Vector v) {
-    Point p;
-    
-    p.x = x + v.x;
-    p.y = y + v.y;
-    p.z = y + v.z;
-    
-    return p;
+Point Point::operator+ (Vector& v) {
+    Point* p = new Point(x + v.x,
+                         y + v.y,
+                         z + v.z);
+    return *p;
 }
 
-Point Point::operator- (Vector v) {
-    Point p;
-    
-    p.x = x - v.x;
-    p.y = y - v.y;
-    p.z = y - v.z;
-    
-    return p;
+Point Point::operator- (Vector& v) {
+    Point* p = new Point(x - v.x,
+                         y - v.y,
+                         z - v.z);
+    return *p;
 }
 
-Vector Point::operator- (Point p2) {
+Vector Point::operator- (Point& p2) {
     float u, v, w;
-    
     u = x - p2.x;
     v = y - p2.y;
     w = z - p2.z;
-    
-    return Vector(u, v, w);;
+    Vector* ret = new Vector(u, v, w);
+    return *ret;
 }
 
 /*
  * Ray class member functions
  */
- 
-Ray::Ray (Point p, Vector v, float min, float max) {
+
+Ray::Ray(){
+}
+
+Ray::Ray (Point& p, Vector& v, float min, float max) {
     
     position = p;
     direction = v;
@@ -210,15 +177,15 @@ Vector Transformation::operator* (Vector& v) {
 }
 
 Ray Transformation::operator* (Ray& r) {
-    Ray result;
+    Ray* result = new Ray();
 
-    result.position = this->operator*(r.position);
-    result.direction = this->operator*(r.direction);
+    result->position = this->operator*(r.position);
+    result->direction = this->operator*(r.direction);
     // TODO: do we need to transform t_min and t_max when we transform a Ray?
-    result.t_min = r.t_min;
-    result.t_max = r.t_max;
+    result->t_min = r.t_min;
+    result->t_max = r.t_max;
 
-    return result;
+    return *result;
 }
 
 LocalGeo Transformation::operator* (LocalGeo& lg) {
