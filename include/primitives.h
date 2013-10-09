@@ -7,6 +7,7 @@ class Vector {
         float x, y, z, a;
         Vector();
         Vector(float, float, float);
+        Vector operator- ();
         Vector operator+ (Vector);
         Vector operator- (Vector);
         Vector operator* (float);
@@ -15,7 +16,7 @@ class Vector {
         Vector cross(Vector, Vector);
         float dot(Vector, Vector);
         Vector magnitude(Vector);
-        };
+};
 
 /*
  * 
@@ -47,10 +48,10 @@ class Point {
 };
 
 class Ray {
-        Point pos;
-        Vector dir;
-        float t_min, t_max;
     public: 
+        Point position;
+        Vector direction;
+        float t_min, t_max;
         Ray();
         Ray(Point, Vector, float, float); //ray constructor?
 };

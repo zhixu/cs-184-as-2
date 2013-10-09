@@ -1,17 +1,7 @@
-#include <film.h>
-
 #ifndef SAMPLER_H
 #define SAMPLER_H
 
-
-class Sample {
-    public:
-        float x, y;
-        Sample();
-        Sample(CameraFrame, Film);
-        Sample(float, float);
-        bool getSample(Sample);
-};
+#include <film.h>
 
 class CameraSpec {
     public:
@@ -28,6 +18,16 @@ class CameraFrame {
     CameraFrame(CameraSpec);
 };
 
+class Sample {
+    public:
+        float x, y;
+        Sample() { }
+        Sample(CameraSpec, CameraFrame, Film);
+        Sample(float, float);
+        bool getSample(Sample);
+};
+
+//LL, UL, LR, UR are points given in WORLD SPACE
 class ScreenCoord {
     public:
         float step_x, step_y;

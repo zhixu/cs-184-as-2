@@ -1,7 +1,8 @@
-#include "primitives.h"
-
 #ifndef FILM_H
 #define FILM_H
+
+#include "primitives.h"
+#include "sampler.h"
 
 class Film {
     private:
@@ -10,6 +11,7 @@ class Film {
         int width, height;
         Film();
         Film(int, int);
-        void commit (Sample&, Color&);
+        //void commit (Sample&, Color&);
         void write (char*);
 };
+#endif

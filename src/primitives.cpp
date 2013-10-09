@@ -1,15 +1,28 @@
 #include "primitives.h"
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 /*
  * Vector class member functions
  */
+ 
 Vector::Vector (float u, float v, float w) {
     
     x = u;
     y = v;
     z = w;
     a = 0; //signifies direction
+    
+}
+
+Vector Vector::operator- () {
+    Vector v;
+    v.x = -x;
+    v.y = -y;
+    v.z = -z;
+    
+    return v;
     
 }
 
@@ -78,18 +91,17 @@ Vector Vector::magnitude(Vector v) {
 float Vector::dot(Vector u, Vector v) {
     float w;
     
-    w = u.x * v.x + u.y * v.y + u.z * y.z;
+    w = u.x * v.x + u.y * v.y + u.z * v.z;
     
     return w;
 }
 
-Vector Vector::cross(Vector u, Vector v) {
+Vector Vector::cross(Vector a, Vector b) {
     Vector w;
     
-    u2 = magnitude(u);
-    v2 = magnitude(v);
-    
-    float cos = dot(u, v)/(u2*v2);
+    w.x = a.y*b.z - a.z*b.y;
+    w.y = a.z*b.x - a.x*b.z;
+    w.z = a.x*b.y - a.y*b.z;
         
     return w;
 }
@@ -97,7 +109,7 @@ Vector Vector::cross(Vector u, Vector v) {
 /*
  * Point class member functions
  */
-Point Point::Point (float u, float v, float w) {
+Point::Point (float u, float v, float w) {
     
     x = u;
     y = v;
@@ -126,7 +138,7 @@ Point Point::operator- (Vector v) {
     return p;
 }
 
-Point Point::operator- (Point p2) {
+Vector Point::operator- (Point p2) {
     float u, v, w;
     
     u = x - p2.x;
@@ -140,10 +152,10 @@ Point Point::operator- (Point p2) {
  * Ray class member functions
  */
  
- Ray Ray::Ray (Point p, Vector v, float min, float max) {
+Ray::Ray (Point p, Vector v, float min, float max) {
     
-    pos = p;
-    dir = v;
+    position = p;
+    direction = v;
     t_min = min;
     t_max = max;
     
