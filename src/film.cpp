@@ -1,5 +1,8 @@
 #include "film.h"
+#include "math.h"
+#include <stdlib.h>
 #include <png.h>
+#include <vector>
 
 Film::Film (int w, int h) {
     /*
@@ -10,23 +13,25 @@ Film::Film (int w, int h) {
     width = w;
     height = h;
 
-    colors = new Color*[height];
+    colors.resize(height);
     int x, y;
     for(y=0; y<height; y++){
-        colors[y] = new Color[width];
+        colors[y].resize(width, NULL);
 
         for(x=0; x<width; x++){
-            colors[y][x] = new Color(0, 0, 0);
+           colors[y][x] = new Color();
         }
     }
 }
 
-void Film::commit(Sample& sample, Color& color){
+void Film::commit(Sample* sample, Color* color){
     int x, y;
-    x = std::floor(sample->x + 0.5);
-    y = std::floor(sample->y + 0.5);
+    x = floor(sample->x + 0.5);
+    y = floor(sample->y + 0.5);
 
-    colors[x][y] = colors[x][y] + color;
+    Color newColor = *colors[x][y] + *color;
+    delete colors[x][y]; // need the old Color object anymore
+    colors[x][y] = &newColor;
 }
 
 void Film::write(char* filename){
@@ -71,9 +76,9 @@ void Film::write(char* filename){
     int x, y;
     for(y=0; y<height; y++){
         for(x=0; x<width; x++){
-            row[(3 * x) + 0] = colors[y][x].r;
-            row[(3 * x) + 1] = colors[y][x].g;
-            row[(3 * x) + 2] = colors[y][x].b;
+            row[(3 * x) + 0] = colors[y][x]->r;
+            row[(3 * x) + 1] = colors[y][x]->g;
+            row[(3 * x) + 2] = colors[y][x]->b;
         }
         png_write_row(png_ptr, row);
     }

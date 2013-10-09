@@ -58,8 +58,8 @@ class Ray {
 
 
 class Matrix {
-        float mat[4][4];
     public:
+        float mat[4][4];
         Matrix();
         Matrix rotate();
         Matrix scale();
@@ -82,10 +82,10 @@ class Transformation {
 
     public:
         // TODO: decide arguments for constructor
-        Point operator* (Point);
-        Vector operator* (Vector);
-        Ray operator* (Ray);
-        LocalGeo operator* (LocalGeo);
+        Point operator* (Point&);
+        Vector operator* (Vector&);
+        Ray operator* (Ray&);
+        LocalGeo operator* (LocalGeo&);
         //Normal operator* (Normal);
 };
 
@@ -94,8 +94,8 @@ class Color {
         float r, g, b;
         Color();
         Color (float, float ,float);
-        Color operator+ (Color);
-        Color operator- (Color);
+        Color operator+ (Color&);
+        Color operator- (Color&);
         Color operator* (float);
         Color operator/ (float);
 };

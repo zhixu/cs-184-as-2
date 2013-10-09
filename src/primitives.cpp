@@ -189,27 +189,27 @@ Ray::Ray (Point p, Vector v, float min, float max) {
  * Transformation class member functions
  */
 
-Point Transformation::operator* (Point p) {
+Point Transformation::operator* (Point& p) {
     float x, y, z;
 
-    x = m[0][0] * p.x + m[0][1] * p.y + m[0][2] * p.z;
-    y = m[1][0] * p.x + m[1][1] * p.y + m[1][2] * p.z;
-    z = m[2][0] * p.x + m[2][1] * p.y + m[2][2] * p.z;
+    x = m.mat[0][0] * p.x + m.mat[0][1] * p.y + m.mat[0][2] * p.z;
+    y = m.mat[1][0] * p.x + m.mat[1][1] * p.y + m.mat[1][2] * p.z;
+    z = m.mat[2][0] * p.x + m.mat[2][1] * p.y + m.mat[2][2] * p.z;
 
     return Point(x, y, z);
 }
 
-Vector Transformation::operator* (Vector v) {
+Vector Transformation::operator* (Vector& v) {
     float x, y, z;
 
-    x = m[0][0] * p.x + m[0][1] * p.y + m[0][2] * p.z;
-    y = m[1][0] * p.x + m[1][1] * p.y + m[1][2] * p.z;
-    z = m[2][0] * p.x + m[2][1] * p.y + m[2][2] * p.z;
+    x = m.mat[0][0] * p.x + m.mat[0][1] * p.y + m.mat[0][2] * p.z;
+    y = m.mat[1][0] * p.x + m.mat[1][1] * p.y + m.mat[1][2] * p.z;
+    z = m.mat[2][0] * p.x + m.mat[2][1] * p.y + m.mat[2][2] * p.z;
 
     return Vector(x, y, z);
 }
 
-Ray Transformation::operator* (Ray r) {
+Ray Transformation::operator* (Ray& r) {
     Ray result;
 
     result.position = this * r.position;
@@ -221,7 +221,7 @@ Ray Transformation::operator* (Ray r) {
     return result;
 }
 
-LocalGeo Transformation::operator* (LocalGeo lg) {
+LocalGeo Transformation::operator* (LocalGeo& lg) {
     LocalGeo result;
 
     result.position = this * lg.position;
@@ -230,7 +230,7 @@ LocalGeo Transformation::operator* (LocalGeo lg) {
     return result;
 }
 
-Normal Transformation::operator* (Normal n){
+Normal Transformation::operator* (Normal& n){
     float x, y, z;
 
     x = m[0][0] * p.x + m[0][1] * p.y + m[0][2] * p.z;
@@ -245,30 +245,36 @@ Normal Transformation::operator* (Normal n){
  * Color class member functions
  */
 
+Color::Color(){
+    r = 0;
+    g = 0;
+    b = 0;
+}
+
 Color::Color (float paramR, float paramG, float paramB) {
     r = paramR;
     g = paramG;
     b = paramB;
 }
 
-Color Color::operator+ (Color that) {
-    Color result;
+Color Color::operator+ (Color& that) {
+    Color* result = new Color(0, 0, 0);
 
-    result.r = fmin(r + that.r, 255.0);
-    result.g = fmin(g + that.g, 255.0);
-    result.b = fmin(b + that.b, 255.0);
+    result->r = fmin(r + that.r, 255.0);
+    result->g = fmin(g + that.g, 255.0);
+    result->b = fmin(b + that.b, 255.0);
 
-    return result;
+    return *result;
 }
 
-Color Color::operator- (Color that) {
-    Color result;
+Color Color::operator- (Color& that) {
+    Color* result = new Color(0, 0, 0);
 
-    result.r = fmax(r - that.r, 0.0);
-    result.g = fmax(g - that.g, 0.0);
-    result.b = fmax(b - that.b, 0.0);
+    result->r = fmax(r - that.r, 0.0);
+    result->g = fmax(g - that.g, 0.0);
+    result->b = fmax(b - that.b, 0.0);
 
-    return result;
+    return *result;
 }
 
 Color Color::operator* (float x) {

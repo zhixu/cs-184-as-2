@@ -1,7 +1,9 @@
 #ifndef SAMPLER_H
 #define SAMPLER_H
 
-#include <film.h>
+#include "primitives.h"
+#include "film.h"
+class Film; // need this so that g++ doesn't get confused
 
 class CameraSpec {
     public:
