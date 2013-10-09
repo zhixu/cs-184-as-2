@@ -202,9 +202,9 @@ Point Transformation::operator* (Point& p) {
 Vector Transformation::operator* (Vector& v) {
     float x, y, z;
 
-    x = m.mat[0][0] * p.x + m.mat[0][1] * p.y + m.mat[0][2] * p.z;
-    y = m.mat[1][0] * p.x + m.mat[1][1] * p.y + m.mat[1][2] * p.z;
-    z = m.mat[2][0] * p.x + m.mat[2][1] * p.y + m.mat[2][2] * p.z;
+    x = m.mat[0][0] * v.x + m.mat[0][1] * v.y + m.mat[0][2] * v.z;
+    y = m.mat[1][0] * v.x + m.mat[1][1] * v.y + m.mat[1][2] * v.z;
+    z = m.mat[2][0] * v.x + m.mat[2][1] * v.y + m.mat[2][2] * v.z;
 
     return Vector(x, y, z);
 }
@@ -212,8 +212,8 @@ Vector Transformation::operator* (Vector& v) {
 Ray Transformation::operator* (Ray& r) {
     Ray result;
 
-    result.position = this * r.position;
-    result.direction = this * r.direction;
+    result.position = this->operator*(r.position);
+    result.direction = this->operator*(r.direction);
     // TODO: do we need to transform t_min and t_max when we transform a Ray?
     result.t_min = r.t_min;
     result.t_max = r.t_max;
@@ -224,12 +224,12 @@ Ray Transformation::operator* (Ray& r) {
 LocalGeo Transformation::operator* (LocalGeo& lg) {
     LocalGeo result;
 
-    result.position = this * lg.position;
-    result.normal = this * lg.normal;
+    result.position = this->operator*(lg.position);
+    //result.normal = this->operator*(lg.normal);
 
     return result;
 }
-
+/*
 Normal Transformation::operator* (Normal& n){
     float x, y, z;
 
@@ -239,7 +239,7 @@ Normal Transformation::operator* (Normal& n){
 
     return Normal(x, y, z);
 }
-
+*/
 
 /*
  * Color class member functions
