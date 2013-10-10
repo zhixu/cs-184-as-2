@@ -56,8 +56,8 @@ Vector Vector::normalize () {
     return *vector;
 }
 
-Vector Vector::magnitude() {
-    Vector* w = new Vector(abs(x), abs(y), abs(z));
+Vector Vector::magnitude(Vector v) {
+    Vector* w = new Vector(abs(v.x), abs(v.y), abs(v.z));
     return *w;
 }
 
@@ -129,28 +129,107 @@ Ray::Ray (Point& p, Vector& v, float min, float max) {
  }
  
  /*
- * Ray class member functions
+ * Matrix class member functions
  */
  
- Matrix Matrix::rotate() {
+ Matrix::Matrix() {
  }
  
- Matrix Matrix::scale() {
+ Matrix::Matrix(float a1, float a2, float a3, float a4,
+                float b1, float b2, float b3, float b4,
+                float c1, float c2, float c3, float c4,
+                float d1, float d2, float d3, float d4) {
+                    
+                    mat[0][0] = a1;
+                    mat[0][1] = a2;
+                    mat[0][2] = a3;
+                    mat[0][3] = a4;
+                    mat[1][0] = b1;
+                    mat[1][1] = b2;
+                    mat[1][2] = b3;
+                    mat[1][3] = b4;
+                    mat[2][0] = c1;
+                    mat[2][1] = c2;
+                    mat[2][2] = c3;
+                    mat[2][3] = c4;
+                    mat[3][0] = d1;
+                    mat[3][1] = d2;
+                    mat[3][2] = d3;
+                    mat[3][3] = d4;
+
+}
+ 
+ 
+ Matrix Matrix::rotate(float x, float y, float z) {
+ 
+    Matrix* m = new Matrix (x, 0.0, 0.0, 0.0,
+                             0.0, y, 0.0, 0.0,
+                             0.0, 0.0, z, 0.0,
+                             0.0, 0.0, 0.0, 1.0);
+    
+    return *m;
+ 
  }
  
- Matrix Matrix::translate() {
+ Matrix Matrix::scale(float x, float y, float z) {
+     Matrix* m = new Matrix (x, 0.0, 0.0, 0.0,
+                             0.0, y, 0.0, 0.0,
+                             0.0, 0.0, z, 0.0,
+                             0.0, 0.0, 0.0, 1.0);
+     
+     return *m;
  }
  
- Matrix Matrix::invrotate() {
+ Matrix Matrix::translate(float x, float y, float z) {
+     Matrix* m = new Matrix (1.0, 0.0, 0.0, x,
+                             0.0, 1.0, 0.0, y,
+                             0.0, 0.0, 1.0, z,
+                             0.0, 0.0, 0.0, 1.0);
+                             
+    return *m;
  }
  
- Matrix Matrix::invscale() {
+ Matrix Matrix::invrotate(Matrix m) {
+     Matrix *n = new Matrix(mat[0][0], mat[1][0], mat[2][0], mat[3][0],
+                            mat[0][1], mat[1][1], mat[2][1], mat[3][1],
+                            mat[0][2], mat[1][2], mat[2][2], mat[3][2],
+                            mat[0][3], mat[1][3], mat[2][3], mat[3][3]);
+     
+     return *n;
  }
  
- Matrix Matrix::invtranslate() {
+ Matrix Matrix::invscale(Matrix m) {
+     
+     Matrix *n = new Matrix(1/mat[0][0], 1/mat[0][1], 1/mat[0][2], 1/mat[0][3],
+                            1/mat[1][0], 1/mat[1][1], 1/mat[1][2], 1/mat[1][3],
+                            1/mat[2][0], 1/mat[2][1], 1/mat[2][2], 1/mat[2][3],
+                            1/mat[3][0], 1/mat[3][1], 1/mat[3][2], 1/mat[3][3]);
+     return *n;
  }
  
+ Matrix Matrix::invtranslate(Matrix m) {
+     
+     Matrix *n = new Matrix(-mat[0][0], -mat[0][1], -mat[0][2], -mat[0][3],
+                            -mat[1][0], -mat[1][1], -mat[1][2], -mat[1][3],
+                            -mat[2][0], -mat[2][1], -mat[2][2], -mat[2][3],
+                            -mat[3][0], -mat[3][1], -mat[3][2], -mat[3][3]);
+     return *n;
+     
+ }
  
+/*
+ * LocalGeo class member functions
+ */
+ 
+ LocalGeo::LocalGeo() {
+ }
+ 
+ LocalGeo::LocalGeo(Point p, Vector v) {
+     
+     position = p;
+     normal = v;
+     
+ }
 
 /*
  * Transformation class member functions

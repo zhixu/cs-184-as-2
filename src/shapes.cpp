@@ -8,7 +8,11 @@ Sphere::Sphere (Point p, float radius) {
     r = radius;
 }
 
-bool Sphere::intersect (Ray& ray, float* t_hit, LocalGeo* local) {
+Sphere::normal(Ray& ray) {
+    
+}
+
+bool Sphere::intersect (Ray& ray, float* thit, LocalGeo* local) {
     
     float e = ray.position;
     float d = ray.direction;
@@ -20,8 +24,11 @@ bool Sphere::intersect (Ray& ray, float* t_hit, LocalGeo* local) {
     float t1 = (pt1 + disc)/denom;
     float t2 = (pt1 - disc)/denom;
     
-    &t_hit = t1;
-    &(t_hit+1) = t2;
+    *t_hit = t1;
+    *(t_hit+1) = t2;
+    
+    *local.normal = ;
+    *local.position = ;//not normalized normal
 
 }
 

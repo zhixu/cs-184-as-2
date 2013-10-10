@@ -15,7 +15,7 @@ class Vector {
         Vector normalize();
         Vector cross(Vector&);
         float dot(Vector, Vector);
-        Vector magnitude();
+        float magnitude(Vector);
 };
 
 /*
@@ -61,19 +61,25 @@ class Matrix {
     public:
         float mat[4][4];
         Matrix();
-        Matrix rotate();
-        Matrix scale();
-        Matrix translate();
-        Matrix invrotate();
-        Matrix invscale();
-        Matrix invtranslate();
+        Matrix(float, float, float, float,
+                float, float, float, float, 
+                float, float, float, float, 
+                float, float, float, float);
+        Matrix rotate(float, float, float);
+        Matrix scale(float, float, float);
+        Matrix translate(float, float, float);
+        Matrix invrotate(Matrix);
+        Matrix invscale(Matrix);
+        Matrix invtranslate(Matrix);
         
 };
 
 class LocalGeo {
     public:
         Point position;
-        //Normal normal;
+        Vector normal;
+    LocalGeo();
+    LocalGeo(Point, Vector);
 };
 
 class Transformation {
