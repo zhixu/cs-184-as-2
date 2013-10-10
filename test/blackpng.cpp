@@ -15,7 +15,7 @@ int main (int argc, char* argv[]) {
     Sample* s;
     Color* c = new Color(255, 0, 0);
     for(int i=0; i<480; i++){
-        s = &(Sample(i, i));
+        s = new Sample(i, i);
         f->commit(s, c);
         delete s;
     }
