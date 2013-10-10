@@ -3,6 +3,7 @@
 
 #include "primitives.h"
 #include "film.h"
+
 class Film; // need this so that g++ doesn't get confused
 
 class CameraSpec {
@@ -26,17 +27,16 @@ class ScreenCoord {
         float step_x, step_y;
         Vector LL, UL, LR, UR;
         ScreenCoord();
-        ScreenCoord(CameraSpec, Film);
+        ScreenCoord(CameraSpec, Film, CameraFrame);
 };
 
 class Sampler {
   
   public:
         int i, j;
-        CameraFrame cameraf;
-        Film f;
+        int width, height;
         Sampler();
-        Sampler(CameraSpec cs, CameraFrame c, Film film);
+        Sampler(Film film);
         void increment();
     
 };

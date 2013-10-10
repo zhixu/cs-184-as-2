@@ -22,8 +22,6 @@ ScreenCoord::ScreenCoord (CameraSpec c, Film film, CameraFrame f) {
     
     double theta = c.fov/2;
     
-    Vector asdf = Vector(1.0, 2.0, 3.0);
-    
     float adj = (c.lookAt - c.lookFrom).magnitude();
     float halfHeight = tan(theta)*adj;
     float height = halfHeight*2;
@@ -44,18 +42,19 @@ ScreenCoord::ScreenCoord (CameraSpec c, Film film, CameraFrame f) {
 Sampler::Sampler() {
 }
 
-Sampler::Sampler(CameraSpec cs, CameraFrame c, Film film) {
+Sampler::Sampler(Film film) {
     
-    s = ScreenCoord(cs, film);
-    cameraf = c;
-    f = film;
+    width = film.width;
+    height = film.height;
+    i = 0;
+    j = 0;
     
 }
 
 void Sampler::increment() {
     
     i++;
-    if (i > f.width) {
+    if (i > width) {
         i = 0;
         j++;
     }
@@ -69,8 +68,9 @@ Sample::Sample(float u, float v) {
     
 }
 
-bool getSample(Sample* sample, Sampler s, ScreenCord sc) {
-    if (s.j > s.f.height) {
+bool getSample(Sample* sample, Sampler s, ScreenCoord sc) {
+    if (s.j > s.height) {
+        
         return 0;
         
     } else {
@@ -83,7 +83,7 @@ bool getSample(Sample* sample, Sampler s, ScreenCord sc) {
             exit (EXIT_FAILURE);
         }
     
-        sample = new Sample(x, y);
+        *sample = Sample(x, y);
     
         s.increment();
         
