@@ -19,7 +19,7 @@ Film::Film (int w, int h) {
         colors[y].resize(width, NULL);
 
         for(x=0; x<width; x++){
-           colors[y][x] = new Color();
+           colors[y][x] = new Color(0,0,0);
         }
     }
 }
@@ -29,9 +29,7 @@ void Film::commit(Sample* sample, Color* color){
     x = floor(sample->x + 0.5);
     y = floor(sample->y + 0.5);
 
-    Color newColor = *colors[x][y] + *color;
-    delete colors[x][y]; // need the old Color object anymore
-    colors[x][y] = &newColor;
+    *colors[x][y] += *color;
 }
 
 void Film::write(char* filename){
@@ -79,6 +77,7 @@ void Film::write(char* filename){
             row[(3 * x) + 0] = colors[y][x]->r;
             row[(3 * x) + 1] = colors[y][x]->g;
             row[(3 * x) + 2] = colors[y][x]->b;
+
         }
         png_write_row(png_ptr, row);
     }
