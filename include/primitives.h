@@ -104,6 +104,7 @@ class Color {
         Color operator- (Color&);
         Color operator* (float);
         Color operator/ (float);
+        Color& operator+= (Color&);
 };
 
 class Brdf {

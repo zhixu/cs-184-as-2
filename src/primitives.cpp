@@ -333,4 +333,10 @@ Color Color::operator* (float x) {
     return result;
 }
 
+Color& Color::operator+= (Color& that) {
+    r = fmin(r + that.r, 255.0);
+    g = fmin(g + that.g, 255.0);
+    b = fmin(b + that.b, 255.0);
+}
+
 
