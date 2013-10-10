@@ -20,15 +20,6 @@ class CameraFrame {
     CameraFrame(CameraSpec);
 };
 
-class Sample {
-    public:
-        float x, y;
-        Sample() { }
-        Sample(CameraSpec, CameraFrame, Film);
-        Sample(float, float);
-        bool getSample(Sample);
-};
-
 //LL, UL, LR, UR are points given in WORLD SPACE
 class ScreenCoord {
     public:
@@ -36,6 +27,26 @@ class ScreenCoord {
         Vector LL, UL, LR, UR;
         ScreenCoord();
         ScreenCoord(CameraSpec, Film);
+};
+
+class Sampler {
+  
+  public:
+        int i, j;
+        CameraFrame cameraf;
+        Film f;
+        Sampler();
+        Sampler(CameraSpec cs, CameraFrame c, Film film);
+        void increment();
+    
+};
+
+class Sample {
+    public:
+        float x, y;
+        Sample();
+        Sample(float, float);
+        bool getSample(Sample);
 };
 
 #endif
