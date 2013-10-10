@@ -331,5 +331,3 @@ Color Color::operator* (float x) {
 
     return result;
 }
-
-
