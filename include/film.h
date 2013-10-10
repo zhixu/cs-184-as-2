@@ -5,6 +5,8 @@
 #include "sampler.h"
 #include <vector>
 
+class Sample;
+
 class Film {
     private:
         std::vector< std::vector<Color*> > colors;
