@@ -17,16 +17,19 @@ CameraFrame::CameraFrame(CameraSpec c) {
     
     Vector adj_v = -(c.lookAt - c.lookFrom);
     
-    x = normalize(cross(c.up, adj_v));
-    y = normalize(c.up);
-    z = normalize(adj_v);
+    x = (c.up.cross(adj_v)).normalize();
+    y = c.up.normalize();
+    z = adj_v.normalize();
 
 }
 
 ScreenCoord::ScreenCoord (CameraSpec c, Film film) {
     
     double theta = c.fov/2;
-    float adj = magnitude(c.lookAt - c.lookFrom);
+    
+    Vector asdf = Vector(1.0, 2.0, 3.0);
+    
+    float adj = (c.lookAt - c.lookFrom).magnitude();
     float halfHeight = tan(theta)*adj;
     float height = halfHeight*2;
     

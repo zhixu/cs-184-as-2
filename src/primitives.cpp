@@ -20,59 +20,58 @@ Vector::Vector (float u, float v, float w) {
 }
 
 Vector Vector::operator- () {
-    Vector v = new Vector(-x, -y, -z);
+    Vector v = Vector(-x, -y, -z);
     return v;
-    
 }
 
-Vector Vector::operator+ (Vector& v) {
-    Vector vector = new Vector(x + v.x,
+Vector Vector::operator+ (Vector v) {
+    Vector vector = Vector(x + v.x,
                                 y + v.y,
                                 z + v.z);
     return vector;
 }
 
-Vector Vector::operator- (Vector& v) {
-    Vector vector = new Vector(x - v.x,
+Vector Vector::operator- (Vector v) {
+    Vector vector = Vector(x - v.x,
                                 y - v.y,
                                 z - v.z);
     return vector;
 }
 
 Vector Vector::operator* (float i) {
-    Vector vector = new Vector(x * i, y * i, z * i);
+    Vector vector = Vector(x * i, y * i, z * i);
     return vector;
 }
 
 Vector Vector::operator/ (float i) {
-    Vector vector = new Vector(x/i, y/i, z/i);
+    Vector vector = Vector(x/i, y/i, z/i);
     return vector;
 }
 
-float Vector::magnitude(Vector v) {
-    float x = sqrt(pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2));
-    return x;
+float Vector::magnitude() {
+    float f = sqrt(x*x + y*y + z*z);
+    return f;
 }
 
-Vector Vector::normalize(Vector v) {
-    float distance = magnitude(v);
-    Vector vector = new Vector(x/distance, y/distance, z/distance);
+Vector Vector::normalize() {
+    float distance = sqrt(x*x + y*y + z*z);
+    Vector vector = Vector(x/distance, y/distance, z/distance);
 
     return vector;
 }
 
-float Vector::dot(Vector u, Vector v) {
-    float w;
-    
-    w = u.x * v.x + u.y * v.y + u.z * v.z;
-    
+Vector Vector::cross(Vector b) {
+    Vector w = Vector(y * b.z - z * b.y,
+                           z * b.x - x * b.z,
+                           x * b.y - y * b.z);
     return w;
 }
 
-Vector Vector::cross(Vector& b) {
-    Vector w = new Vector(y * b.z - z * b.y,
-                           z * b.x - x * b.z,
-                           x * b.y - y * b.z);
+float Vector::dot(Vector v) {
+    float w;
+    
+    w = x * v.x + y * v.y + z * v.z;
+    
     return w;
 }
 
@@ -89,27 +88,27 @@ Point::Point (float u, float v, float w) {
     a = 1; //signifies point
 }
 
-Point Point::operator+ (Vector& v) {
-    Point* p = new Point(x + v.x,
+Point Point::operator+ (Vector v) {
+    Point p = Point(x + v.x,
                          y + v.y,
                          z + v.z);
-    return *p;
+    return p;
 }
 
-Point Point::operator- (Vector& v) {
-    Point* p = new Point(x - v.x,
+Point Point::operator- (Vector v) {
+    Point p = Point(x - v.x,
                          y - v.y,
                          z - v.z);
-    return *p;
+    return p;
 }
 
-Vector Point::operator- (Point& p2) {
+Vector Point::operator- (Point p2) {
     float u, v, w;
     u = x - p2.x;
     v = y - p2.y;
     w = z - p2.z;
-    Vector* ret = new Vector(u, v, w);
-    return *ret;
+    Vector ret = Vector(u, v, w);
+    return ret;
 }
 
 /*
@@ -162,58 +161,58 @@ Ray::Ray (Point& p, Vector& v, float min, float max) {
  
  Matrix Matrix::rotate(float x, float y, float z) {
  
-    Matrix* m = new Matrix (x, 0.0, 0.0, 0.0,
+    Matrix m = Matrix (x, 0.0, 0.0, 0.0,
                              0.0, y, 0.0, 0.0,
                              0.0, 0.0, z, 0.0,
                              0.0, 0.0, 0.0, 1.0);
     
-    return *m;
+    return m;
  
  }
  
  Matrix Matrix::scale(float x, float y, float z) {
-     Matrix* m = new Matrix (x, 0.0, 0.0, 0.0,
+     Matrix m = Matrix (x, 0.0, 0.0, 0.0,
                              0.0, y, 0.0, 0.0,
                              0.0, 0.0, z, 0.0,
                              0.0, 0.0, 0.0, 1.0);
      
-     return *m;
+     return m;
  }
  
  Matrix Matrix::translate(float x, float y, float z) {
-     Matrix* m = new Matrix (1.0, 0.0, 0.0, x,
+     Matrix m = Matrix (1.0, 0.0, 0.0, x,
                              0.0, 1.0, 0.0, y,
                              0.0, 0.0, 1.0, z,
                              0.0, 0.0, 0.0, 1.0);
                              
-    return *m;
+    return m;
  }
  
  Matrix Matrix::invrotate(Matrix m) {
-     Matrix *n = new Matrix(mat[0][0], mat[1][0], mat[2][0], mat[3][0],
+     Matrix n = Matrix(mat[0][0], mat[1][0], mat[2][0], mat[3][0],
                             mat[0][1], mat[1][1], mat[2][1], mat[3][1],
                             mat[0][2], mat[1][2], mat[2][2], mat[3][2],
                             mat[0][3], mat[1][3], mat[2][3], mat[3][3]);
      
-     return *n;
+     return n;
  }
  
  Matrix Matrix::invscale(Matrix m) {
      
-     Matrix *n = new Matrix(1/mat[0][0], 1/mat[0][1], 1/mat[0][2], 1/mat[0][3],
+     Matrix n = Matrix(1/mat[0][0], 1/mat[0][1], 1/mat[0][2], 1/mat[0][3],
                             1/mat[1][0], 1/mat[1][1], 1/mat[1][2], 1/mat[1][3],
                             1/mat[2][0], 1/mat[2][1], 1/mat[2][2], 1/mat[2][3],
                             1/mat[3][0], 1/mat[3][1], 1/mat[3][2], 1/mat[3][3]);
-     return *n;
+     return n;
  }
  
  Matrix Matrix::invtranslate(Matrix m) {
      
-     Matrix *n = new Matrix(-mat[0][0], -mat[0][1], -mat[0][2], -mat[0][3],
+     Matrix n = Matrix(-mat[0][0], -mat[0][1], -mat[0][2], -mat[0][3],
                             -mat[1][0], -mat[1][1], -mat[1][2], -mat[1][3],
                             -mat[2][0], -mat[2][1], -mat[2][2], -mat[2][3],
                             -mat[3][0], -mat[3][1], -mat[3][2], -mat[3][3]);
-     return *n;
+     return n;
      
  }
  

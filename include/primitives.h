@@ -8,14 +8,14 @@ class Vector {
         Vector();
         Vector(float, float, float);
         Vector operator- ();
-        Vector operator+ (Vector&);
-        Vector operator- (Vector&);
+        Vector operator+ (Vector);
+        Vector operator- (Vector);
         Vector operator* (float);
         Vector operator/ (float);
+        float magnitude();
         Vector normalize();
-        Vector cross(Vector&);
-        float dot(Vector, Vector);
-        float magnitude(Vector);
+        Vector cross(Vector);
+        float dot(Vector);
 };
 
 /*
@@ -41,9 +41,9 @@ class Point {
         float x, y, z, a;
         Point();
         Point(float, float, float);
-        Point operator+ (Vector&); //point + vector(displacement) = point (displaced)
-        Point operator- (Vector&); //point - vector = point
-        Vector operator- (Point&); //point - point = vector
+        Point operator+ (Vector); //point + vector(displacement) = point (displaced)
+        Point operator- (Vector); //point - vector = point
+        Vector operator- (Point); //point - point = vector
         
 };
 

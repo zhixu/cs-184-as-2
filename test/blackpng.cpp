@@ -6,6 +6,8 @@
  * I tried to compile this with:
  *  g++ -g -Wall -I include/ src/film.cpp test/blackpng.cpp src/primitives.cpp -lpng
  */
+ 
+ class Sample;
 
 int main (int argc, char* argv[]) {
     Film* f = new Film(640, 480);
@@ -13,7 +15,7 @@ int main (int argc, char* argv[]) {
     Sample* s;
     Color* c = new Color(255, 0, 0);
     for(int i=0; i<480; i++){
-        s = new Sample(i, i);
+        s = &(Sample(i, i));
         f->commit(s, c);
         delete s;
     }
