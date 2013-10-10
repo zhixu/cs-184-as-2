@@ -20,45 +20,45 @@ Vector::Vector (float u, float v, float w) {
 }
 
 Vector Vector::operator- () {
-    Vector* v = new Vector(-x, -y, -z);
-    return *v;
+    Vector v = new Vector(-x, -y, -z);
+    return v;
     
 }
 
 Vector Vector::operator+ (Vector& v) {
-    Vector* vector = new Vector(x + v.x,
+    Vector vector = new Vector(x + v.x,
                                 y + v.y,
                                 z + v.z);
-    return *vector;
+    return vector;
 }
 
 Vector Vector::operator- (Vector& v) {
-    Vector *vector = new Vector(x - v.x,
+    Vector vector = new Vector(x - v.x,
                                 y - v.y,
                                 z - v.z);
-    return *vector;
+    return vector;
 }
 
 Vector Vector::operator* (float i) {
-    Vector* vector = new Vector(x * i, y * i, z * i);
-    return *vector;
+    Vector vector = new Vector(x * i, y * i, z * i);
+    return vector;
 }
 
 Vector Vector::operator/ (float i) {
-    Vector* vector = new Vector(x/i, y/i, z/i);
-    return *vector;
+    Vector vector = new Vector(x/i, y/i, z/i);
+    return vector;
 }
 
-Vector Vector::normalize () {
-    float distance = sqrt(x*x + y*y + z*z);
-    Vector* vector = new Vector(x/distance, y/distance, z/distance);
-
-    return *vector;
+float Vector::magnitude(Vector v) {
+    float x = sqrt(pow(v.x, 2) + pow(v.y, 2) + pow(v.z, 2));
+    return x;
 }
 
-Vector Vector::magnitude(Vector v) {
-    Vector* w = new Vector(abs(v.x), abs(v.y), abs(v.z));
-    return *w;
+Vector Vector::normalize(Vector v) {
+    float distance = magnitude(v);
+    Vector vector = new Vector(x/distance, y/distance, z/distance);
+
+    return vector;
 }
 
 float Vector::dot(Vector u, Vector v) {
@@ -70,10 +70,10 @@ float Vector::dot(Vector u, Vector v) {
 }
 
 Vector Vector::cross(Vector& b) {
-    Vector* w = new Vector(y * b.z - z * b.y,
+    Vector w = new Vector(y * b.z - z * b.y,
                            z * b.x - x * b.z,
                            x * b.y - y * b.z);
-    return *w;
+    return w;
 }
 
 /*

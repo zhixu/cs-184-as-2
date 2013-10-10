@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+class Vector;
+
 int i, j; //counters for stepping
 ScreenCoord s;
 CameraFrame cameraf;
