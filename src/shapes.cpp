@@ -25,12 +25,10 @@ bool Sphere::intersect (Ray ray, float* thit, LocalGeo* local) {
     *thit = t1;
     *(thit+1) = t2;
     
-    //Point position = (e + d*t1 -c)/r;
-    //Vector normal = 2*(e + d*t1 -c);
+    Point position = (e + d*t1 -c)/r;
+    Vector normal = 2*(e + d*t1 -c);
     
-    //local = new LocalGeo(position, normal);
-    
-    return 1;
+    local = new LocalGeo(position, normal);
 
 }
 
@@ -46,7 +44,6 @@ bool Sphere::intersectP (Ray ray) {
     float disc = B*B - 4*A*C;
     
     if (disc >= 0) {
-        printf("disc: %f\n", disc);
         return 1;
     } else {
         return 0;

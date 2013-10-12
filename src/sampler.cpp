@@ -29,11 +29,11 @@ Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
     y = up.normalize();
     z = d.normalize(); //camera looks in -z direction
     
-    
+    /*
     printf("basis x: %f %f %f\n", x.x, x.y, x.z);
     printf("basis y: %f %f %f\n", y.x, y.y, y.z);
     printf("basis z: %f %f %f\n", z.x, z.y, z.z);
-    
+    */
     
     double theta = fov/2;
     float dd = d.dot(d);
@@ -44,12 +44,13 @@ Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
     u = x*halfWidth;
     v = y*halfHeight;
     
+    /*
     printf("halfwidth: %f      halfheight %f\n", halfWidth, halfHeight);
     printf("basis u: %f %f %f\n", u.x, u.y, u.z);
     printf("basis v: %f %f %f\n", v.x, v.y, v.z);
         
     printf("width: %d height: %d\n", width, height);
-    
+    */
 }
 
 

@@ -336,3 +336,32 @@ Color& Color::operator+= (Color& that) {
 
     return *this;
 }
+
+/*
+ * Brdf class member functions
+ */
+ 
+ Brdf::Brdf() {
+ }
+ 
+ Brdf::Brdf(Color kd, Color ks, Color ka, Color kr) {
+     
+     kd = kd;
+     ks = ks;
+     ka = ka;
+     kr = kr;
+ 
+ }
+ 
+ /*
+ * Light class member functions
+ */
+
+Light::Light() {
+}
+
+Light::Light(Color c, Point p, int i) {
+    c = c;
+    pos = p;
+    isPoint = i;
+}

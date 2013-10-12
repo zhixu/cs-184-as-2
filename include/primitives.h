@@ -109,6 +109,17 @@ class Color {
 class Brdf {
     public:
         Color kd, ks, ka, kr;
+        Brdf();
+        Brdf(Color, Color, Color, Color);
+};
+
+class Light {
+    public:
+        Color c;
+        Point pos;
+        int isPoint; // 1 if point light, 0 if direction
+        Light();
+        Light(Color, Point, int);
 };
 
 #endif /* PRIMITIVES_H */

@@ -27,7 +27,7 @@ int main (int argc, char* argv[]) {
     // calls appropriate functions to generate result
     
     //in lieu of parser
-    Film film = Film(400, 200);
+    Film film = Film(100, 100);
     
     Point lookFrom = Point(0.0, 0.0, 0.0);
     Point lookAt = Point (0.0, 0.0, -1.0);
@@ -39,7 +39,7 @@ int main (int argc, char* argv[]) {
     float radius = 1.0;
     Sphere sphere = Sphere(center, radius);
     
-    //char s[] = "test";
+    
 
     Color* color = new Color(255, 0, 0);
     
