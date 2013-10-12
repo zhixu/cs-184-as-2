@@ -24,10 +24,10 @@ Film::Film (int w, int h) {
     }
 }
 
-void Film::commit(Sample* sample, Color* color){
-    int x, y;
-    x = floor(sample->x + 0.5);
-    y = floor(sample->y + 0.5);
+void Film::commit(int x, int y, Color* color){
+    
+    x = floor(x + 0.5);
+    y = floor(y + 0.5);
 
     *colors[x][y] += *color;
 }

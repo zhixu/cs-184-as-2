@@ -48,11 +48,6 @@ Vector Vector::operator/ (float i) {
     return vector;
 }
 
-float Vector::magnitude() {
-    float f = sqrt(x*x + y*y + z*z);
-    return f;
-}
-
 Vector Vector::normalize() {
     float distance = sqrt(x*x + y*y + z*z);
     Vector vector = Vector(x/distance, y/distance, z/distance);
@@ -61,9 +56,10 @@ Vector Vector::normalize() {
 }
 
 Vector Vector::cross(Vector b) {
-    Vector w = Vector(y * b.z - z * b.y,
-                           z * b.x - x * b.z,
-                           x * b.y - y * b.z);
+    Vector w = Vector(z*b.y - y*b.z,
+                -(x*b.z - z*b.x),
+                x*b.y - y*b.x);
+    
     return w;
 }
 

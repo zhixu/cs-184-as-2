@@ -9,6 +9,6 @@ class Camera {
         CameraSpec spec;
         Camera (CameraSpec&);
         void generateRay (Sample&, Ray*);
-}
+};
 
 #endif

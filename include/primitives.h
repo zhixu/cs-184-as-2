@@ -12,7 +12,6 @@ class Vector {
         Vector operator- (Vector);
         Vector operator* (float);
         Vector operator/ (float);
-        float magnitude();
         Vector normalize();
         Vector cross(Vector);
         float dot(Vector);

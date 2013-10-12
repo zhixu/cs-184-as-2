@@ -1,92 +1,70 @@
 #include "sampler.h"
 #include "primitives.h"
-#include "film.h"
+//#include "film.h"
 #include <math.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 
-class Vector;
+//class Vector;
 
-CameraFrame::CameraFrame(CameraSpec c) {
-    
-    Vector adj_v = -(c.lookAt - c.lookFrom);
-    
-    x = (c.up.cross(adj_v)).normalize();
-    y = c.up.normalize();
-    z = adj_v.normalize();
-
+Sample::Sample() {
 }
 
-ScreenCoord::ScreenCoord (CameraSpec c, Film film, CameraFrame f) {
-    
-    double theta = c.fov/2;
-    
-    float adj = (c.lookAt - c.lookFrom).magnitude();
-    float halfHeight = tan(theta)*adj;
-    float height = halfHeight*2;
-    
-    float halfWidth = halfHeight*film.width*film.height;
-    float width = halfWidth*2;
-    
-    LL = -f.x*halfWidth - f.y*halfHeight + f.z;
-    UL = -f.x*halfWidth + f.y*halfHeight + f.z;
-    LR = f.x*halfWidth - f.y*halfHeight + f.z;
-    UR = f.x*halfWidth + f.y*halfHeight + f.z;
-    
-    step_x = width/film.width;
-    step_y = height/film.height;
-    
-}
+Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
 
-Sampler::Sampler() {
-}
-
-Sampler::Sampler(Film film) {
+    lookFrom = lf;
+    lookAt = la;
+    up = upv;
+    fov = angle;
     
     width = film.width;
     height = film.height;
-    i = 0;
-    j = 0;
+
+    
+    Vector d = lookFrom - lookAt; //camera looks in -z direction
+    
+    //ORTHONORMAL BASIS FOR CAMERA
+    x = (d.cross(up)).normalize();
+    y = up.normalize();
+    z = d.normalize(); //camera looks in -z direction
+    
+    
+    printf("basis x: %f %f %f\n", x.x, x.y, x.z);
+    printf("basis y: %f %f %f\n", y.x, y.y, y.z);
+    printf("basis z: %f %f %f\n", z.x, z.y, z.z);
+    
+    
+    double theta = fov/2;
+    float dd = d.dot(d);
+    float halfHeight = tan(theta/180)*dd;
+    float halfWidth = (halfHeight*film.width)/film.height;
+    
+    //BASIS FOR IMAGE PLANE
+    u = x*halfWidth;
+    v = y*halfHeight;
+    
+    printf("halfwidth: %f      halfheight %f\n", halfWidth, halfHeight);
+    printf("basis u: %f %f %f\n", u.x, u.y, u.z);
+    printf("basis v: %f %f %f\n", v.x, v.y, v.z);
+        
+    printf("width: %d height: %d\n", width, height);
     
 }
 
-void Sampler::increment() {
-    
-    i++;
-    if (i > width) {
-        i = 0;
-        j++;
-    }
-    
-}
 
-Sample::Sample(float u, float v) {
-
-    x = u;
-    y = v;
+Point Sample::getSample(int x, int y) {
     
-}
-
-bool getSample(Sample* sample, Sampler s, ScreenCoord sc) {
-    if (s.j > s.height) {
-        
-        return 0;
-        
-    } else {
-
-        float x = sc.LL.x + (s.i+0.5)*sc.step_x;
-        float y = sc.LL.y + (s.j+0.5)*sc.step_y;
-        
-        if (x < sc.LL.x || x > sc.UR.x || y < sc.LL.y || y > sc.UR.y) { 
-            printf("Sample value out of range");
-            exit (EXIT_FAILURE);
-        }
     
-        *sample = Sample(x, y);
+    float alpha = 2*(x + 0.5)/width -1;
+    float beta = 1 - 2*(y+0.5)/height;
     
-        s.increment();
-        
-        return 1;
-    }
+    //printf("alpha: %f beta: %f          x: %d  y: %d\n", alpha, beta, r, s);
+    
+    Vector d = u*alpha + v*beta + z;
+    
+    Point p = Point(d.x, d.y, d.z);
+    
+    return p;
+    
 }

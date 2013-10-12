@@ -14,7 +14,7 @@ class Film {
         int width, height;
         Film();
         Film(int, int);
-        void commit (Sample*, Color*);
+        void commit (int, int, Color*);
         void write (char*);
 };
 #endif

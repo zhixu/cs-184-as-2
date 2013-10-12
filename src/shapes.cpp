@@ -1,50 +1,54 @@
 #include "shapes.h"
 #include "primitives.h"
-#include <glut.h>
 #include <math.h>
+
+#include <stdio.h>
+#include <stdlib.h>
 
 Sphere::Sphere (Point p, float radius) {
     c = p;
     r = radius;
 }
 
-Sphere::normal(Ray& ray) {
+bool Sphere::intersect (Ray ray, float* thit, LocalGeo* local) {
     
-}
-
-bool Sphere::intersect (Ray& ray, float* thit, LocalGeo* local) {
+    Point e = ray.position;
+    Vector d = ray.direction;
     
-    float e = ray.position;
-    float d = ray.direction;
-    
-    float disc = sqrt(pow(cross(d, e-c), 2) - cross(d, d)*(cross(e-c, e-c) - pow(r, 2)));
-    float pt1 = -cross(d, d-c);
-    float denom = cross(d, d);
+    float disc = sqrt(pow(d.dot(e-c), 2) - d.dot(d)*((e-c).dot(e-c)-pow(r, 2)));
+    float pt1 = -d.dot(e-c);
+    float denom = d.dot(d);
     
     float t1 = (pt1 + disc)/denom;
     float t2 = (pt1 - disc)/denom;
     
-    *t_hit = t1;
-    *(t_hit+1) = t2;
+    *thit = t1;
+    *(thit+1) = t2;
     
-    *local.normal = ;
-    *local.position = ;//not normalized normal
+    //Point position = (e + d*t1 -c)/r;
+    //Vector normal = 2*(e + d*t1 -c);
+    
+    //local = new LocalGeo(position, normal);
+    
+    return 1;
 
 }
 
-bool Sphere::intersectP (Ray& ray) {
+bool Sphere::intersectP (Ray ray) {
     
-    float A = cross(ray.direction, ray.direction);
-    float B = 2*(cross(ray.direction, ray.position-c));
-    float C = cross(ray.position-c, ray.position-c);
+    Vector d = ray.direction;
+    Point e = ray.position;
+    
+    float A = d.dot(d);
+    float B = 2*(d.dot(e-c));
+    float C = (e-c).dot(e-c)-r*r;
     
     float disc = B*B - 4*A*C;
     
     if (disc >= 0) {
+        printf("disc: %f\n", disc);
         return 1;
     } else {
         return 0;
     }
-    
 }
-
