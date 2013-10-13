@@ -37,7 +37,7 @@ int main (int argc, char* argv[]) {
             Ray r = Ray(lookFrom, direction, 0, -5);
         
             //printf("direction: %f %f %f   coordinates: x %d y %d\n", direction.x, direction.y, direction.z, j, i);
-            if (sphere.intersectP(r)) { film.commit(i, j, color); }
+            if (sphere.intersect(r)) { film.commit(i, j, color); }
         }
     }
         
