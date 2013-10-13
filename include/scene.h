@@ -4,7 +4,7 @@
 #include <string>
 
 class Scene {
-    private:
+    public:
         int width, height;
         int maxDepth;
         std::string outputFilename;
@@ -15,12 +15,10 @@ class Scene {
 
         // shapes
         std::vector< Shape* > shapes;
-        
 
         // lights
         std::vector< Light* > lights;
 
-    public:
         Scene(std::string);
 
 };
