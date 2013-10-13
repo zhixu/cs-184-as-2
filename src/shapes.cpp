@@ -25,22 +25,20 @@ bool Sphere::intersect (Ray ray, float* thit, LocalGeo* local) {
     Point p1 = e + d*t1;
     Point p2 = e + d*t2;
     
-    float distance1 = p1.dot(p1);
-    float distance2 = p2.dot(p2);
+    float distance1 = (d*p1).dot(d*p1);
+    float distance2 = (d*p2).dot(d*p2);
     
     if (distance1 < distance2) {
         *thit = t1;
         Point position = p1;
         Vector normal = (p1-c)/r;
         local = new LocalGeo(position, normal);
-    
     } else {
         *thit = t2;
         Point position = p2;
         Vector normal = (p2-c)/r;
         local = new LocalGeo(position, normal);
     }
-
 }
 
 bool Sphere::intersectP (Ray ray) {
