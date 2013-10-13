@@ -2,7 +2,7 @@ size 640 480
 
 maxdepth 1
 
-output test.png
+output basic01test.png
 
 camera 0 0 0 0 0 -1 0 1 0 90
 
