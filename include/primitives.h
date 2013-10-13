@@ -125,11 +125,13 @@ class Light {
 class PointLight : public Light {
     public:
         PointLight(Point*, Color*);
+        void generateShadowRay(LocalGeo&, Ray*, Color*);
 };
 
 class DirectionalLight : public Light {
     public:
         DirectionalLight(Point*, Color*);
+        void generateShadowRay(LocalGeo&, Ray*, Color*);
 };
 
 #endif /* PRIMITIVES_H */
