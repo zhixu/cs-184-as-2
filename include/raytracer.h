@@ -3,6 +3,7 @@
 
 #include "primitives.h"
 #include "film.h"
+#include "shapes.h"
 #include <vector>
 
 class RayTracer {
@@ -10,8 +11,8 @@ class RayTracer {
         std::vector< Shape* > shapes;
         std::vector< Light* > lights;
     public:
-        RayTracer(std::vector< Primitive* >);
-        void trace(Ray&, int, Color*);
-        Color illuminate(Point, LocalGeo, Brdf, Light);
+        RayTracer(std::vector< Shape* >, std::vector< Light* >);
+        void trace(Ray*, int, Color*);
+        Color illuminate(Point, LocalGeo*, Brdf*, Light);
 };
 #endif

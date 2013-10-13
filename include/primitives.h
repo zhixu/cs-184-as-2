@@ -108,30 +108,31 @@ class Color {
 
 class Brdf {
     public:
-        Color kd, ks, ka, kr;
+        Color kd, ks, ka;
+        float kr;
         Brdf();
-        Brdf(Color, Color, Color, Color);
+        Brdf(Color, Color, Color, float);
 };
 
 class Light {
     public:
-        Color* color;
-        Point* position;
+        Color color;
+        Point position;
         Light();
         Light(Point*, Color*);
-        virtual void generateShadowRay(LocalGeo&, Ray*, Color*);
+        virtual void generateShadowRay(LocalGeo*, Ray*, Color*);
 };
 
 class PointLight : public Light {
     public:
         PointLight(Point*, Color*);
-        void generateShadowRay(LocalGeo&, Ray*, Color*);
+        void generateShadowRay(LocalGeo*, Ray*, Color*);
 };
 
 class DirectionalLight : public Light {
     public:
         DirectionalLight(Point*, Color*);
-        void generateShadowRay(LocalGeo&, Ray*, Color*);
+        void generateShadowRay(LocalGeo*, Ray*, Color*);
 };
 
 #endif /* PRIMITIVES_H */

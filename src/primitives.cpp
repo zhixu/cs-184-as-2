@@ -344,12 +344,12 @@ Color& Color::operator+= (Color& that) {
  Brdf::Brdf() {
  }
  
- Brdf::Brdf(Color kd, Color ks, Color ka, Color kr) {
+ Brdf::Brdf(Color d, Color s, Color a, float r) {
      
-     kd = kd;
-     ks = ks;
-     ka = ka;
-     kr = kr;
+     kd = d;
+     ks = s;
+     ka = a;
+     kr = r;
  
  }
  
@@ -361,11 +361,11 @@ Light::Light() {
 }
 
 Light::Light(Point* p, Color* c) {
-    color = c;
-    position = p;
+    color = *c;
+    position = *p;
 }
 
-void Light::generateShadowRay(LocalGeo& local, Ray* lightRay, Color* lightColor){
+void Light::generateShadowRay(LocalGeo* local, Ray* lightRay, Color* lightColor){
     // do nothing because we don't know if this is point or directional light
     //
     // also, make sure t_min isn't 0, or else we'll think the ShadowRay
@@ -375,22 +375,22 @@ void Light::generateShadowRay(LocalGeo& local, Ray* lightRay, Color* lightColor)
 PointLight::PointLight(Point* p, Color* c) : Light(p, c) {
 }
 
-void PointLight::generateShadowRay(LocalGeo& local, Ray* shadowRay, Color* lightColor){
-    Vector* vector = new Vector(position->x - local.position.x,
-                                  position->y - local.position.y,
-                                  position->z - local.position.z);
+void PointLight::generateShadowRay(LocalGeo* local, Ray* shadowRay, Color* lightColor){
+    Vector* vector = new Vector(position.x - local->position.x,
+                                  position.y - local->position.y,
+                                  position.z - local->position.z);
 
-    shadowRay = new Ray(local.position, *vector, 0.01, 0);
-    lightColor = color;
+    shadowRay = new Ray(local->position, *vector, 0.01, 0);
+    *lightColor = color;
 }
 
 DirectionalLight::DirectionalLight (Point* p, Color* c) : Light(p, c){
 }
 
-void DirectionalLight::generateShadowRay(LocalGeo& local, Ray* shadowRay, Color* lightColor){
-    Vector* vector = new Vector(position->x,
-                                position->y,
-                                position->z);
-    shadowRay = new Ray(local.position, *vector, 0.01, 0);
-    lightColor = color;
+void DirectionalLight::generateShadowRay(LocalGeo* local, Ray* shadowRay, Color* lightColor){
+    Vector* vector = new Vector(position.x,
+                                position.y,
+                                position.z);
+    shadowRay = new Ray(local->position, *vector, 0.01, 0);
+    *lightColor = color;
 }
