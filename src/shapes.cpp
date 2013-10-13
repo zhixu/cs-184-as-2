@@ -25,8 +25,8 @@ bool Sphere::intersect (Ray ray, float* thit, LocalGeo* local) {
     Point p1 = e + d*t1;
     Point p2 = e + d*t2;
     
-    float distance1 = (d*p1).dot(d*p1);
-    float distance2 = (d*p2).dot(d*p2);
+    float distance1 = (d*t1).dot(d*t1);
+    float distance2 = (d*t2).dot(d*t2);
     
     if (distance1 < distance2) {
         *thit = t1;
