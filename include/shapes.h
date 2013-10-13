@@ -13,7 +13,7 @@ class Sphere : public Shape {
         float r;
         Sphere();
         Sphere(Point, float);
-        bool intersect(Ray ray, float* t_hit, LocalGeo* local);
+        void intersect(Ray ray, float* t_hit, LocalGeo* local);
         bool intersectP(Ray ray);
 };
 

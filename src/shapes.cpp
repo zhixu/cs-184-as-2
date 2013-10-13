@@ -10,7 +10,7 @@ Sphere::Sphere (Point p, float radius) {
     r = radius;
 }
 
-bool Sphere::intersect (Ray ray, float* thit, LocalGeo* local) {
+void Sphere::intersect (Ray ray, float* thit, LocalGeo* local) {
     
     Point e = ray.position;
     Vector d = ray.direction;

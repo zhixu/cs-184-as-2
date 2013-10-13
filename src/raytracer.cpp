@@ -23,7 +23,7 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
     for(std::vector<int>::size_type i=0; has_intersection == false && i != shapes.size(); i++){
         shape = shapes[i];
 
-        if(shape.intersect(ray, &t_of_hit, &intersection)){
+        if(shape.intersectP(ray)){
             has_intersection = true;
             break;
         }
