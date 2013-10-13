@@ -115,11 +115,21 @@ class Brdf {
 
 class Light {
     public:
-        Color c;
-        Point pos;
-        int isPoint; // 1 if point light, 0 if direction
+        Color* color;
+        Point* position;
         Light();
-        Light(Color, Point, int);
+        Light(Point*, Color*);
+        void generateShadowRay(LocalGeo&, Ray*, Color*);
+};
+
+class PointLight : public Light {
+    public:
+        PointLight(Point*, Color*);
+};
+
+class DirectionalLight : public Light {
+    public:
+        DirectionalLight(Point*, Color*);
 };
 
 #endif /* PRIMITIVES_H */

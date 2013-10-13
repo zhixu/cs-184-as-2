@@ -360,8 +360,37 @@ Color& Color::operator+= (Color& that) {
 Light::Light() {
 }
 
-Light::Light(Color c, Point p, int i) {
-    c = c;
-    pos = p;
-    isPoint = i;
+Light::Light(Point* p, Color* c) {
+    color = c;
+    position = p;
+}
+
+void Light::generateShadowRay(LocalGeo& local, Ray* lightRay, Color* lightColor){
+    // do nothing because we don't know if this is point or directional light
+    //
+    // also, make sure t_min isn't 0, or else we'll think the ShadowRay
+    // intersects the source of the original intersection!
+}
+
+PointLight::PointLight(Point* p, Color* c) : Light(p, c) {
+}
+
+void PointLight::generateShadowRay(LocalGeo& local, Ray* shadowRay, Color* lightColor){
+    Vector* vector = new Vector(position->x - local.position.x,
+                                  position->y - local.position.y,
+                                  position->z - local.position.z);
+
+    shadowRay = new Ray(local.position, *vector, 0.01, 0);
+    *lightColor = color;
+}
+
+DirectionalLight::DirectionalLight (Point* p, Color* c) : Light(p, c){
+}
+
+void DirectionalLight::generateShadowRay(LocalGeo& local, Ray* shadowRay, Color* lightColor){
+    Vector* vector = new Vector(position->x,
+                                position->y,
+                                position->z);
+    shadowRay = new Ray(local.position, vector, 0.01, 0);
+    *lightColor = color;
 }
