@@ -4,6 +4,6 @@ maxdepth 1
 
 output test.png
 
-camera 0 0 0 0 0 -1 90
+camera 0 0 0 0 0 -1 0 1 0 90
 
 sphere 0 0 -1 0.2
