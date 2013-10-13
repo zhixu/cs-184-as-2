@@ -119,7 +119,7 @@ class Light {
         Point* position;
         Light();
         Light(Point*, Color*);
-        void generateShadowRay(LocalGeo&, Ray*, Color*);
+        virtual void generateShadowRay(LocalGeo&, Ray*, Color*);
 };
 
 class PointLight : public Light {
