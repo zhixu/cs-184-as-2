@@ -7,7 +7,7 @@
 
 class RayTracer {
     private:
-        std::vector< Primitive* > primitives;
+        std::vector< Shape* > shapes;
         std::vector< Light* > lights;
     public:
         RayTracer(std::vector< Primitive* >);

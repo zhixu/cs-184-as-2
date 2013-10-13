@@ -4,8 +4,8 @@
 
 #define DEPTH_THRESHOLD 1
 
-RayTracer::RayTracer (std::vector< Primitive* > ps, std::vector< Light* > ls) {
-    primitives = ps;
+RayTracer::RayTracer (std::vector< Shape* > ss, std::vector< Light* > ls) {
+    shapes = ss;
     lights = ls;
 }
 
@@ -18,12 +18,12 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
 
     float t_of_hit;
     LocalGeo* intersection;
-    Primitive* primitive;
+    Shape* shape;
     bool has_intersection = false;
-    for(std::vector<int>::size_type i=0; has_intersection == false && i != primitives.size(); i++){
-        primitive = primitives[i];
+    for(std::vector<int>::size_type i=0; has_intersection == false && i != shapes.size(); i++){
+        shape = shapes[i];
 
-        if(primitive.intersect(ray, &t_of_hit, &intersection)){
+        if(shape.intersect(ray, &t_of_hit, &intersection)){
             has_intersection = true;
             break;
         }
@@ -34,17 +34,27 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
     }
 
     Brdf* brdf;
-    intersection->primitive->getBrdf(intersection, &brdf);
+    intersection->shape->getBrdf(intersection, &brdf);
 
     Light* light;
-    Ray* lightRay;
+    Ray* shadowRay;
     Color* lightColor;
     for(std::vector<int>::size_type i=0; i != lights.size(); i++){
         light = lights[i];
-        light->generateLightRay(intersection, &lightRay, &lightColor);
+        light->generateShadowRay(intersection, &shadowRay, &lightColor);
 
         // check if the light ray is blocked
-        if(!primitive->intersectP(lightRay)){
+        bool intersectsOtherObject = false;
+        // loop over each of the other objects and check if this shadow ray hits
+        for(std::vector<int>::size_type j=0; intersectsOtherObject == false && j != shapes.size(); i++){
+            shape = shapes[j];
+            if(shape->intersectP(shadowRay)){
+                intersectsOtherObject = true;
+                break;
+            }
+        }
+
+        if(!intersectsOtherObject){
             *color += shading(intersection, brdf, lightRay, lightColor);
         }
 
