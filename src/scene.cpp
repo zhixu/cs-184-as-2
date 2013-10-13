@@ -11,15 +11,32 @@
 #include "film.h"
 #include "shapes.h"
 #include "scene.h"
+#include "raytracer.h"
+
+
+int main (int argc, char* argv[]) {
+    if(argc < 2){
+        // we need an input filename, so print error and exit program
+        printf("Need input filename as first argument. Exiting.");
+        return 1;
+    }
+    std::string inputFilename = argv[1];
+    Scene* scene = new Scene(inputFilename);
+    Film* film = new Film(scene->width, scene->height);
+
+    RayTracer* rayTracer = new RayTracer(scene->shapes, scene->lights);
+
+
+    printf("%d %d\n", scene->width, scene->height);
+
+    film->write((char *)scene->outputFilename.c_str());
+}
 
 
 Scene::Scene(std::string file) {
     // handle defaults
     maxDepth = 5;
     outputFilename = "output.png";
-
-  //store variables and set stuff at the end
-  int width, height;
 
   std::ifstream inpfile(file.c_str());
   if(!inpfile.is_open()) {
@@ -34,6 +51,8 @@ Scene::Scene(std::string file) {
 
       std::getline(inpfile,line);
       std::stringstream ss(line);
+
+    printf("Processing: %s\n", line.c_str());
 
       while (ss >> buf) {
         splitline.push_back(buf);
