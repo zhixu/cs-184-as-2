@@ -4,7 +4,7 @@
 #include "primitives.h"
 
 class Shape {
-    
+
 };
 
 class Sphere : public Shape {
@@ -13,9 +13,15 @@ class Sphere : public Shape {
         float r;
         Sphere();
         Sphere(Point, float);
-        void intersect(Ray ray, float* t_hit, LocalGeo* local);
-        bool intersectP(Ray ray);
+        bool intersect(Ray ray, float* t_hit, LocalGeo* local);
 };
 
+class Triangle : public Shape {
+    public:
+        Point a, b, c;
+        Triangle();
+        Triangle(Point, Point, Point);
+        bool intersect(Ray ray, float* t_hit, LocalGeo* local);
+};
 
 #endif

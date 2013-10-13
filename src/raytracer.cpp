@@ -62,16 +62,20 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
     }
 }
 
-Color illuminate(Point lookAt, LocalGeo local, Brdf brdf, Light light, Color* ambient, Color* diffuse, Color* specular) {
+Color illuminate(Point lookAt, LocalGeo local, Brdf brdf, Light light) {
     
     Color k = Color(brdf.ka, brdf.ka, brdf.ka);
-    *ambient = k*light.c;
+    ambient = k*light.c;
     
     Vector N = brdf.normal;
-    Vector L = (light.pos - brdf.position).normalize();
-    *diffuse = brdf.kd * N.dot(L) * light.c;
+    Vector L = (light.pos - local.position).normalize();
+    diffuse = brdf.kd * N.dot(L) * light.c;
     
     Vector R = N*2*(L.dot(N)) - L;
-    *specular = brdf.ks * pow(R.dot(lookAt), kr) * light.c;
+    specular = brdf.ks * pow(R.dot(lookAt), kr) * light.c;
+    
+    Color final = ambient + diffuse + specular;
+    
+    return final;
     
 }

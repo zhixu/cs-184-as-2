@@ -12,6 +12,6 @@ class RayTracer {
     public:
         RayTracer(std::vector< Primitive* >);
         void trace(Ray&, int, Color*);
-        Color illuminate(LocalGeo, );
+        Color illuminate(Point, LocalGeo, Brdf, Light);
 };
 #endif

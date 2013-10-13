@@ -10,12 +10,23 @@ Sphere::Sphere (Point p, float radius) {
     r = radius;
 }
 
-void Sphere::intersect (Ray ray, float* thit, LocalGeo* local) {
+
+bool Sphere::intersect (Ray ray, float*& thit, LocalGeo*& local) {
     
     Point e = ray.position;
     Vector d = ray.direction;
     
-    float disc = sqrt(pow(d.dot(e-c), 2) - d.dot(d)*((e-c).dot(e-c)-pow(r, 2)));
+    float A = d.dot(d);
+    float B = 2*(d.dot(e-c));
+    float C = (e-c).dot(e-c)-r*r;
+    
+    float disc = B*B - 4*A*C;
+    
+    if (disc <= 0) {
+        return 0;
+    }
+    
+    disc = sqrt(pow(d.dot(e-c), 2) - d.dot(d)*((e-c).dot(e-c)-pow(r, 2)));
     float pt1 = -d.dot(e-c);
     float denom = d.dot(d);
     
@@ -39,22 +50,50 @@ void Sphere::intersect (Ray ray, float* thit, LocalGeo* local) {
         Vector normal = (p2-c)/r;
         local = new LocalGeo(position, normal);
     }
+    
+    return 1;
 }
 
-bool Sphere::intersectP (Ray ray) {
+Triangle::Triangle() {
+
+}
+
+Triangle::Triangle(Point x, Point y, Point z) {
+
+    a = x;
+    b = y;
+    c = z; 
     
-    Vector d = ray.direction;
+}
+
+bool Triangle::intersect(Ray ray, float*& t_hit, LocalGeo*& locals) {
+    float a2, b2, c2, d2, e2, f, g, h, i, j, k, l;
+    
     Point e = ray.position;
+    Vector d = ray.direction;
     
-    float A = d.dot(d);
-    float B = 2*(d.dot(e-c));
-    float C = (e-c).dot(e-c)-r*r;
+    a2 = a.x - b.x;
+    b2 = a.y - b.y;
+    c2 = a.z - b.z;
+    d2 = a.x - c.x;
+    e2 = a.y - c.y;
+    f = a.z - c.z;
+    g = d.x;
+    h = d.y;
+    i = d.z;
+    j = a.x - e.x;
+    k = a.y - e.y;
+    l = a.z - e.z;
     
-    float disc = B*B - 4*A*C;
+    float ei_hf = e2*i - h*f;
+    float gf_di = g*f - d2*i;
+    float dh_eg = d2*h - e2*g;
     
-    if (disc >= 0) {
-        return 1;
-    } else {
-        return 0;
-    }
+    float M = a2*ei_hf + b2*gf_di + c2*dh_eg;
+    
+    float beta = (j*ei_hf + k*gf_di + l*dh_eg)/M;
+    float gamma = (j*ei_hf + k*gf_di + l*dh_eg)/M;
+    
+    
+    return 1;
 }
