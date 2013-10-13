@@ -1,4 +1,5 @@
 #include <vector>
+#include <math.h>
 #include "primitives.h"
 
 #define DEPTH_THRESHOLD 1
@@ -49,4 +50,18 @@ void RayTracer::trace(Ray& ray, int depth, Color* color){
 
         // TODO: handle reflection
     }
-};
+}
+
+Color illuminate(Point lookAt, LocalGeo local, Brdf brdf, Light light, Color* ambient, Color* diffuse, Color* specular) {
+    
+    Color k = Color(brdf.ka, brdf.ka, brdf.ka);
+    *ambient = k*light.c;
+    
+    Vector N = brdf.normal;
+    Vector L = (light.pos - brdf.position).normalize();
+    *diffuse = brdf.kd * N.dot(L) * light.c;
+    
+    Vector R = N*2*(L.dot(N)) - L;
+    *specular = brdf.ks * pow(R.dot(lookAt), kr) * light.c;
+    
+}

@@ -3,7 +3,11 @@
 
 #include "primitives.h"
 
-class Sphere {
+class Shape {
+    
+};
+
+class Sphere : public Shape {
     public:
         Point c;
         float r;
