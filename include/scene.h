@@ -10,15 +10,15 @@ class Scene {
         std::string outputFilename;
 
         // camera stuff
-        Point *lookFrom, *lookAt;
-        Vector *up;
+        Point lookFrom, lookAt;
+        Vector up;
         float fov;
 
         // shapes
-        std::vector< Shape* > shapes;
+        std::vector< Shape > shapes;
 
         // lights
-        std::vector< Light* > lights;
+        std::vector< Light > lights;
         
         Brdf brdf;
 

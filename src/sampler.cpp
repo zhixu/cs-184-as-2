@@ -54,7 +54,7 @@ Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
 }
 
 
-Point* Sample::getSample(int x, int y) {
+Point Sample::getSample(int x, int y) {
     
     
     float alpha = 2*(x + 0.5)/width -1;
@@ -64,7 +64,7 @@ Point* Sample::getSample(int x, int y) {
     
     Vector d = u*alpha + v*beta + z;
     
-    Point* p = new Point(d.x, d.y, d.z);
+    Point p = Point(d.x, d.y, d.z);
     
     return p;
     

@@ -6,14 +6,14 @@
 
 #define DEPTH_THRESHOLD 1
 
-RayTracer::RayTracer (std::vector< Shape* > ss, std::vector< Light* > ls) {
+RayTracer::RayTracer (std::vector< Shape > ss, std::vector< Light > ls) {
     shapes = ss;
     lights = ls;
 }
 
-void RayTracer::trace(Ray* ray, int depth, Color*& color){
+void RayTracer::trace(Ray ray, int depth, Color& color) {
 
-    printf("entering ray r: %f  g: %f  b: %f\n", color->r, (*color).g, (*color).b);
+    printf("entering ray r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
     
     if(depth > DEPTH_THRESHOLD){
         // Color's default constructor makes it black,
@@ -22,20 +22,21 @@ void RayTracer::trace(Ray* ray, int depth, Color*& color){
     }
     
     float t_of_hit;
-    LocalGeo* intersection;
-    Shape* shape;
+    LocalGeo intersection;
+    Shape shape;
     bool has_intersection = false;
     for(std::vector<int>::size_type i=0; has_intersection == false && i != shapes.size(); i++){
         shape = shapes[i];
 
-        if(shape->intersect(ray, &t_of_hit, &intersection)){
+        float t_of_hit;
+        if(shape.intersect(ray, t_of_hit, intersection)){
             has_intersection = true;
-            Brdf* brdf; //added for testing
-            brdf = shape->brdf; //added for testing
-            Light* light;
+            Brdf brdf; //added for testing
+            brdf = shape.brdf; //added for testing
+            Light light;
             for(std::vector<int>::size_type i=0; i != lights.size(); i++){
                 light = lights[i];
-                illuminate(color, &ray->position, intersection, brdf, light); //added
+                illuminate(color, ray.position, intersection, brdf, light); //added
             }
             return; // break;
         }
@@ -73,37 +74,33 @@ void RayTracer::trace(Ray* ray, int depth, Color*& color){
     }*/
 }
 
-void RayTracer::illuminate(Color*& color, Point* lookAt, LocalGeo* local, Brdf* brdf, Light* light) {
-    Color *ambient, *diffuse, *specular;
+void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf, Light light) {
+    Color ambient, diffuse, specular;
     
-    printf("pre colors r: %f  g: %f  b: %f\n", color->r, color->g, color->b);
+    printf("pre colors r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
 
-    ambient = new Color (brdf->ka.r * light->color.r,
-                         brdf->ka.g * light->color.g,
-                         brdf->ka.b * light->color.b);
+    ambient = Color (brdf.ka.r * light.color.r,
+                         brdf.ka.g * light.color.g,
+                         brdf.ka.b * light.color.b);
     
-    Vector N = local->normal;
-    Vector L = (light->position - local->position).normalize();
+    Vector N = local.normal;
+    Vector L = (light.position - local.position).normalize();
     float diff = N.dot(L);
-    diffuse = new Color(brdf->kd.r * light->color.r,
-                        brdf->kd.g * light->color.g,
-                        brdf->kd.b * light->color.b);
-    *diffuse *= diff;
+    diffuse = Color(brdf.kd.r * light.color.r,
+                        brdf.kd.g * light.color.g,
+                        brdf.kd.b * light.color.b);
+    diffuse *= diff;
     
     Vector R = N*2*(L.dot(N)) - L;
-    diff = pow(R.dot(*lookAt - local->position), brdf->kr);
-    specular = new Color(brdf->ks.r * light->color.r,
-                        brdf->ks.g * light->color.g,
-                        brdf->ks.b * light->color.b);
-    *specular *= diff;
-    
-    Color spec = *specular;
-    
-    printf("specular r: %f  g: %f  b: %f\n", spec.r, spec.g, spec.b);
+    diff = pow(R.dot(lookAt - local.position), brdf.kr);
+    specular = Color(brdf.ks.r * light.color.r,
+                        brdf.ks.g * light.color.g,
+                        brdf.ks.b * light.color.b);
+    specular *= diff;
 
-    *color += *ambient;
-    *color += *diffuse;
-    *color += *specular;
+    color += ambient;
+    color += diffuse;
+    color += specular;
     
-    printf("colors r: %f  g: %f  b: %f\n", color->r, color->g, color->b);
+    printf("colors r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
 }

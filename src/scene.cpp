@@ -21,42 +21,42 @@ int main (int argc, char* argv[]) {
         return 1;
     }
     std::string inputFilename = argv[1];
-    Scene* scene = new Scene(inputFilename);
-    Film* film = new Film(scene->width, scene->height);
+    Scene scene = Scene(inputFilename);
+    Film film = Film(scene.width, scene.height);
 
-    RayTracer* rayTracer = new RayTracer(scene->shapes, scene->lights);
-    Sample* sampleGenerator = new Sample(*(scene->lookFrom),
-                                         *(scene->lookAt),
-                                         *(scene->up),
-                                         scene->fov,
-                                         *film);
+    RayTracer rayTracer = RayTracer(scene.shapes, scene.lights);
+    Sample sampleGenerator = Sample(scene.lookFrom,
+                                    scene.lookAt,
+                                    scene.up,
+                                    scene.fov,
+                                    film);
 
     int x, y;
-    Point* p;
-    Color* c = new Color(0, 0, 0);
-    Color c2 = *c;
+    Point p;
+    Color c = Color(0, 0, 0);
     
-    Ray* r = new Ray();
+    Ray r = Ray();
 
-    r->t_min = 0;
-    r->t_max = 0;
+    r.t_min = 0;
+    r.t_max = 0;
 
-    r->position = *(scene->lookFrom);
+    r.position = scene.lookFrom;
 
-    for(y=0; y<scene->width; y++){
-        for(x=0; x<scene->height; x++){
-            p = sampleGenerator->getSample(x, y);
-            r->direction = *p - *(scene->lookFrom);
-            printf("scene colors r: %f  g: %f  b: %f\n", c2.r, c2.g, c2.b);
-            rayTracer->trace(r, 0, c);
+    for(y=0; y<scene.width; y++){
+        for(x=0; x<scene.height; x++){
+            p = sampleGenerator.getSample(x, y);
+            r.direction = p - scene.lookFrom;
+            rayTracer.trace(r, 0, c);
 
-           film->commit(x, y, c);
+           film.commit(x, y, c);
         }
     }
 
-    printf("%d %d\n", scene->width, scene->height);
+    printf("%d %d\n", scene.width, scene.height);
 
-    film->write((char *)scene->outputFilename.c_str());
+    film.write((char *)scene.outputFilename.c_str());
+    
+    return 0;
 }
 
 
@@ -120,17 +120,17 @@ Scene::Scene(std::string file) {
             x = atof(splitline[1].c_str());
             y = atof(splitline[2].c_str());
             z = atof(splitline[3].c_str());
-            lookFrom = new Point(x, y, z);
+            lookFrom = Point(x, y, z);
         // lookat:
             x = atof(splitline[4].c_str());
             y = atof(splitline[5].c_str());
             z = atof(splitline[6].c_str());
-            lookAt = new Point(x, y, z);
+            lookAt = Point(x, y, z);
         // up:
             x = atof(splitline[7].c_str());
             y = atof(splitline[8].c_str());
             z = atof(splitline[9].c_str());
-            up = new Vector(x, y, z);
+            up = Vector(x, y, z);
         // fov:
             fov = atof(splitline[10].c_str());
       }
@@ -143,7 +143,7 @@ Scene::Scene(std::string file) {
         x = atof(splitline[1].c_str());
         y = atof(splitline[1].c_str());
         z = atof(splitline[1].c_str());
-        Point* center = new Point(x, y, z);
+        Point center = Point(x, y, z);
         r = atof(splitline[4].c_str());
 
         // TODO: all of these fancy things. just storing shape dimensions for now
@@ -151,7 +151,7 @@ Scene::Scene(std::string file) {
         //   Store 4 numbers
         //   Store current property values
         //   Store current top of matrix stack
-        Sphere* sphere = new Sphere(*center, r);
+        Sphere sphere = Sphere(center, r);
         shapes.push_back(sphere);
       }
       //maxverts number
@@ -273,9 +273,9 @@ Scene::Scene(std::string file) {
         r = atof(splitline[4].c_str());
         g = atof(splitline[5].c_str());
         b = atof(splitline[6].c_str());
-        Point* p = new Point(x, y, z);
-        Color* c = new Color(r, g, b);
-        lights.push_back(new DirectionalLight(p, c));
+        Point p = Point(x, y, z);
+        Color c = Color(r, g, b);
+        lights.push_back(DirectionalLight(p, c));
       }
       //point x y z r g b
       //  The location of a point source and the color, as in OpenGL.
@@ -287,9 +287,9 @@ Scene::Scene(std::string file) {
         r = atof(splitline[4].c_str());
         g = atof(splitline[5].c_str());
         b = atof(splitline[6].c_str());
-        Point* p = new Point(x, y, z);
-        Color* c = new Color(r, g, b);
-        lights.push_back(new PointLight(p, c));
+        Point p = Point(x, y, z);
+        Color c = Color(r, g, b);
+        lights.push_back(PointLight(p, c));
       }
       //attenuation const linear quadratic
       //  Sets the constant, linear and quadratic attenuations 

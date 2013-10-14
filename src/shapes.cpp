@@ -11,10 +11,10 @@ Sphere::Sphere (Point p, float radius) {
 }
 
 
-bool Sphere::intersect (Ray*& ray, float* thit, LocalGeo** local) {
+bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     
-    Point e = ray->position;
-    Vector d = ray->direction;
+    Point e = ray.position;
+    Vector d = ray.direction;
     
     float A = d.dot(d);
     float B = 2*(d.dot(e-c));
@@ -40,15 +40,15 @@ bool Sphere::intersect (Ray*& ray, float* thit, LocalGeo** local) {
     float distance2 = (d*t2).dot(d*t2);
     
     if (distance1 < distance2) {
-        *thit = t1;
+        thit = t1;
         Point position = p1;
         Vector normal = (p1-c)/r;
-        *local = new LocalGeo(position, normal);
+        local = LocalGeo(position, normal);
     } else {
-        *thit = t2;
+        thit = t2;
         Point position = p2;
         Vector normal = (p2-c)/r;
-        *local = new LocalGeo(position, normal);
+        local = LocalGeo(position, normal);
     }
     
     //printf("circle hit\n");
@@ -66,8 +66,8 @@ Triangle::Triangle(Point x, Point y, Point z) {
     c = z; 
     
 }
-
-bool Triangle::intersect(Ray*& ray, float* t_hit, LocalGeo** locals) {
+/*
+bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &locals) {
     float a2, b2, c2, d2, e2, f, g, h, i, j, k, l;
     
     Point e = ray->position;
@@ -97,4 +97,4 @@ bool Triangle::intersect(Ray*& ray, float* t_hit, LocalGeo** locals) {
     
     
     return 1;
-}
+}*/

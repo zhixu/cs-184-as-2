@@ -52,10 +52,10 @@ class Ray {
         Vector direction;
         float t_min, t_max;
         Ray();
-        Ray(Point&, Vector&, float, float);
+        Ray(Point, Vector, float, float);
 };
 
-
+/*
 class Matrix {
     public:
         float mat[4][4];
@@ -71,7 +71,7 @@ class Matrix {
         Matrix invscale(Matrix);
         Matrix invtranslate(Matrix);
         
-};
+};*/
 
 class LocalGeo {
     public:
@@ -80,31 +80,31 @@ class LocalGeo {
     LocalGeo();
     LocalGeo(Point, Vector);
 };
-
+/*
 class Transformation {
     private:
         Matrix m, inverseTransposeM;
 
     public:
         // TODO: decide arguments for constructor
-        Point operator* (Point&);
-        Vector operator* (Vector&);
-        Ray operator* (Ray&);
-        LocalGeo operator* (LocalGeo&);
+        Point operator* (Point);
+        Vector operator* (Vector);
+        Ray operator* (Ray);
+        LocalGeo operator* (LocalGeo);
         //Normal operator* (Normal);
-};
+};*/
 
 class Color {
     public:
         float r, g, b;
         Color();
         Color (float, float ,float);
-        Color operator+ (Color&);
-        Color operator- (Color&);
+        Color operator+ (Color);
+        Color operator- (Color);
         Color operator* (float);
         Color operator/ (float);
-        Color& operator+= (Color&);
-        Color& operator*= (float);
+        Color operator+= (Color);
+        Color operator*= (float);
 };
 
 class Brdf {
@@ -120,20 +120,20 @@ class Light {
         Color color;
         Point position;
         Light();
-        Light(Point*, Color*);
-        virtual void generateShadowRay(LocalGeo*, Ray*, Color*);
+        Light(Point, Color);
+        virtual void generateShadowRay(LocalGeo, Ray, Color);
 };
 
 class PointLight : public Light {
     public:
-        PointLight(Point*, Color*);
-        void generateShadowRay(LocalGeo*, Ray*, Color*);
+        PointLight(Point, Color);
+        void generateShadowRay(LocalGeo, Ray, Color);
 };
 
 class DirectionalLight : public Light {
     public:
-        DirectionalLight(Point*, Color*);
-        void generateShadowRay(LocalGeo*, Ray*, Color*);
+        DirectionalLight(Point, Color);
+        void generateShadowRay(LocalGeo, Ray, Color);
 };
 
 

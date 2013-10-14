@@ -24,12 +24,14 @@ Film::Film (int w, int h) {
     }
 }
 
-void Film::commit(int x, int y, Color* color){
+void Film::commit(int x, int y, Color color){
     
     x = floor(x + 0.5);
     y = floor(y + 0.5);
-
-    *colors[x][y] += *color;
+    
+    *colors[x][y] += color; //is this how arrays work ?? D:
+    
+    printf("Film final color?? r %f  g %f  b %f \n", colors[x][y]->r, colors[x][y]->g, colors[x][y]->b);
 }
 
 void Film::write(char* filename){

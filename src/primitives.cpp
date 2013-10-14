@@ -114,7 +114,7 @@ Vector Point::operator- (Point p2) {
 Ray::Ray(){
 }
 
-Ray::Ray (Point& p, Vector& v, float min, float max) {
+Ray::Ray (Point p, Vector v, float min, float max) {
     
     position = p;
     direction = v;
@@ -126,7 +126,7 @@ Ray::Ray (Point& p, Vector& v, float min, float max) {
  /*
  * Matrix class member functions
  */
- 
+ /*
  Matrix::Matrix() {
  }
  
@@ -210,7 +210,7 @@ Ray::Ray (Point& p, Vector& v, float min, float max) {
                             -mat[3][0], -mat[3][1], -mat[3][2], -mat[3][3]);
      return n;
      
- }
+ }*/
  
 /*
  * LocalGeo class member functions
@@ -230,7 +230,8 @@ Ray::Ray (Point& p, Vector& v, float min, float max) {
  * Transformation class member functions
  */
 
-Point Transformation::operator* (Point& p) {
+/*
+Point Transformation::operator* (Point p) {
     float x, y, z;
 
     x = m.mat[0][0] * p.x + m.mat[0][1] * p.y + m.mat[0][2] * p.z;
@@ -240,7 +241,7 @@ Point Transformation::operator* (Point& p) {
     return Point(x, y, z);
 }
 
-Vector Transformation::operator* (Vector& v) {
+Vector Transformation::operator* (Vector v) {
     float x, y, z;
 
     x = m.mat[0][0] * v.x + m.mat[0][1] * v.y + m.mat[0][2] * v.z;
@@ -250,26 +251,26 @@ Vector Transformation::operator* (Vector& v) {
     return Vector(x, y, z);
 }
 
-Ray Transformation::operator* (Ray& r) {
-    Ray* result = new Ray();
+Ray Transformation::operator* (Ray r) {
+    Ray result = Ray();
 
-    result->position = this->operator*(r.position);
-    result->direction = this->operator*(r.direction);
+    result.position = m*(r.position);
+    result.direction = m*(r.direction);
     // TODO: do we need to transform t_min and t_max when we transform a Ray?
-    result->t_min = r.t_min;
-    result->t_max = r.t_max;
-
-    return *result;
-}
-
-LocalGeo Transformation::operator* (LocalGeo& lg) {
-    LocalGeo result;
-
-    result.position = this->operator*(lg.position);
-    //result.normal = this->operator*(lg.normal);
+    result.t_min = r.t_min;
+    result.t_max = r.t_max;
 
     return result;
 }
+
+LocalGeo Transformation::operator* (LocalGeo lg) {
+    LocalGeo result;
+
+    result.position = this.operator*(lg.position);
+    //result.normal = this->operator*(lg.normal);
+
+    return result;
+}*/
 /*
 Normal Transformation::operator* (Normal& n){
     float x, y, z;
@@ -298,24 +299,24 @@ Color::Color (float paramR, float paramG, float paramB) {
     b = paramB;
 }
 
-Color Color::operator+ (Color& that) {
-    Color* result = new Color(0, 0, 0);
+Color Color::operator+ (Color that) {
+    Color result = Color(0, 0, 0);
 
-    result->r = fmin(r + that.r, 255.0);
-    result->g = fmin(g + that.g, 255.0);
-    result->b = fmin(b + that.b, 255.0);
+    result.r = fmin(r + that.r, 255.0);
+    result.g = fmin(g + that.g, 255.0);
+    result.b = fmin(b + that.b, 255.0);
 
-    return *result;
+    return result;
 }
 
-Color Color::operator- (Color& that) {
-    Color* result = new Color(0, 0, 0);
+Color Color::operator- (Color that) {
+    Color result = Color(0, 0, 0);
 
-    result->r = fmax(r - that.r, 0.0);
-    result->g = fmax(g - that.g, 0.0);
-    result->b = fmax(b - that.b, 0.0);
+    result.r = fmax(r - that.r, 0.0);
+    result.g = fmax(g - that.g, 0.0);
+    result.b = fmax(b - that.b, 0.0);
 
-    return *result;
+    return result;
 }
 
 Color Color::operator* (float x) {
@@ -329,7 +330,8 @@ Color Color::operator* (float x) {
 }
 
 
-Color& Color::operator+= (Color& that) {
+Color Color::operator+= (Color that) {
+    
     r = fmin(r + that.r, 255.0);
     g = fmin(g + that.g, 255.0);
     b = fmin(b + that.b, 255.0);
@@ -337,7 +339,8 @@ Color& Color::operator+= (Color& that) {
     return *this;
 }
 
-Color& Color::operator*= (float x) {
+Color Color::operator*= (float x) {
+    
     r = fmin(r * x, 255.0);
     g = fmin(g * x, 255.0);
     b = fmin(b * x, 255.0);
@@ -368,37 +371,37 @@ Color& Color::operator*= (float x) {
 Light::Light() {
 }
 
-Light::Light(Point* p, Color* c) {
-    color = *c;
-    position = *p;
+Light::Light(Point p, Color c) {
+    color = c;
+    position = p;
 }
 
-void Light::generateShadowRay(LocalGeo* local, Ray* lightRay, Color* lightColor){
+void Light::generateShadowRay(LocalGeo local, Ray lightRay, Color lightColor){
     // do nothing because we don't know if this is point or directional light
     //
     // also, make sure t_min isn't 0, or else we'll think the ShadowRay
     // intersects the source of the original intersection!
 }
 
-PointLight::PointLight(Point* p, Color* c) : Light(p, c) {
+PointLight::PointLight(Point p, Color c) : Light(p, c) {
 }
 
-void PointLight::generateShadowRay(LocalGeo* local, Ray* shadowRay, Color* lightColor){
-    Vector* vector = new Vector(position.x - local->position.x,
-                                  position.y - local->position.y,
-                                  position.z - local->position.z);
+void PointLight::generateShadowRay(LocalGeo local, Ray shadowRay, Color lightColor){
+    Vector vector = Vector(position.x - local.position.x,
+                                  position.y - local.position.y,
+                                  position.z - local.position.z);
 
-    shadowRay = new Ray(local->position, *vector, 0.01, 0);
-    *lightColor = color;
+    shadowRay = Ray(local.position, vector, 0.01, 0);
+    lightColor = color;
 }
 
-DirectionalLight::DirectionalLight (Point* p, Color* c) : Light(p, c){
+DirectionalLight::DirectionalLight (Point p, Color c) : Light(p, c){
 }
 
-void DirectionalLight::generateShadowRay(LocalGeo* local, Ray* shadowRay, Color* lightColor){
-    Vector* vector = new Vector(position.x,
+void DirectionalLight::generateShadowRay(LocalGeo local, Ray shadowRay, Color lightColor){
+    Vector vector = Vector(position.x,
                                 position.y,
                                 position.z);
-    shadowRay = new Ray(local->position, *vector, 0.01, 0);
-    *lightColor = color;
+    shadowRay = Ray(local.position, vector, 0.01, 0);
+    lightColor = color;
 }
