@@ -1,4 +1,3 @@
-#include <vector>
 #include <math.h>
 #include "raytracer.h"
 
@@ -34,14 +33,13 @@ void RayTracer::trace(Ray* ray, int depth, Color* color){
     }
 
     Brdf* brdf;
-    shape->getBrdf(intersection, &brdf);
+    brdf = shape->brdf;
 
     Light* light;
     Ray* shadowRay;
-    Color* lightColor;
     for(std::vector<int>::size_type i=0; i != lights.size(); i++){
         light = lights[i];
-        light->generateShadowRay(intersection, shadowRay, lightColor);
+        light->generateShadowRay(intersection, shadowRay, &light->color);
 
         // check if the light ray is blocked
         bool intersectsOtherObject = false;
@@ -55,35 +53,36 @@ void RayTracer::trace(Ray* ray, int depth, Color* color){
         }
 
         if(!intersectsOtherObject){
-            *color += shading(intersection, brdf, shadowRay, lightColor);
+            illuminate(color, &ray->position, intersection, brdf, light);
         }
 
         // TODO: handle reflection
     }
 }
 
-Color illuminate(Point lookAt, LocalGeo* local, Brdf* brdf, Light* light) {
-    Color ambient, diffuse, specular;
+void RayTracer::illuminate(Color* color, Point* lookAt, LocalGeo* local, Brdf* brdf, Light* light) {
+    Color *ambient, *diffuse, *specular;
 
-    ambient = new Color (brdf->ka->r * light->color->r
-                        brdf->ka->g * light->color->g;
-                        brdf->ka->b * light->color->b)
+    ambient = new Color (brdf->ka.r * light->color.r,
+                         brdf->ka.g * light->color.g,
+                         brdf->ka.b * light->color.b);
     
     Vector N = local->normal;
     Vector L = (light->position - local->position).normalize();
     float diff = N.dot(L);
-    diffuse = new Color(brdf->kd->r * light->color->r, 
-                        brdf->kd->g * light->color->g,
-                        brdf->kd->b * light->color->b);
-    diffuse = diffuse*diff;
+    diffuse = new Color(brdf->kd.r * light->color.r,
+                        brdf->kd.g * light->color.g,
+                        brdf->kd.b * light->color.b);
+    *diffuse *= diff;
     
     Vector R = N*2*(L.dot(N)) - L;
-    diff = pow(R.dot(lookAt - local->position), brdf->kr);
-    specular = new Color(brdf->ks->r * light->color->r, 
-                        brdf->ks->g * light->color->g,
-                        brdf->ks->b * light->color->b);
-    specular = specular*diff;
+    diff = pow(R.dot(*lookAt - local->position), brdf->kr);
+    specular = new Color(brdf->ks.r * light->color.r,
+                        brdf->ks.g * light->color.g,
+                        brdf->ks.b * light->color.b);
+    *specular *= diff;
 
-    Color final = ambient + diffuse + specular;
-    return final;
+    *color += *ambient;
+    *color += *diffuse;
+    *color += *specular;
 }

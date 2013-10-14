@@ -13,6 +13,6 @@ class RayTracer {
     public:
         RayTracer(std::vector< Shape* >, std::vector< Light* >);
         void trace(Ray*, int, Color*);
-        Color illuminate(Point, LocalGeo*, Brdf*, Light);
+        void illuminate(Color*, Point*, LocalGeo*, Brdf*, Light*);
 };
 #endif

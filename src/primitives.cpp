@@ -337,6 +337,14 @@ Color& Color::operator+= (Color& that) {
     return *this;
 }
 
+Color& Color::operator*= (float x) {
+    r = fmin(r * x, 255.0);
+    g = fmin(g * x, 255.0);
+    b = fmin(b * x, 255.0);
+
+    return *this;
+}
+
 /*
  * Brdf class member functions
  */

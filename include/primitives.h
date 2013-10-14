@@ -104,6 +104,7 @@ class Color {
         Color operator* (float);
         Color operator/ (float);
         Color& operator+= (Color&);
+        Color& operator*= (float);
 };
 
 class Brdf {
@@ -134,5 +135,6 @@ class DirectionalLight : public Light {
         DirectionalLight(Point*, Color*);
         void generateShadowRay(LocalGeo*, Ray*, Color*);
 };
+
 
 #endif /* PRIMITIVES_H */
