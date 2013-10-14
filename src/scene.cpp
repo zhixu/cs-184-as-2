@@ -34,6 +34,8 @@ int main (int argc, char* argv[]) {
     int x, y;
     Point* p;
     Color* c = new Color(0, 0, 0);
+    Color c2 = *c;
+    
     Ray* r = new Ray();
 
     r->t_min = 0;
@@ -41,11 +43,11 @@ int main (int argc, char* argv[]) {
 
     r->position = *(scene->lookFrom);
 
-    for(y=0; y<scene->width; x++){
-        for(x=0; x<scene->height; y++){
+    for(y=0; y<scene->width; y++){
+        for(x=0; x<scene->height; x++){
             p = sampleGenerator->getSample(x, y);
             r->direction = *p - *(scene->lookFrom);
-
+            printf("scene colors r: %f  g: %f  b: %f\n", c2.r, c2.g, c2.b);
             rayTracer->trace(r, 0, c);
 
            film->commit(x, y, c);

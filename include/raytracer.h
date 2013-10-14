@@ -12,7 +12,7 @@ class RayTracer {
         std::vector< Light* > lights;
     public:
         RayTracer(std::vector< Shape* >, std::vector< Light* >);
-        void trace(Ray*, int, Color*);
-        void illuminate(Color*, Point*, LocalGeo*, Brdf*, Light*);
+        void trace(Ray*, int, Color*&);
+        void illuminate(Color*&, Point*, LocalGeo*, Brdf*, Light*);
 };
 #endif

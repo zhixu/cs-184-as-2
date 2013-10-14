@@ -1,6 +1,9 @@
 #include <math.h>
 #include "raytracer.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #define DEPTH_THRESHOLD 1
 
 RayTracer::RayTracer (std::vector< Shape* > ss, std::vector< Light* > ls) {
@@ -8,13 +11,16 @@ RayTracer::RayTracer (std::vector< Shape* > ss, std::vector< Light* > ls) {
     lights = ls;
 }
 
-void RayTracer::trace(Ray* ray, int depth, Color* color){
+void RayTracer::trace(Ray* ray, int depth, Color*& color){
+
+    printf("entering ray r: %f  g: %f  b: %f\n", color->r, (*color).g, (*color).b);
+    
     if(depth > DEPTH_THRESHOLD){
         // Color's default constructor makes it black,
         // no need to do anything here
         return;
     }
-
+    
     float t_of_hit;
     LocalGeo* intersection;
     Shape* shape;
@@ -24,17 +30,24 @@ void RayTracer::trace(Ray* ray, int depth, Color* color){
 
         if(shape->intersect(ray, &t_of_hit, &intersection)){
             has_intersection = true;
-            break;
+            Brdf* brdf; //added for testing
+            brdf = shape->brdf; //added for testing
+            Light* light;
+            for(std::vector<int>::size_type i=0; i != lights.size(); i++){
+                light = lights[i];
+                illuminate(color, &ray->position, intersection, brdf, light); //added
+            }
+            return; // break;
         }
     }
 
     if(!has_intersection){
         return;
     }
-
+    /*
     Brdf* brdf;
     brdf = shape->brdf;
-
+    
     Light* light;
     Ray* shadowRay;
     for(std::vector<int>::size_type i=0; i != lights.size(); i++){
@@ -57,11 +70,13 @@ void RayTracer::trace(Ray* ray, int depth, Color* color){
         }
 
         // TODO: handle reflection
-    }
+    }*/
 }
 
-void RayTracer::illuminate(Color* color, Point* lookAt, LocalGeo* local, Brdf* brdf, Light* light) {
+void RayTracer::illuminate(Color*& color, Point* lookAt, LocalGeo* local, Brdf* brdf, Light* light) {
     Color *ambient, *diffuse, *specular;
+    
+    printf("pre colors r: %f  g: %f  b: %f\n", color->r, color->g, color->b);
 
     ambient = new Color (brdf->ka.r * light->color.r,
                          brdf->ka.g * light->color.g,
@@ -81,8 +96,14 @@ void RayTracer::illuminate(Color* color, Point* lookAt, LocalGeo* local, Brdf* b
                         brdf->ks.g * light->color.g,
                         brdf->ks.b * light->color.b);
     *specular *= diff;
+    
+    Color spec = *specular;
+    
+    printf("specular r: %f  g: %f  b: %f\n", spec.r, spec.g, spec.b);
 
     *color += *ambient;
     *color += *diffuse;
     *color += *specular;
+    
+    printf("colors r: %f  g: %f  b: %f\n", color->r, color->g, color->b);
 }

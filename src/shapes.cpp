@@ -51,7 +51,7 @@ bool Sphere::intersect (Ray*& ray, float* thit, LocalGeo** local) {
         *local = new LocalGeo(position, normal);
     }
     
-    printf("circle hit\n");
+    //printf("circle hit\n");
     return 1;
 }
 
