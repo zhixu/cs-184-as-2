@@ -41,14 +41,14 @@ int main (int argc, char* argv[]) {
 
     r->position = *(scene->lookFrom);
 
-    for(x=0; x<scene->width; x++){
-        for(y=0; y<scene->height; y++){
+    for(y=0; y<scene->width; x++){
+        for(x=0; x<scene->height; y++){
             p = sampleGenerator->getSample(x, y);
             r->direction = *p - *(scene->lookFrom);
 
             rayTracer->trace(r, 0, c);
 
-   //        film->commit(x, y, c);
+           film->commit(x, y, c);
         }
     }
 
@@ -193,11 +193,12 @@ Scene::Scene(std::string file) {
       //  the vertex command). The vertices are assumed to be speciﬁed in counter-clockwise order. Your code
       //  should internally compute a face normal for this triangle.
       else if(!splitline[0].compare("tri")) {
-        // v1: atof(splitline[1].c_str())
-        // v2: atof(splitline[2].c_str())
-        // v3: atof(splitline[3].c_str())
+        //v1: atof(splitline[1].c_str());
+        //v2: atof(splitline[2].c_str());
+        //v3: atof(splitline[3].c_str());
         // Create new triangle:
         //   Store pointer to array of vertices
+        
         //   Store 3 integers to index into array
         //   Store current property values
         //   Store current top of matrix stack
@@ -300,32 +301,37 @@ Scene::Scene(std::string file) {
       //  The global ambient color to be added for each object 
       //  (default is .2,.2,.2)
       else if(!splitline[0].compare("ambient")) {
-        // r: atof(splitline[1].c_str())
-        // g: atof(splitline[2].c_str())
-        // b: atof(splitline[3].c_str())
+          float r, g, b;
+         r = atof(splitline[1].c_str());
+         g = atof(splitline[2].c_str());
+         b = atof(splitline[3].c_str());
+         brdf.ka = Color(r, g, b);
       }
 
-      //diﬀuse r g b
+      //diffuse r g b
       //  speciﬁes the diﬀuse color of the surface.
       else if(!splitline[0].compare("diffuse")) {
-        // r: atof(splitline[1].c_str())
-        // g: atof(splitline[2].c_str())
-        // b: atof(splitline[3].c_str())
-        // Update current properties
+          float r, g, b;
+         r = atof(splitline[1].c_str());
+         g = atof(splitline[2].c_str());
+         b = atof(splitline[3].c_str());
+         brdf.kd = Color(r, g, b);
       }
       //specular r g b 
       //  speciﬁes the specular color of the surface.
       else if(!splitline[0].compare("specular")) {
-        // r: atof(splitline[1].c_str())
-        // g: atof(splitline[2].c_str())
-        // b: atof(splitline[3].c_str())
-        // Update current properties
+          float r, g, b;
+         r = atof(splitline[1].c_str());
+         g = atof(splitline[2].c_str());
+         b = atof(splitline[3].c_str());
+         brdf.ks = Color(r, g, b);
       }
-      //shininess s
+      //shininess s (kr)
       //  speciﬁes the shininess of the surface.
       else if(!splitline[0].compare("shininess")) {
-        // shininess: atof(splitline[1].c_str())
-        // Update current properties
+          float shininess;
+         shininess = atof(splitline[1].c_str());
+         brdf.kr = shininess;
       }
       //emission r g b
       //  gives the emissive color of the surface.
