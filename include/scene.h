@@ -10,7 +10,8 @@ class Scene {
         std::string outputFilename;
 
         // camera stuff
-        Point *lookFrom, *lookAt, *up;
+        Point *lookFrom, *lookAt;
+        Vector *up;
         float fov;
 
         // shapes

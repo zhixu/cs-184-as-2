@@ -25,7 +25,32 @@ int main (int argc, char* argv[]) {
     Film* film = new Film(scene->width, scene->height);
 
     RayTracer* rayTracer = new RayTracer(scene->shapes, scene->lights);
+    Sample* sampleGenerator = new Sample(*(scene->lookFrom),
+                                         *(scene->lookAt),
+                                         *(scene->up),
+                                         scene->fov,
+                                         *film);
 
+    int x, y;
+    Point* p;
+    Color* c = new Color(0, 0, 0);
+    Ray* r = new Ray();
+
+    r->t_min = 0;
+    r->t_max = 0;
+
+    r->position = *(scene->lookFrom);
+
+    for(x=0; x<scene->width; x++){
+        for(y=0; y<scene->height; y++){
+            p = sampleGenerator->getSample(x, y);
+            r->direction = *p - *(scene->lookFrom);
+
+            rayTracer->trace(r, 0, c);
+
+   //        film->commit(x, y, c);
+        }
+    }
 
     printf("%d %d\n", scene->width, scene->height);
 
@@ -103,7 +128,7 @@ Scene::Scene(std::string file) {
             x = atof(splitline[7].c_str());
             y = atof(splitline[8].c_str());
             z = atof(splitline[9].c_str());
-            up = new Point(x, y, z);
+            up = new Vector(x, y, z);
         // fov:
             fov = atof(splitline[10].c_str());
       }

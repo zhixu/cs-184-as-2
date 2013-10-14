@@ -15,7 +15,7 @@ class Sample {
         int width, height;
         Sample();
         Sample(Point, Point, Vector, float, Film);
-        Point getSample(int, int);
+        Point* getSample(int, int);
 
 };    
 
