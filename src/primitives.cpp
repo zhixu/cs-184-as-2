@@ -319,6 +319,18 @@ Color Color::operator- (Color that) {
     return result;
 }
 
+Color Color::operator* (Color that) {
+    
+    Color result = Color(0, 0, 0);
+
+    result.r = fmax(r * that.r, 0.0);
+    result.g = fmax(g * that.g, 0.0);
+    result.b = fmax(b * that.b, 0.0);
+
+    return result;
+    
+}
+
 Color Color::operator* (float x) {
     Color result;
 

@@ -5,8 +5,8 @@
 
 class Shape {
     public:
-        Brdf brdf;
-        virtual bool intersect(Ray ray, float &t_hit, LocalGeo &local) { return 1; }
+        static Brdf brdf;
+        virtual bool intersect(Ray ray, float &t_hit, LocalGeo &local) = 0;
 
 };
 

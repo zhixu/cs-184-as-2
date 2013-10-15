@@ -13,6 +13,8 @@ Sphere::Sphere (Point p, float radius) {
 
 bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     
+    //printf("circle middle: x %f  y %f  z %f  radius: %f\n", c.x, c.y, c.z, r);
+    
     Point e = ray.position;
     Vector d = ray.direction;
     
@@ -23,6 +25,7 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     float disc = B*B - 4*A*C;
     
     if (disc <= 0) {
+        //printf("no intersection\n");
         return 0;
     }
     
@@ -51,7 +54,7 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
         local = LocalGeo(position, normal);
     }
     
-    //printf("circle hit\n");
+    //printf("discriminant: %f\n", disc);
     return 1;
 }
 

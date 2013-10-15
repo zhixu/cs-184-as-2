@@ -15,11 +15,12 @@ class Scene {
         float fov;
 
         // shapes
-        std::vector< Shape > shapes;
+        std::vector< Shape* > shapes;
 
         // lights
-        std::vector< Light > lights;
+        std::vector< Light* > lights;
         
+        //brdf
         Brdf brdf;
 
         Scene(std::string);

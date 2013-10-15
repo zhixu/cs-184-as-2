@@ -13,6 +13,7 @@
 #include "scene.h"
 #include "raytracer.h"
 
+Brdf Shape::brdf = Brdf();
 
 int main (int argc, char* argv[]) {
     if(argc < 2){
@@ -23,6 +24,8 @@ int main (int argc, char* argv[]) {
     std::string inputFilename = argv[1];
     Scene scene = Scene(inputFilename);
     Film film = Film(scene.width, scene.height);
+    
+    Shape::brdf = scene.brdf;
 
     RayTracer rayTracer = RayTracer(scene.shapes, scene.lights);
     Sample sampleGenerator = Sample(scene.lookFrom,
@@ -33,7 +36,6 @@ int main (int argc, char* argv[]) {
 
     int x, y;
     Point p;
-    Color c = Color(0, 0, 0);
     
     Ray r = Ray();
 
@@ -42,10 +44,15 @@ int main (int argc, char* argv[]) {
 
     r.position = scene.lookFrom;
 
-    for(y=0; y<scene.width; y++){
-        for(x=0; x<scene.height; x++){
+    for(x=0; x<scene.width; x++){
+        for(y=0; y<scene.height; y++){
+            Color c = Color(0, 0, 0);
             p = sampleGenerator.getSample(x, y);
             r.direction = p - scene.lookFrom;
+            //printf("Scene color: r %f  g %f  b %f \n", c.r, c.g, c.b);
+            //printf("coords width %d  y %d   ", y, x);
+            //printf("direction x: %f  y: %f z: %f\n", r.direction.x, r.direction.y, r.direction.z);
+            
             rayTracer.trace(r, 0, c);
 
            film.commit(x, y, c);
@@ -78,6 +85,7 @@ Scene::Scene(std::string file) {
 
       std::getline(inpfile,line);
       std::stringstream ss(line);
+      
 
     printf("Processing: %s\n", line.c_str());
 
@@ -141,9 +149,10 @@ Scene::Scene(std::string file) {
           float x, y, z, r;
 
         x = atof(splitline[1].c_str());
-        y = atof(splitline[1].c_str());
-        z = atof(splitline[1].c_str());
+        y = atof(splitline[2].c_str());
+        z = atof(splitline[3].c_str());
         Point center = Point(x, y, z);
+        printf("circle parse middle: x %f  y %f  z %f\n", x, y, z);
         r = atof(splitline[4].c_str());
 
         // TODO: all of these fancy things. just storing shape dimensions for now
@@ -151,8 +160,7 @@ Scene::Scene(std::string file) {
         //   Store 4 numbers
         //   Store current property values
         //   Store current top of matrix stack
-        Sphere sphere = Sphere(center, r);
-        shapes.push_back(sphere);
+        shapes.push_back(new Sphere(center, r));
       }
       //maxverts number
       //  Deﬁnes a maximum number of vertices for later triangle speciﬁcations. 
@@ -275,7 +283,7 @@ Scene::Scene(std::string file) {
         b = atof(splitline[6].c_str());
         Point p = Point(x, y, z);
         Color c = Color(r, g, b);
-        lights.push_back(DirectionalLight(p, c));
+        lights.push_back(new DirectionalLight(p, c));
       }
       //point x y z r g b
       //  The location of a point source and the color, as in OpenGL.
@@ -289,7 +297,7 @@ Scene::Scene(std::string file) {
         b = atof(splitline[6].c_str());
         Point p = Point(x, y, z);
         Color c = Color(r, g, b);
-        lights.push_back(PointLight(p, c));
+        lights.push_back(new PointLight(p, c));
       }
       //attenuation const linear quadratic
       //  Sets the constant, linear and quadratic attenuations 
@@ -307,6 +315,7 @@ Scene::Scene(std::string file) {
          r = atof(splitline[1].c_str());
          g = atof(splitline[2].c_str());
          b = atof(splitline[3].c_str());
+         printf("brdf colors r: %f  g: %f  b: %f\n", r, g, b);
          brdf.ka = Color(r, g, b);
       }
 

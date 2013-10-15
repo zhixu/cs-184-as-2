@@ -6,34 +6,36 @@
 
 #define DEPTH_THRESHOLD 1
 
-RayTracer::RayTracer (std::vector< Shape > ss, std::vector< Light > ls) {
+RayTracer::RayTracer (std::vector< Shape* > ss, std::vector< Light* > ls) {
     shapes = ss;
     lights = ls;
 }
 
 void RayTracer::trace(Ray ray, int depth, Color& color) {
 
-    printf("entering ray r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
+    //printf("entering ray color r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
     
     if(depth > DEPTH_THRESHOLD){
         // Color's default constructor makes it black,
         // no need to do anything here
         return;
     }
-    
+
     float t_of_hit;
     LocalGeo intersection;
-    Shape shape;
+    Shape* shape;
     bool has_intersection = false;
+
     for(std::vector<int>::size_type i=0; has_intersection == false && i != shapes.size(); i++){
         shape = shapes[i];
-
+ 
         float t_of_hit;
-        if(shape.intersect(ray, t_of_hit, intersection)){
+        if(shape->intersect(ray, t_of_hit, intersection)){
             has_intersection = true;
             Brdf brdf; //added for testing
-            brdf = shape.brdf; //added for testing
-            Light light;
+            brdf = shape->brdf; //added for testing
+            Light* light;
+            
             for(std::vector<int>::size_type i=0; i != lights.size(); i++){
                 light = lights[i];
                 illuminate(color, ray.position, intersection, brdf, light); //added
@@ -74,33 +76,36 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
     }*/
 }
 
-void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf, Light light) {
+void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf, Light* light) {
     Color ambient, diffuse, specular;
     
-    printf("pre colors r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
+    //printf("pre illum colors r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
+    /* ambient */
+    ambient = brdf.ka * light->color;
+    //printf("brdf colors r: %f  g: %f  b: %f\n", brdf.ka.r, brdf.ka.g, brdf.ka.b);
+    //printf("ambient colors r: %f  g: %f  b: %f\n", ambient.r, ambient.g, ambient.b);
+    //printf("light colors: r: %f  g: %f  b: %f\n", light->color.r, light->color.g, light->color.b);
+    
+    /* diffuse */
+    Vector N = local.normal.normalize();
+    Vector L = (light->position - local.position).normalize();
+    float diff = L.dot(N);
+    diffuse = brdf.kd * light->color * diff;
 
-    ambient = Color (brdf.ka.r * light.color.r,
-                         brdf.ka.g * light.color.g,
-                         brdf.ka.b * light.color.b);
+    //printf("diffuse colors r: %f  g: %f  b: %f\n", diffuse.r, diffuse.g, diffuse.b);
     
-    Vector N = local.normal;
-    Vector L = (light.position - local.position).normalize();
-    float diff = N.dot(L);
-    diffuse = Color(brdf.kd.r * light.color.r,
-                        brdf.kd.g * light.color.g,
-                        brdf.kd.b * light.color.b);
-    diffuse *= diff;
-    
-    Vector R = N*2*(L.dot(N)) - L;
-    diff = pow(R.dot(lookAt - local.position), brdf.kr);
-    specular = Color(brdf.ks.r * light.color.r,
-                        brdf.ks.g * light.color.g,
-                        brdf.ks.b * light.color.b);
+    /* specular */
+    Vector R = N*2*diff - L;
+    Vector V = (lookAt - local.position).normalize();
+    specular = brdf.ks * light->color * pow(R.dot(V), brdf.kr);
     specular *= diff;
+    //printf("specular colors r: %f  g: %f  b: %f\n", specular.r, specular.g, specular.b);
 
     color += ambient;
     color += diffuse;
     color += specular;
     
-    printf("colors r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
+    //color = Color(255, 255, 255);
+    
+    //printf("illum colors r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
 }

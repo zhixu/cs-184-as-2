@@ -60,11 +60,11 @@ Point Sample::getSample(int x, int y) {
     float alpha = 2*(x + 0.5)/width -1;
     float beta = 1 - 2*(y+0.5)/height;
     
-    //printf("alpha: %f beta: %f          x: %d  y: %d\n", alpha, beta, r, s);
-    
-    Vector d = u*alpha + v*beta + z;
+    Vector d = u*alpha + v*beta - z;
     
     Point p = Point(d.x, d.y, d.z);
+    
+    //printf("position vec x %f   y %f  z %f\n", p.x, p.y, p.z);
     
     return p;
     
