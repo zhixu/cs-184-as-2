@@ -51,6 +51,9 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
         thit = t2;
         Point position = p2;
         Vector normal = (p2-c)/r;
+        //printf("normal x %f y %f z %f\n", normal.x, normal.y, normal.z);
+        //Vector n = normal.normalize();
+        //printf("normalized x %f y %f z %f\n", n.x, n.y, n.z);
         local = LocalGeo(position, normal);
     }
     

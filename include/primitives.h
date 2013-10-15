@@ -123,18 +123,21 @@ class Light {
         Light();
         Light(Point, Color);
         virtual void generateShadowRay(LocalGeo, Ray, Color);
+        virtual Vector getLm(Point) = 0;
 };
 
 class PointLight : public Light {
     public:
         PointLight(Point, Color);
-        void generateShadowRay(LocalGeo, Ray, Color);
+        Vector getLm(Point);
+        void generateShadowRay(LocalGeo, Ray&, Color);
 };
 
 class DirectionalLight : public Light {
     public:
         DirectionalLight(Point, Color);
-        void generateShadowRay(LocalGeo, Ray, Color);
+        Vector getLm(Point);
+        void generateShadowRay(LocalGeo, Ray&, Color);
 };
 
 
