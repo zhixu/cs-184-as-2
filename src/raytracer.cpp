@@ -35,16 +35,16 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
     bool hitBlocker; // did the shadow ray for an object hit a blocker?
                      // to be determined in an inner loop
 
-    // variables for use while finding closest object
-    Shape *tempShape;
+    // variables for use while looking over objects
+    Shape *tempObject;
     float tempObjectHitT;
     LocalGeo tempObjectIntersection;
     bool hitTemp;
 
     // get the closest object that the ray hits
     for(std::vector<int>::size_type i=0; i != shapes.size(); i++){
-        tempShape = shapes[i];
-        hitTemp = shape->intersect(ray, tempObjectHitT, tempObjectIntersection);
+        tempObject = shapes[i];
+        hitTemp = tempObject->intersect(ray, tempObjectHitT, tempObjectIntersection);
         if(hitTemp){
             if(!hitObject){
                 //this is the first object to be hit
@@ -67,53 +67,43 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
     }
 
     // at this point, we know the camera ray hit an object
-    // now we need to see if 
+    // now we need to see which lights manage to hit it
 
+    Brdf brdf = object->brdf;
 
-    for(std::vector<int>::size_type i=0; has_intersection == false && i != shapes.size(); i++){
-        shape = shapes[i];
-        float t_of_hit;
-        
-        if(shape->intersect(ray, t_of_hit, intersection)){
-            has_intersection = true;
-            Brdf brdf = shape->brdf;
-            bool intersectsOtherObject;
-            
-            /* --------------------------- shadow rays --------------------------- */
-            Light* light;
-            Ray shadowRay;
-            
-            for(std::vector<int>::size_type i=0; i != lights.size(); i++){
-                intersectsOtherObject = false;
-                light = lights[i];
-                light->generateShadowRay(intersection, shadowRay, light->color);
+    Light* light;
+    Ray shadowRay;
 
-                // check if the light ray is blocked
-                
-                // loop over each of the other objects and check if this shadow ray hits
-                for(std::vector<int>::size_type j=0; intersectsOtherObject == false && j != shapes.size(); j++){
-                    subshape = shapes[j];
-                    
-                    if(subshape->intersect(shadowRay, t_of_shadow_hit, intersection)) {
-                        intersectsOtherObject = true;
- //                       color += brdf.ka * light->color; //don't skip ambient
-                        break;
-                    }
+    for(std::vector<int>::size_type i=0; i != lights.size(); i++){
+        light = lights[i];
+        light->generateShadowRay(objectIntersection, shadowRay, light->color); // sets shadowRay
 
-                    //phong phong
-                    if(!intersectsOtherObject) {
-                        illuminate(color, ray.position, intersection, brdf, light);
-                        break;
-                    }
-                }
+        // to check if the light ray is blocked, loop over each of the other objects and check 
+        // if the shadow ray hits a blocker
+        hitBlocker = false;
+
+        for(std::vector<int>::size_type j=0; hitBlocker == false && j != shapes.size(); j++){
+            tempObject = shapes[j];
+
+            hitTemp = tempObject->intersect(shadowRay, tempObjectHitT, tempObjectIntersection);
+            if(hitTemp){
+                hitBlocker = true;
+                blocker = tempObject;
+                blockerHitT = tempObjectHitT;
+                break;
             }
         }
-        if (!has_intersection) {
-            break;
-        }
 
-        // TODO: handle reflection
+        if(hitBlocker){
+            // we still need to account for ambient light
+            color += brdf.ka * light->color;
+        } else {
+            // do the full phong illumination!
+            illuminate(color, ray.position, objectIntersection, brdf, light);
+        }
     }
+
+    // TODO: handle reflection
     return;
 }
 
