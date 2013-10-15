@@ -30,7 +30,7 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     }
     
     disc = sqrt(pow(d.dot(e-c), 2) - d.dot(d)*((e-c).dot(e-c)-pow(r, 2)));
-    float pt1 = -d.dot(e-c);
+    float pt1 = -(d.dot(e-c));
     float denom = d.dot(d);
     
     float t1 = (pt1 + disc)/denom;
@@ -39,8 +39,8 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     Point p1 = e + d*t1;
     Point p2 = e + d*t2;
     
-    float distance1 = (d*t1).dot(d*t1);
-    float distance2 = (d*t2).dot(d*t2);
+    float distance1 = (p1-e).dot(p1-e);
+    float distance2 = (p2-e).dot(p2-e);
     
     if (distance1 < distance2) {
         thit = t1;

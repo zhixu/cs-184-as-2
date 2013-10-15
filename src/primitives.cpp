@@ -302,9 +302,9 @@ Color::Color (float paramR, float paramG, float paramB) {
 Color Color::operator+ (Color that) {
     Color result = Color(0, 0, 0);
 
-    result.r = fmin(fmax(r + that.r, 0), 255.0);
-    result.g = fmin(fmax(g + that.g, 0), 255.0);
-    result.b = fmin(fmax(b + that.b, 0), 255.0);
+    result.r = fmin(fmax(r + that.r, 0), 1);
+    result.g = fmin(fmax(g + that.g, 0), 1);
+    result.b = fmin(fmax(b + that.b, 0), 1);
 
     return result;
 }
@@ -312,9 +312,9 @@ Color Color::operator+ (Color that) {
 Color Color::operator- (Color that) {
     Color result = Color(0, 0, 0);
 
-    result.r = fmin(255.0, fmax(r - that.r, 0.0));
-    result.g = fmin(255.0, fmax(g - that.g, 0.0));
-    result.b = fmin(255.0, fmax(b - that.b, 0.0));
+    result.r = fmin(1, fmax(r - that.r, 0.0));
+    result.g = fmin(1, fmax(g - that.g, 0.0));
+    result.b = fmin(1, fmax(b - that.b, 0.0));
 
     return result;
 }
@@ -323,9 +323,9 @@ Color Color::operator* (Color that) {
     
     Color result = Color(0, 0, 0);
 
-    result.r = fmin(255.0, fmax(r * that.r, 0.0));
-    result.g = fmin(255.0, fmax(g * that.g, 0.0));
-    result.b = fmin(255.0, fmax(b * that.b, 0.0));
+    result.r = fmin(1, fmax(r * that.r, 0.0));
+    result.g = fmin(1, fmax(g * that.g, 0.0));
+    result.b = fmin(1, fmax(b * that.b, 0.0));
 
     return result;
     
@@ -334,9 +334,9 @@ Color Color::operator* (Color that) {
 Color Color::operator* (float x) {
     Color result;
 
-    result.r = fmin(255.0, fmax(r * x, 0.0));
-    result.g = fmin(255.0, fmax(g * x, 0.0));
-    result.b = fmin(255.0, fmax(b * x, 0.0));
+    result.r = fmin(1, fmax(r * x, 0.0));
+    result.g = fmin(1, fmax(g * x, 0.0));
+    result.b = fmin(1, fmax(b * x, 0.0));
 
     return result;
 }
@@ -344,18 +344,18 @@ Color Color::operator* (float x) {
 
 Color Color::operator+= (Color that) {
     
-    r = fmin(fmax(r + that.r, 0.0), 255.0);
-    g = fmin(fmax(g + that.g, 0.0), 255.0);
-    b = fmin(fmax(b + that.b, 0.0), 255.0);
+    r = fmin(fmax(r + that.r, 0.0), 1);
+    g = fmin(fmax(g + that.g, 0.0), 1);
+    b = fmin(fmax(b + that.b, 0.0), 1);
 
     return *this;
 }
 
 Color Color::operator*= (float x) {
     
-    r = fmin(fmax(r * x, 0), 255.0);
-    g = fmin(fmax(g * x, 0), 255.0);
-    b = fmin(fmax(b * x, 0), 255.0);
+    r = fmin(fmax(r * x, 0), 1);
+    g = fmin(fmax(g * x, 0), 1);
+    b = fmin(fmax(b * x, 0), 1);
 
     return *this;
 }
@@ -400,7 +400,9 @@ PointLight::PointLight(Point p, Color c) : Light(p, c) {
 
 Vector PointLight::getLm(Point p) {
     
-    return position - p;
+    return Vector(position.x - p.x,
+                                  position.y - p.y,
+                                  position.z - p.z);
     
 }
 

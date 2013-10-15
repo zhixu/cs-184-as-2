@@ -76,9 +76,14 @@ void Film::write(char* filename){
     int x, y;
     for(y=0; y<height; y++){
         for(x=0; x<width; x++){
-            row[(3 * x) + 0] = colors[y][x]->r;
-            row[(3 * x) + 1] = colors[y][x]->g;
-            row[(3 * x) + 2] = colors[y][x]->b;
+            
+            float r = colors[y][x]->r * 255.0;
+            float g = colors[y][x]->g * 255.0;
+            float b = colors[y][x]->b * 255.0;
+            
+            row[(3 * x) + 0] = r;
+            row[(3 * x) + 1] = g;
+            row[(3 * x) + 2] = b;
 
         }
         png_write_row(png_ptr, row);
