@@ -23,8 +23,9 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
     }
 
     float t_of_hit;
+    float t_of_shadow_hit;
     LocalGeo intersection;
-    Shape* shape;
+    Shape *shape, *subshape;
     bool has_intersection = false;
 
     for(std::vector<int>::size_type i=0; has_intersection == false && i != shapes.size(); i++){
@@ -34,25 +35,26 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
         if(shape->intersect(ray, t_of_hit, intersection)){
             has_intersection = true;
             Brdf brdf = shape->brdf;
-            bool intersectsOtherObject = false;
+            bool intersectsOtherObject;
             
             /* --------------------------- shadow rays --------------------------- */
             Light* light;
             Ray shadowRay;
             
             for(std::vector<int>::size_type i=0; i != lights.size(); i++){
+                intersectsOtherObject = false;
                 light = lights[i];
                 light->generateShadowRay(intersection, shadowRay, light->color);
 
                 // check if the light ray is blocked
                 
                 // loop over each of the other objects and check if this shadow ray hits
-                for(std::vector<int>::size_type j=0; intersectsOtherObject == false && j != shapes.size(); i++){
-                    shape = shapes[j];
+                for(std::vector<int>::size_type j=0; intersectsOtherObject == false && j != shapes.size(); j++){
+                    subshape = shapes[j];
                     
-                    if(shape->intersect(shadowRay, t_of_hit, intersection)) {
+                    if(subshape->intersect(shadowRay, t_of_shadow_hit, intersection)) {
                         intersectsOtherObject = true;
-                        color += brdf.ka * light->color; //don't skip ambient
+ //                       color += brdf.ka * light->color; //don't skip ambient
                         break;
                     }
 
@@ -63,7 +65,8 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
                     }
                 }
             }
-        } if (!has_intersection) {
+        }
+        if (!has_intersection) {
             break;
         }
 
