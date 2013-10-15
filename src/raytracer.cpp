@@ -22,11 +22,53 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
         return;
     }
 
-    float t_of_hit;
-    float t_of_shadow_hit;
-    LocalGeo intersection;
-    Shape *shape, *subshape;
-    bool has_intersection = false;
+    // there are 2 intersections we care about:
+    // camera ray intersecting object
+    // shadow ray intersecting blocker
+    // Lets make variable names that differentiate between the two
+
+    float objectHitT, blockerHitT;
+    LocalGeo objectIntersection, blockerIntersection;
+    Shape *object, *blocker;
+    bool hitObject = false; // did the camera ray hit an object?
+
+    bool hitBlocker; // did the shadow ray for an object hit a blocker?
+                     // to be determined in an inner loop
+
+    // variables for use while finding closest object
+    Shape *tempShape;
+    float tempObjectHitT;
+    LocalGeo tempObjectIntersection;
+    bool hitTemp;
+
+    // get the closest object that the ray hits
+    for(std::vector<int>::size_type i=0; i != shapes.size(); i++){
+        tempShape = shapes[i];
+        hitTemp = shape->intersect(ray, tempObjectHitT, tempObjectIntersection);
+        if(hitTemp){
+            if(!hitObject){
+                //this is the first object to be hit
+                objectIntersection = tempObjectIntersection;
+                object = tempObject;
+                objectHitT = tempObjectHitT;
+                hitObject = true;
+            } else if(tempObjectHitT < objectHitT){
+                // we found a closer object hit!
+                objectIntersection = tempObjectIntersection;
+                object = tempObject;
+                objectHitT = tempObjectHitT;
+            }
+        }
+    }
+
+    if(!hitObject){
+        // we didn't hit anything, so nothing to do
+        return;
+    }
+
+    // at this point, we know the camera ray hit an object
+    // now we need to see if 
+
 
     for(std::vector<int>::size_type i=0; has_intersection == false && i != shapes.size(); i++){
         shape = shapes[i];
