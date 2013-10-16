@@ -159,7 +159,7 @@ void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf
 
 Ray RayTracer::createReflectRay(LocalGeo intersection, Ray ray){
     Vector r, d, n;
-    d = ray.normalize();
+    d = ray.direction.normalize();
     n = intersection.normal.normalize();
 
     r = d - (n * 2) * d.dot(n);
