@@ -169,9 +169,9 @@ Scene::Scene(std::string file) {
         // Care if you want
         // Here, either declare array size
         // Or you can just use a STL vector, in which case you can ignore this
-        int x = atoi(sploitline[1].c_str());
-        
-        points = new Point array[x];
+        int x = atoi(splitline[1].c_str());
+        Point arr[x];
+        points = arr;
       }
       //maxvertnorms number
       //  Deﬁnes a maximum number of vertices with normals for later speciﬁcations.
@@ -183,11 +183,11 @@ Scene::Scene(std::string file) {
       //  Deﬁnes a vertex at the given location.
       //  The vertex is put into a pile, starting to be numbered at 0.
       else if(!splitline[0].compare("vertex")) {
-        
+        float x, y, z;
         
         x = atof(splitline[1].c_str()),
         y = atof(splitline[2].c_str()),
-        z = atof(splitline[3].c_str()));
+        z = atof(splitline[3].c_str());
         // Create a new vertex with these 3 values, store in some array
         *(points+p_counter) = Point(x, y, z);
         p_counter++;
@@ -210,16 +210,18 @@ Scene::Scene(std::string file) {
       //  the vertex command). The vertices are assumed to be speciﬁed in counter-clockwise order. Your code
       //  should internally compute a face normal for this triangle.
       else if(!splitline[0].compare("tri")) {
-        v1 = atof(splitline[1].c_str());
-        v2 = atof(splitline[2].c_str());
-        v3 = atof(splitline[3].c_str());
+          int v1, v2, v3;
+          
+        v1 = atoi(splitline[1].c_str());
+        v2 = atoi(splitline[2].c_str());
+        v3 = atoi(splitline[3].c_str());
         // Create new triangle:
         //   Store pointer to array of vertices
         
         //   Store 3 integers to index into array
         //   Store current property values
         //   Store current top of matrix stack
-        shapes.push_back(new Triangle(v1, v2, v3));
+        shapes.push_back(new Triangle(*(points+v1), *(points+v2), *(points+v3)));
       }
       //trinormal v1 v2 v3
       //  Same as above but for vertices speciﬁed with normals.

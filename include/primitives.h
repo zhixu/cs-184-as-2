@@ -43,6 +43,7 @@ class Point {
         Point operator+ (Vector); //point + vector(displacement) = point (displaced)
         Point operator- (Vector); //point - vector = point
         Vector operator- (Point); //point - point = vector
+        Point operator* (float);
         void print();
 };
 

@@ -21,7 +21,7 @@ class Sphere : public Shape {
 
 class Triangle : public Shape {
     public:
-        Point p0, p1, p2;
+        Point a, b, c;
         Vector normal;
         Triangle();
         Triangle(Point, Point, Point);
