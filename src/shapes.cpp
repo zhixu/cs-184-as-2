@@ -14,7 +14,7 @@ Sphere::Sphere (Point p, float radius) {
 bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     
     //printf("circle middle: x %f  y %f  z %f  radius: %f\n", c.x, c.y, c.z, r);
-    Point e = ray.position + ray.direction * ray.t_min;
+    Point e = ray.position;
     Vector d = ray.direction;
     
     float A = d.dot(d);
@@ -28,15 +28,23 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
         return 0;
     }
     
-    disc = sqrt(pow(d.dot(e-c), 2) - d.dot(d)*((e-c).dot(e-c)-pow(r, 2)));
+    disc = sqrt(disc);
     float pt1 = -(d.dot(e-c));
-    float denom = d.dot(d);
+    float denom = A;
     
     float t1 = (pt1 + disc)/denom;
     float t2 = (pt1 - disc)/denom;
     
-    if (t1 < ray.t_min && t2 < ray.t_min && t1 > ray.t_max && t2 > ray.t_max) { return 0; }
-    
+//    if (t1 < ray.t_min && t2 < ray.t_min && t1 > ray.t_max && t2 > ray.t_max) { return 0; }
+    if(t1 < ray.t_min && t2 < ray.t_min){
+        printf("t1=%f\tt2=%f\tmin=%f\tmax=%f\n", t1, t2, ray.t_min, ray.t_max);
+        return 0;
+    }
+    if(t1 > ray.t_max && t2 > ray.t_max){
+        printf("t1=%f\tt2=%f\tmin=%f\tmax=%f\n", t1, t2, ray.t_min, ray.t_max);
+        return 0;
+    }
+
     Point p1 = e + d*t1;
     Point p2 = e + d*t2;
     
