@@ -69,6 +69,7 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
     // now we need to see which lights manage to hit it
 
     Brdf brdf = object->brdf;
+    //printf("OUTSIDE brdf ka r: %f  g: %f  b: %f\n", brdf.ka.r, brdf.ka.g, brdf.ka.b);
 
     color += brdf.emission;
 
@@ -134,36 +135,31 @@ void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf
     Vector V = (lookAt - local.position).normalize();
     float RV = R.dot(V);
     //printf("LN %f\n", LN);
+    //printf("RV %f\n", RV);
         
     /* --------------------------- ambient --------------------------- */
     ambient = brdf.ka * light->color;
     //printf("ambient\t\t"); ambient.print();
     //printf("brdf ka r: %f  g: %f  b: %f\n", brdf.ka.r, brdf.ka.g, brdf.ka.b);
-    //printf("lightcolor r: %f  g: %f  b: %f\n", light->color.r, light->color.g, light->color.b);
-    //printf("ambient colors r: %f  g: %f  b: %f\n", ambient.r, ambient.g, ambient.b);
     
     /* --------------------------- diffuse --------------------------- */
 
     diffuse = brdf.kd * light->color * LN;
     //printf("diffuse\t\t"); diffuse.print();
-    /*printf("LN2 %f\n", LN);
-    printf("L x: %f y: %f z: %f \n", L.x, L.y, L.z);
-    printf("N x: %f y: %f z: %f \n", N.x, N.y, N.z);
-    printf("brdf kd r: %f  g: %f  b: %f\n", brdf.kd.r, brdf.kd.g, brdf.kd.b);*/
-    //printf("diffuse colors r: %f  g: %f  b: %f\n", diffuse.r, diffuse.g, diffuse.b);
+    //printf("LN2 %f\n", LN);
     
     /* --------------------------- specular --------------------------- */
 
     specular = brdf.ks * light->color * pow(RV, brdf.sp);
     //printf("specular\t"); specular.print();
     //printf("RV %f\n", RV);
-    //printf("specular colors r: %f  g: %f  b: %f\n", specular.r, specular.g, specular.b);
 
     color += ambient;
     color += diffuse;
     if(LN > 0){ // prevents adding a specular component to the wrong side of the object
         color += specular;
     }
+    
     //printf("illum colors r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
     //printf("phong\t\t"); color.print();
 }

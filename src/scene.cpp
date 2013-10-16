@@ -176,8 +176,7 @@ Scene::Scene(std::string file) {
         // Here, either declare array size
         // Or you can just use a STL vector, in which case you can ignore this
         int x = atoi(splitline[1].c_str());
-        Point arr[x];
-        points = arr;
+        points = new Point[x];
       }
       //maxvertnorms number
       //  Deﬁnes a maximum number of vertices with normals for later speciﬁcations.
@@ -195,7 +194,9 @@ Scene::Scene(std::string file) {
         y = atof(splitline[2].c_str()),
         z = atof(splitline[3].c_str());
         // Create a new vertex with these 3 values, store in some array
-        *(points+p_counter) = Point(x, y, z);
+        Point *p = new Point(x, y, z);
+        *(points+p_counter) = *p;
+        printf("Point %d : %f %f %f\n", p_counter, (*(points+p_counter)).x, (*(points+p_counter)).y, (*(points+p_counter)).z);
         p_counter++;
       }
       //vertexnormal x y z nx ny nz
@@ -227,7 +228,19 @@ Scene::Scene(std::string file) {
         //   Store 3 integers to index into array
         //   Store current property values
         //   Store current top of matrix stack
-        shapes.push_back(new Triangle(*(points+v1), *(points+v2), *(points+v3)));
+        /*printf("Triangle points %d : %f %f %f \t %d : %f %f %f \t %d : %f %f %f\n",
+                v1, (*(points+v1)).x, (*(points+v1)).y, (*(points+v1)).z,
+                v2, (*(points+v2)).x, (*(points+v2)).y, (*(points+v2)).z,
+                v3, (*(points+v3)).x, (*(points+v3)).y, (*(points+v3)).z);
+         printf("Triangle points %d : %f %f %f \t %d : %f %f %f \t %d : %f %f %f\n",
+                v1, points[v1].x, points[v1].y, points[v1].z,
+                v2, points[v2].x, points[v2].y, points[v2].z,
+                v3, points[v3].x, points[v3].y, points[v3].z);*/
+        Shape* s = new Triangle(points[v1], points[v2], points[v3]);
+        s->brdf = Brdf(diffuse, specular, ambient, kr, emission, sp);
+        shapes.push_back(s);
+        
+
       }
       //trinormal v1 v2 v3
       //  Same as above but for vertices speciﬁed with normals.

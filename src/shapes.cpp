@@ -37,11 +37,11 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     
 //    if (t1 < ray.t_min && t2 < ray.t_min && t1 > ray.t_max && t2 > ray.t_max) { return 0; }
     if(t1 < ray.t_min && t2 < ray.t_min){
-        printf("t1=%f\tt2=%f\tmin=%f\tmax=%f\n", t1, t2, ray.t_min, ray.t_max);
+        //printf("t1=%f\tt2=%f\tmin=%f\tmax=%f\n", t1, t2, ray.t_min, ray.t_max);
         return 0;
     }
     if(t1 > ray.t_max && t2 > ray.t_max){
-        printf("t1=%f\tt2=%f\tmin=%f\tmax=%f\n", t1, t2, ray.t_min, ray.t_max);
+        //printf("t1=%f\tt2=%f\tmin=%f\tmax=%f\n", t1, t2, ray.t_min, ray.t_max);
         return 0;
     }
 
@@ -73,7 +73,7 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
 }
 
 Triangle::Triangle() {
-
+    
 }
 
 Triangle::Triangle(Point x, Point y, Point z) {
@@ -91,6 +91,11 @@ bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &local) {
     
     Point e = ray.position;
     Vector d = ray.direction;
+    /*printf("d before ");
+    d.print();
+    printf("e before ");
+    e.print();*/
+    
     
     a2 = a.x - b.x;
     b2 = a.y - b.y;
@@ -105,26 +110,66 @@ bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &local) {
     k = a.y - e.y;
     l = a.z - e.z;
     
-    float ei_hf = e2*i - h*f;
-    float gf_di = g*f - d2*i;
-    float dh_eg = d2*h - e2*g;
+    Vector m_beta = Vector(e2*i - h*f, g*f - d2*i, d2*h - e2*g);
+    Vector t_gamma = Vector(a2*k - j*b2, j*c2 - a2*l, d2*h - e2*g);
     
-    float M = a2*ei_hf + b2*gf_di + c2*dh_eg;
+    Vector beta_t = Vector(j, k, l);
+    Vector gamma_t = Vector(i, h, g);
+    Vector t_t = Vector(f, e2, d2);
+    Vector M_t = Vector(a2, b2, c2);
     
+    float M = M_t.dot(m_beta);
     
-    float t = - (f*(a2*k - j*b2) + h*(j*c2 - a2*l) + g*(b2*l - e2*g))/M;
-    if (t < ray.t_min || t > ray.t_max) { return 0; }
+    float t = -(t_t.dot(t_gamma))/M;
+    if (t < ray.t_min || t > ray.t_max) { 
+        //printf("t no hit\n");
+        return 0; 
+        }
     
-    float gamma = (j*ei_hf + k*gf_di + l*dh_eg)/M;
-    if (gamma < 0 || gamma > 1) { return 0; }
+    float gamma = (gamma_t.dot(t_gamma))/M;
+    if (gamma < 0 || gamma > 1) { 
+        //printf("gamma no hit\n");
+        return 0; 
+        }
     
-    float beta = (j*ei_hf + k*gf_di + l*dh_eg)/M;
-    if (beta < 0 || beta > 1 - gamma) { return 0; }
+    float beta = (beta_t.dot(m_beta))/M;
+    if (beta < 0 || beta > 1 - gamma) { 
+        //printf("beta no hit\n");
+        return 0; 
+        }
     
     Point temp = Point(0, 0, 0);
     Vector pos = (a-temp)*(1 - beta - gamma) + (b-temp)*beta + (c-temp)*gamma;
     Point position = Point(pos.x, pos.y, pos.z);
     Vector n = normal;
+   /*printf("...................................................................\n");
+    printf("a ");
+    a.print();
+    printf("b ");
+    b.print();
+    printf("c ");
+    c.print();
+    printf("d ");
+    d.print();
+    //printf("e ");
+    //e.print();
+    
+    printf("components %f %f %f \n %f %f %f \n %f %f %f \n %f %f %f\n", 
+            a2, b2, c2, d2, e2, f, g, h, i, j, k, l);
+    
+    printf("M_t ");
+    M_t.print();
+    printf("m_beta ");
+    m_beta.print();
+    printf("M: %f\n", M);
+     
+    printf("t %f  gamma %f  beta %f \n", t, gamma, beta);*/
+    
+    /*printf("position ");
+    position.print();
+    printf("normal ");
+    n.print();
+    */
     
     local = LocalGeo(position, n);
     
