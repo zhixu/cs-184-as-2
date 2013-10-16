@@ -21,10 +21,11 @@ class Sphere : public Shape {
 
 class Triangle : public Shape {
     public:
-        Point a, b, c;
+        Point p0, p1, p2;
+        Vector normal;
         Triangle();
         Triangle(Point, Point, Point);
-        //bool intersect(Ray ray, float &t_hit, LocalGeo &local);
+        bool intersect(Ray ray, float &t_hit, LocalGeo &local);
 };
 
 #endif

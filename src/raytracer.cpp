@@ -148,11 +148,5 @@ void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf
     color += diffuse;
     color += specular;
     
-
-    
-    
-    
-    //color = Color(255, 255, 255);
-    
     //printf("illum colors r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
 }

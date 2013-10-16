@@ -35,6 +35,8 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     float t1 = (pt1 + disc)/denom;
     float t2 = (pt1 - disc)/denom;
     
+    if (t1 < t_min && t2 < t_min && t1 > t_max && t2 > t_max) { return 0; }
+    
     Point p1 = e + d*t1;
     Point p2 = e + d*t2;
     
@@ -68,12 +70,14 @@ Triangle::Triangle() {
 
 Triangle::Triangle(Point x, Point y, Point z) {
 
-    a = x;
-    b = y;
-    c = z; 
+    p0 = x;
+    p1 = y;
+    p2 = z; 
+    
+    normal = (p1-p0).dot(p2-p0);
     
 }
-/*
+
 bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &locals) {
     float a2, b2, c2, d2, e2, f, g, h, i, j, k, l;
     
@@ -99,9 +103,16 @@ bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &locals) {
     
     float M = a2*ei_hf + b2*gf_di + c2*dh_eg;
     
-    float beta = (j*ei_hf + k*gf_di + l*dh_eg)/M;
+    
+    t = - (f*(a2*k - j*b2) + h*(j*c2 - a2*l) + g*(b2*l - e2*g))/M;
+    if (t < ray.t_min || t > ray.t_max) { return 0; }
+    
     float gamma = (j*ei_hf + k*gf_di + l*dh_eg)/M;
+    if (gamma < 0 || gamma > 1) { return 0; }
+    
+    float beta = (j*ei_hf + k*gf_di + l*dh_eg)/M;
+    if (beta < 0 || beta > 1 - gamma) { return 0; }
     
     
     return 1;
-}*/
+}
