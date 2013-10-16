@@ -4,7 +4,7 @@ maxdepth 1
 
 output basic01test.png
 
-camera 0 0 0 0 0 -1 0 1 0 90
+camera 0 0 0 0 0 -1 0 1 0 30
 
 ambient .1 .1 .2
 
