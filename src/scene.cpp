@@ -37,7 +37,7 @@ int main (int argc, char* argv[]) {
     Ray r = Ray();
 
     r.t_min = 0;
-    r.t_max = 0;
+    r.t_max = 900;
 
     r.position = scene.lookFrom;
 
