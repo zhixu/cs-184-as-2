@@ -53,7 +53,7 @@ int main (int argc, char* argv[]) {
             //printf("coords width %d  y %d   ", y, x);
             //printf("direction x: %f  y: %f z: %f\n", r.direction.x, r.direction.y, r.direction.z);
             
-            rayTracer.trace(r, 0, c);
+            rayTracer.trace(r, scene.maxDepth, c);
 
            film.commit(x, y, c);
         }

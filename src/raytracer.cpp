@@ -5,18 +5,17 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define DEPTH_THRESHOLD 1
-
 RayTracer::RayTracer (std::vector< Shape* > ss, std::vector< Light* > ls) {
     shapes = ss;
     lights = ls;
 }
 
 void RayTracer::trace(Ray ray, int depth, Color& color) {
+    // to make things easier, the depth is initially maxDepth, and counts down to 0
 
     //printf("entering ray color r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
     
-    if(depth > DEPTH_THRESHOLD){
+    if(depth < 0){
         // Color's default constructor makes it black,
         // no need to do anything here
         return;
@@ -107,7 +106,13 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
         }
     }
 
-    // TODO: handle reflection
+    if(brdf.kr > 0){
+        Ray reflectRay = createReflectRay(objectIntersection, ray);
+        Color tempColor = Color(0, 0, 0);
+        trace(reflectRay, depth - 1, tempColor);
+        color += tempColor * brdf.kr;
+    }
+
     return;
 }
 
@@ -150,4 +155,13 @@ void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf
         color += specular;
     }
     //printf("illum colors r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
+}
+
+Ray RayTracer::createReflectRay(LocalGeo intersection, Ray ray){
+    Vector r, d, n;
+    d = ray.normalize();
+    n = intersection.normal.normalize();
+
+    r = d - (n * 2) * d.dot(n);
+    return Ray(intersection.position, r, 0.05, 0);
 }
