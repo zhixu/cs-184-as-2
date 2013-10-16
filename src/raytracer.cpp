@@ -146,7 +146,8 @@ void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf
 
     color += ambient;
     color += diffuse;
-    color += specular;
-    
+    if(LN > 0){ // prevents adding a specular component to the wrong side of the object
+        color += specular;
+    }
     //printf("illum colors r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
 }
