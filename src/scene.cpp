@@ -13,7 +13,6 @@
 #include "scene.h"
 #include "raytracer.h"
 
-Brdf Shape::brdf = Brdf();
 
 int main (int argc, char* argv[]) {
     if(argc < 2){
@@ -24,8 +23,6 @@ int main (int argc, char* argv[]) {
     std::string inputFilename = argv[1];
     Scene scene = Scene(inputFilename);
     Film film = Film(scene.width, scene.height);
-    
-    Shape::brdf = scene.brdf;
 
     RayTracer rayTracer = RayTracer(scene.shapes, scene.lights);
     Sample sampleGenerator = Sample(scene.lookFrom,
@@ -71,6 +68,13 @@ Scene::Scene(std::string file) {
     // handle defaults
     maxDepth = 5;
     outputFilename = "output.png";
+
+    float kr = 0;
+    float sp = 0;
+    Color diffuse = Color(0, 0, 0);
+    Color specular = Color(0, 0, 0);
+    Color ambient = Color(0.2, 0.2, 0.2);
+    Color emission = Color(0, 0, 0);
 
   std::ifstream inpfile(file.c_str());
   if(!inpfile.is_open()) {
@@ -160,7 +164,9 @@ Scene::Scene(std::string file) {
         //   Store 4 numbers
         //   Store current property values
         //   Store current top of matrix stack
-        shapes.push_back(new Sphere(center, r));
+        Shape* s = new Sphere(center, r);
+        s->brdf = Brdf(diffuse, specular, ambient, kr, emission, sp);
+        shapes.push_back(s);
       }
       //maxverts number
       //  Deﬁnes a maximum number of vertices for later triangle speciﬁcations. 
@@ -326,7 +332,7 @@ Scene::Scene(std::string file) {
          g = atof(splitline[2].c_str());
          b = atof(splitline[3].c_str());
          printf("brdf colors r: %f  g: %f  b: %f\n", r, g, b);
-         brdf.ka = Color(r, g, b);
+         ambient = Color(r, g, b);
       }
 
       //diffuse r g b
@@ -336,7 +342,7 @@ Scene::Scene(std::string file) {
          r = atof(splitline[1].c_str());
          g = atof(splitline[2].c_str());
          b = atof(splitline[3].c_str());
-         brdf.kd = Color(r, g, b);
+         diffuse = Color(r, g, b);
       }
       //specular r g b 
       //  speciﬁes the specular color of the surface.
@@ -345,22 +351,24 @@ Scene::Scene(std::string file) {
          r = atof(splitline[1].c_str());
          g = atof(splitline[2].c_str());
          b = atof(splitline[3].c_str());
-         brdf.ks = Color(r, g, b);
+         specular = Color(r, g, b);
       }
-      //shininess s (kr)
+      //shininess s (sp)
       //  speciﬁes the shininess of the surface.
       else if(!splitline[0].compare("shininess")) {
           float shininess;
          shininess = atof(splitline[1].c_str());
-         brdf.kr = shininess;
+         sp = shininess;
       }
       //emission r g b
       //  gives the emissive color of the surface.
       else if(!splitline[0].compare("emission")) {
-        // r: atof(splitline[1].c_str())
-        // g: atof(splitline[2].c_str())
-        // b: atof(splitline[3].c_str())
+        int r, g, b;
+        r = atof(splitline[1].c_str());
+        g = atof(splitline[2].c_str());
+        b = atof(splitline[3].c_str());
         // Update current properties
+        emission = Color(r, g, b);
       } else {
         std::cerr << "Unknown command: " << splitline[0] << std::endl;
       }

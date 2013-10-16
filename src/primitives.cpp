@@ -71,6 +71,10 @@ float Vector::dot(Vector v) {
     return w;
 }
 
+void Vector::print(){
+    printf("Vector(%f, %f, %f)\n", x, y, z);
+}
+
 /*
  * Point class member functions
  */
@@ -372,6 +376,10 @@ Color Color::operator*= (float x) {
     return *this;
 }
 
+void Color::print(){
+    printf("Color(%f, %f, %f)\n", r, g, b);
+}
+
 /*
  * Brdf class member functions
  */
@@ -379,14 +387,29 @@ Color Color::operator*= (float x) {
  Brdf::Brdf() {
  }
  
- Brdf::Brdf(Color d, Color s, Color a, float r) {
+ Brdf::Brdf(Color d, Color s, Color a, float r, Color e, float shine) {
      
      kd = d;
      ks = s;
      ka = a;
      kr = r;
+     emission = e;
+     sp = shine;
  
  }
+
+void Brdf::print(){
+    printf("kd: ");
+    kd.print();
+    printf("ks: ");
+    ks.print();
+    printf("ka: ");
+    ka.print();
+    printf("kr: %f\n", kr);
+    printf("emission: ");
+    emission.print();
+}
+
  
  /*
  * Light class member functions

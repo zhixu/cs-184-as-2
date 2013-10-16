@@ -70,6 +70,8 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
 
     Brdf brdf = object->brdf;
 
+    color += brdf.emission;
+
     Light* light;
     Ray shadowRay;
 
@@ -110,8 +112,13 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
         Ray reflectRay = createReflectRay(objectIntersection, ray);
         Color tempColor = Color(0, 0, 0);
         trace(reflectRay, depth - 1, tempColor);
-        color += tempColor * brdf.kr;
+        Color reflection = tempColor * brdf.kr;
+   //     printf("Reflection\t"); reflection.print();
+        color += reflection;
     }
+ //   printf("Final\t\t");
+   // color.print();
+  //  printf("\n");
 
     return;
 }
@@ -130,6 +137,7 @@ void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf
         
     /* --------------------------- ambient --------------------------- */
     ambient = brdf.ka * light->color;
+    //printf("ambient\t\t"); ambient.print();
     //printf("brdf ka r: %f  g: %f  b: %f\n", brdf.ka.r, brdf.ka.g, brdf.ka.b);
     //printf("lightcolor r: %f  g: %f  b: %f\n", light->color.r, light->color.g, light->color.b);
     //printf("ambient colors r: %f  g: %f  b: %f\n", ambient.r, ambient.g, ambient.b);
@@ -137,6 +145,7 @@ void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf
     /* --------------------------- diffuse --------------------------- */
 
     diffuse = brdf.kd * light->color * LN;
+    //printf("diffuse\t\t"); diffuse.print();
     /*printf("LN2 %f\n", LN);
     printf("L x: %f y: %f z: %f \n", L.x, L.y, L.z);
     printf("N x: %f y: %f z: %f \n", N.x, N.y, N.z);
@@ -145,7 +154,8 @@ void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf
     
     /* --------------------------- specular --------------------------- */
 
-    specular = brdf.ks * light->color * pow(RV, brdf.kr);
+    specular = brdf.ks * light->color * pow(RV, brdf.sp);
+    //printf("specular\t"); specular.print();
     //printf("RV %f\n", RV);
     //printf("specular colors r: %f  g: %f  b: %f\n", specular.r, specular.g, specular.b);
 
@@ -155,6 +165,7 @@ void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf
         color += specular;
     }
     //printf("illum colors r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
+    //printf("phong\t\t"); color.print();
 }
 
 Ray RayTracer::createReflectRay(LocalGeo intersection, Ray ray){
@@ -162,6 +173,10 @@ Ray RayTracer::createReflectRay(LocalGeo intersection, Ray ray){
     d = ray.direction.normalize();
     n = intersection.normal.normalize();
 
-    r = d - (n * 2) * d.dot(n);
+    r = d - ((n * 2) * d.dot(n));
+
+    //r.print();
+    //d.print();
+    //printf("\n\n");
     return Ray(intersection.position, r, 0.05, 0);
 }

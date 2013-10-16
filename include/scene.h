@@ -21,9 +21,6 @@ class Scene {
 
         // lights
         std::vector< Light* > lights;
-        
-        //brdf
-        Brdf brdf;
 
         Scene(std::string);
 

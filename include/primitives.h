@@ -15,6 +15,7 @@ class Vector {
         Vector normalize();
         Vector cross(Vector);
         float dot(Vector);
+        void print();
 };
 
 /*
@@ -108,14 +109,16 @@ class Color {
         Color operator/ (float);
         Color operator+= (Color);
         Color operator*= (float);
+        void print();
 };
 
 class Brdf {
     public:
-        Color kd, ks, ka;
-        float kr;
+        Color kd, ks, ka, emission;
+        float kr, sp;
         Brdf();
-        Brdf(Color, Color, Color, float);
+        Brdf(Color, Color, Color, float, Color, float);
+        void print();
 };
 
 class Light {
