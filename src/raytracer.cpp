@@ -84,12 +84,16 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
 
         for(std::vector<int>::size_type j=0; hitBlocker == false && j != shapes.size(); j++){
             tempObject = shapes[j];
+            if(tempObject == object){
+                continue;
+            }
 
             hitTemp = tempObject->intersect(shadowRay, tempObjectHitT, tempObjectIntersection);
             if(hitTemp){
                 hitBlocker = true;
                 blocker = tempObject;
                 blockerHitT = tempObjectHitT;
+
                 break;
             }
         }

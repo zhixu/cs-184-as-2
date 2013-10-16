@@ -107,6 +107,10 @@ Vector Point::operator- (Point p2) {
     return ret;
 }
 
+void Point::print(){
+    printf("Point(%f, %f, %f)\n", x, y, z);
+}
+
 /*
  * Ray class member functions
  */
@@ -122,6 +126,14 @@ Ray::Ray (Point p, Vector v, float min, float max) {
     t_max = max;
     
  }
+
+void Ray::print(){
+    printf("Ray(position=(%f, %f, %f), direction=(%f, %f, %f), t_min=%f, t_max=%f)\n",
+            position.x, position.y, position.z,
+            direction.x, direction.y, direction.z,
+            t_min,
+            t_max);
+}
  
  /*
  * Matrix class member functions
@@ -411,9 +423,9 @@ void PointLight::generateShadowRay(LocalGeo local, Ray &shadowRay, Color lightCo
                                   position.y - local.position.y,
                                   position.z - local.position.z);
     /* add bias */
-    Point pos = local.position + vector*0.01;
+    Point pos = local.position;
     
-    shadowRay = Ray(pos, vector, 0.01, 0);
+    shadowRay = Ray(pos, vector, 0.05, 0);
     lightColor = color;
 }
 
@@ -429,8 +441,8 @@ void DirectionalLight::generateShadowRay(LocalGeo local, Ray &shadowRay, Color l
                                 position.y,
                                 position.z);
     /* add bias */
-    Point pos = local.position + vector*0.01;
+    Point pos = local.position;
     
-    shadowRay = Ray(pos, vector, 0.01, 0);
+    shadowRay = Ray(pos, vector, 0.05, 0);
     lightColor = color;
 }

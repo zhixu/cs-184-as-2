@@ -43,7 +43,7 @@ class Point {
         Point operator+ (Vector); //point + vector(displacement) = point (displaced)
         Point operator- (Vector); //point - vector = point
         Vector operator- (Point); //point - point = vector
-        
+        void print();
 };
 
 class Ray {
@@ -53,6 +53,7 @@ class Ray {
         float t_min, t_max;
         Ray();
         Ray(Point, Vector, float, float);
+        void print();
 };
 
 /*
