@@ -62,11 +62,13 @@ class Matrix {
     public:
         float mat[4][4];
         Matrix();
+        Matrix(const Matrix&);
         Matrix(float, float, float, float,
                 float, float, float, float, 
                 float, float, float, float, 
                 float, float, float, float);
-        void rotate(float, float, float);
+        void identity();
+        void rotate(float, float, float, float);
         void scale(float, float, float);
         void translate(float, float, float);
         Matrix invrotate(Matrix);
@@ -74,6 +76,7 @@ class Matrix {
         Matrix invtranslate(Matrix);
         Point operator* (Point);
         Vector operator* (Vector);
+        Matrix operator* (Matrix);
         
 };
 
