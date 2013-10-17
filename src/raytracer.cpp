@@ -13,8 +13,6 @@ RayTracer::RayTracer (std::vector< Shape* > ss, std::vector< Light* > ls) {
 void RayTracer::trace(Ray ray, int depth, Color& color) {
     // to make things easier, the depth is initially maxDepth, and counts down to 0
 
-    //printf("entering ray color r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
-    
     if(depth < 0){
         // Color's default constructor makes it black,
         // no need to do anything here
@@ -26,9 +24,9 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
     // shadow ray intersecting blocker
     // Lets make variable names that differentiate between the two
 
-    float objectHitT, blockerHitT;
+    float objectHitT;//, blockerHitT;
     LocalGeo objectIntersection, blockerIntersection;
-    Shape *object, *blocker;
+    Shape *object;//, *blocker;
     bool hitObject = false; // did the camera ray hit an object?
 
     bool hitBlocker; // did the shadow ray for an object hit a blocker?
@@ -93,8 +91,8 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
             hitTemp = tempObject->intersect(shadowRay, tempObjectHitT, tempObjectIntersection);
             if(hitTemp){
                 hitBlocker = true;
-                blocker = tempObject;
-                blockerHitT = tempObjectHitT;
+                //blocker = tempObject;
+                //blockerHitT = tempObjectHitT;
 
                 break;
             }
@@ -102,7 +100,8 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
 
         if(hitBlocker){
             // we still need to account for ambient light
-            color += brdf.ka * light->color;
+            //color += brdf.ka * light->color;
+            break;
         } else {
             // do the full phong illumination!
             illuminate(color, ray.position, objectIntersection, brdf, light);

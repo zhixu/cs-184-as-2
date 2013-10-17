@@ -22,7 +22,7 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     float C = (e-c).dot(e-c)-r*r;
     
     float disc = B*B - 4*A*C;
-    
+    //printf("discriminant: %f\n", disc);
     if (disc <= 0) {
         //printf("no intersection\n");
         return 0;
@@ -68,7 +68,8 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
 
 //    printf("(%f, %f, %f) disc=%f denom=%f\n", e.x, e.y, e.z, disc, denom);
 //    printf("(%f, %f, %f)\n", ray.position.x, ray.position.y, ray.position.z);
-    //printf("discriminant: %f\n", disc);
+    
+    
     return 1;
 }
 

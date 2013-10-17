@@ -23,7 +23,7 @@ class Scene {
         std::vector< Light* > lights;
         
         //transformation
-        std::stack<Matrix> mst;
+        //std::stack<Matrix> mst;
 
         Scene(std::string);
 

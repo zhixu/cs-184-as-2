@@ -12,7 +12,7 @@ Sample::Sample() {
 }
 
 Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
-
+   
     lookFrom = lf;
     lookAt = la;
     up = upv;

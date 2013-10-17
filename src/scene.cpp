@@ -256,39 +256,39 @@ Scene::Scene(std::string file) {
       //translate x y z
       //  A translation 3-vector
       else if(!splitline[0].compare("translate")) {
-        float x, y, z;
-        x = atof(splitline[1].c_str());
-        y = atof(splitline[2].c_str());
-        z = atof(splitline[3].c_str());
+        //float x, y, z;
+        //x = atof(splitline[1].c_str());
+        //y = atof(splitline[2].c_str());
+        //z = atof(splitline[3].c_str());
         // Update top of matrix stack
-        Matrix m = Matrix();
-        m.translate(x, y, z);
-        mst.push(m);
+        //Matrix m = Matrix();
+        //m.translate(x, y, z);
+        //mst.push(m);
       }
       //rotate x y z angle
       //  Rotate by angle (in degrees) about the given axis as in OpenGL.
       else if(!splitline[0].compare("rotate")) {
-        float x, y, z;
-        x = atof(splitline[1].c_str());
-        y = atof(splitline[2].c_str());
-        z = atof(splitline[3].c_str());
+        //float x, y, z;
+        //x = atof(splitline[1].c_str());
+        //y = atof(splitline[2].c_str());
+        //z = atof(splitline[3].c_str());
         // angle: atof(splitline[4].c_str())
         // Update top of matrix stack
-        Matrix m = Matrix();
-        m.rotate(x, y, z);
-        mst.push(m);
+        //Matrix m = Matrix();
+        //m.rotate(x, y, z);
+        //mst.push(m);
       }
       //scale x y z
       //  Scale by the corresponding amount in each axis (a non-uniform scaling).
       else if(!splitline[0].compare("scale")) {
-        float x, y, z;
+        /*float x, y, z;
         x = atof(splitline[1].c_str());
         y = atof(splitline[2].c_str());
         z = atof(splitline[3].c_str());
         // Update top of matrix stack
         Matrix m = Matrix();
         m.scale(x, y, z);
-        mst.push(m);
+        mst.push(m);*/
       }
       //pushTransform
       //  Push the current modeling transform on the stack as in OpenGL. 
@@ -304,7 +304,7 @@ Scene::Scene(std::string file) {
       //  (assuming the initial camera transformation is on the stack as 
       //  discussed above).
       else if(!splitline[0].compare("popTransform")) {
-        mst.pop();
+        //mst.pop();
       }
 
       //directional x y z r g b
