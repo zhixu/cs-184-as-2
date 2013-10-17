@@ -58,7 +58,6 @@ class Ray {
         void print();
 };
 
-/*
 class Matrix {
     public:
         float mat[4][4];
@@ -67,14 +66,14 @@ class Matrix {
                 float, float, float, float, 
                 float, float, float, float, 
                 float, float, float, float);
-        Matrix rotate(float, float, float);
-        Matrix scale(float, float, float);
-        Matrix translate(float, float, float);
+        void rotate(float, float, float);
+        void scale(float, float, float);
+        void translate(float, float, float);
         Matrix invrotate(Matrix);
         Matrix invscale(Matrix);
         Matrix invtranslate(Matrix);
         
-};*/
+};
 
 class LocalGeo {
     public:

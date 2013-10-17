@@ -146,8 +146,13 @@ void Ray::print(){
  /*
  * Matrix class member functions
  */
- /*
+ 
  Matrix::Matrix() {
+     for(int i = 0; i < 4; i++) {
+         for(int j = 0; j < 4; j++) {
+             mat[i][j] = 0;
+         }
+     }
  }
  
  Matrix::Matrix(float a1, float a2, float a3, float a4,
@@ -174,34 +179,30 @@ void Ray::print(){
 
 }
  
+ // how to rotation matrix
+ void Matrix::rotate(float x, float y, float z) {
  
- Matrix Matrix::rotate(float x, float y, float z) {
- 
-    Matrix m = Matrix (x, 0.0, 0.0, 0.0,
-                             0.0, y, 0.0, 0.0,
-                             0.0, 0.0, z, 0.0,
-                             0.0, 0.0, 0.0, 1.0);
-    
-    return m;
- 
+    mat[0][0] = x;
+    mat[1][1] = y;
+    mat[2][2] = z;
+    mat[3][3] = 1.0;
+
  }
  
- Matrix Matrix::scale(float x, float y, float z) {
-     Matrix m = Matrix (x, 0.0, 0.0, 0.0,
-                             0.0, y, 0.0, 0.0,
-                             0.0, 0.0, z, 0.0,
-                             0.0, 0.0, 0.0, 1.0);
-     
-     return m;
+void Matrix::scale(float x, float y, float z) {
+    mat[0][0] = x;
+    mat[1][1] = y;
+    mat[2][2] = z;
+    mat[3][3] = 1.0;
  }
  
- Matrix Matrix::translate(float x, float y, float z) {
-     Matrix m = Matrix (1.0, 0.0, 0.0, x,
-                             0.0, 1.0, 0.0, y,
-                             0.0, 0.0, 1.0, z,
-                             0.0, 0.0, 0.0, 1.0);
-                             
-    return m;
+void Matrix::translate(float x, float y, float z) {
+
+    mat[0][3] = x;
+    mat[1][3] = y;
+    mat[2][3] = z;
+    mat[3][3] = 1.0;
+
  }
  
  Matrix Matrix::invrotate(Matrix m) {
@@ -230,7 +231,7 @@ void Ray::print(){
                             -mat[3][0], -mat[3][1], -mat[3][2], -mat[3][3]);
      return n;
      
- }*/
+ }
  
 /*
  * LocalGeo class member functions

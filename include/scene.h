@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include <string>
+#include <queue>
 
 class Scene {
     public:
@@ -21,6 +22,9 @@ class Scene {
 
         // lights
         std::vector< Light* > lights;
+        
+        //transformation
+        std::queue<Matrix> mst;
 
         Scene(std::string);
 
