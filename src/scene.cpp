@@ -78,12 +78,17 @@ Scene::Scene(std::string file) {
     Color ambient = Color(0.2, 0.2, 0.2);
     Color emission = Color(0, 0, 0);
 
+
+
   std::ifstream inpfile(file.c_str());
   if(!inpfile.is_open()) {
     std::cout << "Unable to open file" << std::endl;
   } else {
     std::string line;
     //MatrixStack mst;
+    std::stack< Matrix* > transformsStack;
+    Matrix currentTransform = Matrix();
+    currentTransform.identity();
 
     while(inpfile.good()) {
       std::vector<std::string> splitline;
@@ -253,46 +258,47 @@ Scene::Scene(std::string file) {
       //translate x y z
       //  A translation 3-vector
       else if(!splitline[0].compare("translate")) {
-        //float x, y, z;
-        //x = atof(splitline[1].c_str());
-        //y = atof(splitline[2].c_str());
-        //z = atof(splitline[3].c_str());
+        float x, y, z;
+        x = atof(splitline[1].c_str());
+        y = atof(splitline[2].c_str());
+        z = atof(splitline[3].c_str());
         // Update top of matrix stack
-        //Matrix m = Matrix();
-        //m.translate(x, y, z);
-        //mst.push(m);
+        Matrix m = Matrix();
+        m.translate(x, y, z);
+        currentTransform = currentTransform * m;
       }
       //rotate x y z angle
       //  Rotate by angle (in degrees) about the given axis as in OpenGL.
       else if(!splitline[0].compare("rotate")) {
-        //float x, y, z;
-        //x = atof(splitline[1].c_str());
-        //y = atof(splitline[2].c_str());
-        //z = atof(splitline[3].c_str());
-        // angle: atof(splitline[4].c_str())
+        float x, y, z, angle;
+        x = atof(splitline[1].c_str());
+        y = atof(splitline[2].c_str());
+        z = atof(splitline[3].c_str());
+        angle = atof(splitline[4].c_str());
         // Update top of matrix stack
-        //Matrix m = Matrix();
-        //m.rotate(x, y, z);
-        //mst.push(m);
+        Matrix m = Matrix();
+        m.rotate(x, y, z, angle);
+        currentTransform = currentTransform * m;
       }
       //scale x y z
       //  Scale by the corresponding amount in each axis (a non-uniform scaling).
       else if(!splitline[0].compare("scale")) {
-        /*float x, y, z;
+        float x, y, z;
         x = atof(splitline[1].c_str());
         y = atof(splitline[2].c_str());
         z = atof(splitline[3].c_str());
         // Update top of matrix stack
         Matrix m = Matrix();
         m.scale(x, y, z);
-        mst.push(m);*/
+        currentTransform = currentTransform * m;
       }
       //pushTransform
       //  Push the current modeling transform on the stack as in OpenGL. 
       //  You might want to do pushTransform immediately after setting 
       //   the camera to preserve the “identity” transformation.
       else if(!splitline[0].compare("pushTransform")) {
-        //mst.push();
+          Matrix* savedTransform = new Matrix(currentTransform);
+            transformsStack.push(savedTransform);
       }
       //popTransform
       //  Pop the current transform from the stack as in OpenGL. 
@@ -301,7 +307,14 @@ Scene::Scene(std::string file) {
       //  (assuming the initial camera transformation is on the stack as 
       //  discussed above).
       else if(!splitline[0].compare("popTransform")) {
-        //mst.pop();
+        if(!transformsStack.empty()){
+            Matrix* topTransform = transformsStack.top();
+            transformsStack.pop();
+            currentTransform = *topTransform;
+            delete topTransform;
+        } else {
+            std::cerr << "Tried to popTransform when there was nothing on the transform stack" << std::endl;
+        }
       }
 
       //directional x y z r g b
