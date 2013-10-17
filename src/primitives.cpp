@@ -405,6 +405,10 @@ void Color::print(){
     printf("Color(%f, %f, %f)\n", r, g, b);
 }
 
+bool Color::isNotZero(){
+    return (r > 0 && g > 0 && b > 0);
+}
+
 /*
  * Brdf class member functions
  */
@@ -412,12 +416,12 @@ void Color::print(){
  Brdf::Brdf() {
  }
  
- Brdf::Brdf(Color d, Color s, Color a, float r, Color e, float shine) {
+ Brdf::Brdf(Color d, Color s, Color a, Color e, float shine) {
      
      kd = d;
      ks = s;
      ka = a;
-     kr = r;
+     kr = s;
      emission = e;
      sp = shine;
  
@@ -430,7 +434,8 @@ void Brdf::print(){
     ks.print();
     printf("ka: ");
     ka.print();
-    printf("kr: %f\n", kr);
+    printf("kr: ");
+    kr.print();
     printf("emission: ");
     emission.print();
 }

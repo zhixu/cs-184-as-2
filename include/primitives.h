@@ -111,14 +111,15 @@ class Color {
         Color operator+= (Color);
         Color operator*= (float);
         void print();
+        bool isNotZero();
 };
 
 class Brdf {
     public:
-        Color kd, ks, ka, emission;
-        float kr, sp;
+        Color kd, ks, ka, emission, kr;
+        float sp;
         Brdf();
-        Brdf(Color, Color, Color, float, Color, float);
+        Brdf(Color, Color, Color, Color, float);
         void print();
 };
 

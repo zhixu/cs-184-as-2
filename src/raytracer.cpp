@@ -108,7 +108,7 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
         }
     }
 
-    if(brdf.kr > 0){
+    if(brdf.kr.isNotZero()){
         Ray reflectRay = createReflectRay(objectIntersection, ray);
         Color tempColor = Color(0, 0, 0);
         trace(reflectRay, depth - 1, tempColor);

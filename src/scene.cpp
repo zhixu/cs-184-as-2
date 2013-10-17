@@ -72,7 +72,6 @@ Scene::Scene(std::string file) {
     maxDepth = 5;
     outputFilename = "output.png";
 
-    float kr = 0;
     float sp = 0;
     Color diffuse = Color(0, 0, 0);
     Color specular = Color(0, 0, 0);
@@ -168,7 +167,7 @@ Scene::Scene(std::string file) {
         //   Store current property values
         //   Store current top of matrix stack
         Shape* s = new Sphere(center, r);
-        s->brdf = Brdf(diffuse, specular, ambient, kr, emission, sp);
+        s->brdf = Brdf(diffuse, specular, ambient, emission, sp);
         shapes.push_back(s);
       }
       //maxverts number
@@ -230,7 +229,7 @@ Scene::Scene(std::string file) {
         //   Store current property values
         //   Store current top of matrix stack
         Shape* s = new Triangle(*points[v1], *points[v2], *points[v3]);
-        s->brdf = Brdf(diffuse, specular, ambient, kr, emission, sp);
+        s->brdf = Brdf(diffuse, specular, ambient, emission, sp);
         shapes.push_back(s);
         
 
