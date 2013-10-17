@@ -22,7 +22,7 @@ class Sphere : public Shape {
 class Triangle : public Shape {
     public:
         Point a, b, c;
-        Vector normal;
+        Vector normal, normal1, normal2;
         Triangle();
         Triangle(Point, Point, Point);
         bool intersect(Ray ray, float &t_hit, LocalGeo &local);

@@ -83,7 +83,8 @@ Triangle::Triangle(Point x, Point y, Point z) {
     b = y;
     c = z; 
     
-    normal = ((b-a).cross(c-a)).normalize();
+    normal1 = ((c-a).cross(b-a)).normalize();
+    normal2 = ((b-a).cross(c-a)).normalize();
     
 }
 
@@ -133,6 +134,18 @@ bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &local) {
     printf("normal ");
     n.print();
     */
+    if (d.dot(normal1) >= 0) {
+        //printf("normal1\n");
+        normal = normal1;
+    } else if (d.dot(normal2) >= 0) {
+        //printf("normal2\n");
+        normal = normal2;
+    } if (d.dot(normal1) >= 0 && (d.dot(normal2) >=0)) {
+        printf("shit's so fucked\n");
+    } else if (d.dot(normal) < 0 && (d.dot(normal2) < 0)) {
+        printf("seppukus\n");
+    }
+    
     local = LocalGeo(position, n);
     
     

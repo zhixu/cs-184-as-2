@@ -234,7 +234,6 @@ Scene::Scene(std::string file) {
         Shape* s = new Triangle(points[v1], points[v2], points[v3]);
         s->brdf = Brdf(diffuse, specular, ambient, kr, emission, sp);
         shapes.push_back(s);
-        
 
       }
       //trinormal v1 v2 v3
@@ -351,7 +350,7 @@ Scene::Scene(std::string file) {
          r = atof(splitline[1].c_str());
          g = atof(splitline[2].c_str());
          b = atof(splitline[3].c_str());
-         printf("brdf colors r: %f  g: %f  b: %f\n", r, g, b);
+         //printf("brdf colors r: %f  g: %f  b: %f\n", r, g, b);
          ambient = Color(r, g, b);
       }
 
@@ -383,7 +382,7 @@ Scene::Scene(std::string file) {
       //emission r g b
       //  gives the emissive color of the surface.
       else if(!splitline[0].compare("emission")) {
-        int r, g, b;
+        float r, g, b;
         r = atof(splitline[1].c_str());
         g = atof(splitline[2].c_str());
         b = atof(splitline[3].c_str());
