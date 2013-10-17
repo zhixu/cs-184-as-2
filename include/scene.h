@@ -16,8 +16,7 @@ class Scene {
 
         // shapes
         std::vector< Shape* > shapes;
-        Point *points; //for triangles
-        int p_counter;
+        std::vector< Point* > points; // for triangles
 
         // lights
         std::vector< Light* > lights;

@@ -72,7 +72,6 @@ Scene::Scene(std::string file) {
     maxDepth = 5;
     outputFilename = "output.png";
 
-    float kr = 0;
     float sp = 0;
     Color diffuse = Color(0, 0, 0);
     Color specular = Color(0, 0, 0);
@@ -168,7 +167,7 @@ Scene::Scene(std::string file) {
         //   Store current property values
         //   Store current top of matrix stack
         Shape* s = new Sphere(center, r);
-        s->brdf = Brdf(diffuse, specular, ambient, kr, emission, sp);
+        s->brdf = Brdf(diffuse, specular, ambient, emission, sp);
         shapes.push_back(s);
       }
       //maxverts number
@@ -179,7 +178,7 @@ Scene::Scene(std::string file) {
         // Here, either declare array size
         // Or you can just use a STL vector, in which case you can ignore this
         int x = atoi(splitline[1].c_str());
-        points = new Point[x];
+        points.reserve(x);
       }
       //maxvertnorms number
       //  Deﬁnes a maximum number of vertices with normals for later speciﬁcations.
@@ -197,10 +196,8 @@ Scene::Scene(std::string file) {
         y = atof(splitline[2].c_str()),
         z = atof(splitline[3].c_str());
         // Create a new vertex with these 3 values, store in some array
-        Point *p = new Point(x, y, z);
-        *(points+p_counter) = *p;
-        printf("Point %d : %f %f %f\n", p_counter, (*(points+p_counter)).x, (*(points+p_counter)).y, (*(points+p_counter)).z);
-        p_counter++;
+        Point* p = new Point(x, y, z);
+        points.push_back(p);
       }
       //vertexnormal x y z nx ny nz
       //  Similar to the above, but deﬁne a surface normal with each vertex.
@@ -231,8 +228,8 @@ Scene::Scene(std::string file) {
         //   Store 3 integers to index into array
         //   Store current property values
         //   Store current top of matrix stack
-        Shape* s = new Triangle(points[v1], points[v2], points[v3]);
-        s->brdf = Brdf(diffuse, specular, ambient, kr, emission, sp);
+        Shape* s = new Triangle(*points[v1], *points[v2], *points[v3]);
+        s->brdf = Brdf(diffuse, specular, ambient, emission, sp);
         shapes.push_back(s);
 
       }
