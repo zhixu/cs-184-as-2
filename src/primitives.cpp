@@ -56,9 +56,13 @@ Vector Vector::normalize() {
 }
 
 Vector Vector::cross(Vector b) {
-    Vector w = Vector(z*b.y - y*b.z,
+    /*Vector w = Vector(z*b.y - y*b.z,
                 -(x*b.z - z*b.x),
-                x*b.y - y*b.x);
+                x*b.y - y*b.x);*/
+                
+    Vector w = Vector(y*b.z - z*b.y,
+                        z*b.x-x*b.z,
+                        x*b.y-y*b.x);
     
     return w;
 }
