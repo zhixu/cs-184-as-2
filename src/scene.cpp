@@ -6,12 +6,15 @@
 #include <sstream>
 #include <vector>
 #include <iostream>
+#include <stack>
 
 #include "sampler.h"
 #include "film.h"
 #include "shapes.h"
 #include "scene.h"
 #include "raytracer.h"
+
+
 
 
 int main (int argc, char* argv[]) {
@@ -253,40 +256,46 @@ Scene::Scene(std::string file) {
       //translate x y z
       //  A translation 3-vector
       else if(!splitline[0].compare("translate")) {
+        float x, y, z;
         x = atof(splitline[1].c_str());
         y = atof(splitline[2].c_str());
         z = atof(splitline[3].c_str());
         // Update top of matrix stack
         Matrix m = Matrix();
-        mst.push(m.translate(x, y, z));
+        m.translate(x, y, z);
+        mst.push(m);
       }
       //rotate x y z angle
       //  Rotate by angle (in degrees) about the given axis as in OpenGL.
       else if(!splitline[0].compare("rotate")) {
+        float x, y, z;
         x = atof(splitline[1].c_str());
         y = atof(splitline[2].c_str());
         z = atof(splitline[3].c_str());
         // angle: atof(splitline[4].c_str())
         // Update top of matrix stack
         Matrix m = Matrix();
-        mst.push(m.rotate(x, y, z));
+        m.rotate(x, y, z);
+        mst.push(m);
       }
       //scale x y z
       //  Scale by the corresponding amount in each axis (a non-uniform scaling).
       else if(!splitline[0].compare("scale")) {
+        float x, y, z;
         x = atof(splitline[1].c_str());
         y = atof(splitline[2].c_str());
         z = atof(splitline[3].c_str());
         // Update top of matrix stack
         Matrix m = Matrix();
-        mst.push(m.scale(x, y, z));
+        m.scale(x, y, z);
+        mst.push(m);
       }
       //pushTransform
       //  Push the current modeling transform on the stack as in OpenGL. 
       //  You might want to do pushTransform immediately after setting 
       //   the camera to preserve the “identity” transformation.
       else if(!splitline[0].compare("pushTransform")) {
-        mst.push();
+        //mst.push();
       }
       //popTransform
       //  Pop the current transform from the stack as in OpenGL. 

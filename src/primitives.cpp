@@ -233,6 +233,26 @@ void Matrix::translate(float x, float y, float z) {
      
  }
  
+ Point Matrix::operator* (Point v) {
+     Point u = Point();
+     u.x = mat[0][0]*v.x + mat[1][0]*v.x + mat[2][0]*v.x + mat[3][0]*v.x;
+     u.y = mat[0][1]*v.y + mat[1][1]*v.y + mat[2][1]*v.y + mat[3][1]*v.y;
+     u.y = mat[0][2]*v.z + mat[1][2]*v.z + mat[2][2]*v.z + mat[3][2]*v.z;
+     u.y = mat[0][3]*v.a + mat[1][3]*v.a + mat[2][3]*v.a + mat[3][3]*v.a;
+     
+     return u;
+ }
+ 
+  Vector Matrix::operator* (Vector v) {
+     Vector u = Vector();
+     u.x = mat[0][0]*v.x + mat[1][0]*v.x + mat[2][0]*v.x + mat[3][0]*v.x;
+     u.y = mat[0][1]*v.y + mat[1][1]*v.y + mat[2][1]*v.y + mat[3][1]*v.y;
+     u.y = mat[0][2]*v.z + mat[1][2]*v.z + mat[2][2]*v.z + mat[3][2]*v.z;
+     u.y = mat[0][3]*v.a + mat[1][3]*v.a + mat[2][3]*v.a + mat[3][3]*v.a;
+     
+     return u;
+ }
+ 
 /*
  * LocalGeo class member functions
  */
@@ -251,7 +271,7 @@ void Matrix::translate(float x, float y, float z) {
  * Transformation class member functions
  */
 
-/*
+
 Point Transformation::operator* (Point p) {
     float x, y, z;
 
@@ -275,8 +295,8 @@ Vector Transformation::operator* (Vector v) {
 Ray Transformation::operator* (Ray r) {
     Ray result = Ray();
 
-    result.position = m*(r.position);
-    result.direction = m*(r.direction);
+    result.position = m.operator*(r.position);
+    result.direction = m.operator*(r.direction);
     // TODO: do we need to transform t_min and t_max when we transform a Ray?
     result.t_min = r.t_min;
     result.t_max = r.t_max;
@@ -287,11 +307,11 @@ Ray Transformation::operator* (Ray r) {
 LocalGeo Transformation::operator* (LocalGeo lg) {
     LocalGeo result;
 
-    result.position = this.operator*(lg.position);
+    result.position = (*this).operator*(lg.position);
     //result.normal = this->operator*(lg.normal);
 
     return result;
-}*/
+}
 /*
 Normal Transformation::operator* (Normal& n){
     float x, y, z;

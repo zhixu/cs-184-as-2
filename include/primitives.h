@@ -72,6 +72,8 @@ class Matrix {
         Matrix invrotate(Matrix);
         Matrix invscale(Matrix);
         Matrix invtranslate(Matrix);
+        Point operator* (Point);
+        Vector operator* (Vector);
         
 };
 
@@ -82,7 +84,7 @@ class LocalGeo {
     LocalGeo();
     LocalGeo(Point, Vector);
 };
-/*
+
 class Transformation {
     private:
         Matrix m, inverseTransposeM;
@@ -94,7 +96,7 @@ class Transformation {
         Ray operator* (Ray);
         LocalGeo operator* (LocalGeo);
         //Normal operator* (Normal);
-};*/
+};
 
 class Color {
     public:

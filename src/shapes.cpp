@@ -124,10 +124,6 @@ bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &local) {
     float beta = (beta_t.dot(m_beta))/M;
     if (beta < 0 || beta > 1 - gamma) { return 0; }
     
-    Point temp = Point(0, 0, 0);
-    /*
-    Vector pos = (a-temp) + (b-a)*beta + (c-a)*gamma;
-    Point position = Point(pos.x, pos.y, pos.z);*/
     Point position = e + d*t;
     Vector n = normal;
     /*
