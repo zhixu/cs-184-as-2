@@ -22,12 +22,17 @@ Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
     height = film.height;
 
     
-    Vector d = lookFrom - lookAt; //camera looks in -z direction
+    Vector d = lookAt-lookFrom; //camera looks in -z direction
     
     //ORTHONORMAL BASIS FOR CAMERA
-    x = (d.cross(up)).normalize();
+/*    x = (d.cross(up)).normalize();
     y = up.normalize();
-    z = d.normalize(); //camera looks in -z direction
+    z = d.normalize(); //camera looks in -z direction*/
+    
+    z = d.normalize();
+    x = (up.cross(z)).normalize();
+    y = (x.cross(z)).normalize();
+    
     
     /*
     printf("basis x: %f %f %f\n", x.x, x.y, x.z);
