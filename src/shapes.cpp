@@ -14,8 +14,8 @@ Sphere::Sphere (Point p, float radius) {
 bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     
     //printf("circle middle: x %f  y %f  z %f  radius: %f\n", c.x, c.y, c.z, r);
-    Point e = ray.position;
-    Vector d = ray.direction;
+    Point e = worldToObject * ray.position;
+    Vector d = worldToObject * ray.direction;
     
     float A = d.dot(d);
     float B = 2*(d.dot(e-c));
@@ -38,10 +38,12 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
 //    if (t1 < ray.t_min && t2 < ray.t_min && t1 > ray.t_max && t2 > ray.t_max) { return 0; }
     if(t1 < ray.t_min && t2 < ray.t_min){
         //printf("t1=%f\tt2=%f\tmin=%f\tmax=%f\n", t1, t2, ray.t_min, ray.t_max);
+       // printf("Hit but lower than t_min");
         return 0;
     }
     if(t1 > ray.t_max && t2 > ray.t_max){
         //printf("t1=%f\tt2=%f\tmin=%f\tmax=%f\n", t1, t2, ray.t_min, ray.t_max);
+       // printf("Hit but higher than t_max");
         return 0;
     }
 
@@ -51,20 +53,22 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     float distance1 = (p1-e).dot(p1-e);
     float distance2 = (p2-e).dot(p2-e);
     
+
+    Point position;
+    Vector normal;
     if (distance1 < distance2) {
         thit = t1;
-        Point position = p1;
-        Vector normal = (p1-c)/r;
-        local = LocalGeo(position, normal);
+        position = p1;
+        normal = (p1-c)/r;
     } else {
         thit = t2;
-        Point position = p2;
-        Vector normal = (p2-c)/r;
+        position = p2;
+        normal = (p2-c)/r;
         //printf("normal x %f y %f z %f\n", normal.x, normal.y, normal.z);
         //Vector n = normal.normalize();
         //printf("normalized x %f y %f z %f\n", n.x, n.y, n.z);
-        local = LocalGeo(position, normal);
     }
+    local = LocalGeo(objectToWorld * position, objectToWorld * normal);
 
 //    printf("(%f, %f, %f) disc=%f denom=%f\n", e.x, e.y, e.z, disc, denom);
 //    printf("(%f, %f, %f)\n", ray.position.x, ray.position.y, ray.position.z);

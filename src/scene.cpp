@@ -175,6 +175,12 @@ Scene::Scene(std::string file) {
         //   Store current top of matrix stack
         Shape* s = new Sphere(center, r);
         s->brdf = Brdf(diffuse, specular, ambient, emission, sp);
+        s->worldToObject = Matrix(currentInverse);
+        s->objectToWorld = Matrix(currentTransform);
+        printf("Current Inverse:\n");
+        currentInverse.print();
+        printf("Current transform:\n");
+        currentTransform.print();
         shapes.push_back(s);
       }
       //maxverts number
@@ -237,8 +243,6 @@ Scene::Scene(std::string file) {
         //   Store current top of matrix stack
         Shape* s = new Triangle(*points[v1], *points[v2], *points[v3]);
         s->brdf = Brdf(diffuse, specular, ambient, emission, sp);
-        s->worldToObject = Matrix(currentInverse);
-        s->objectToWorld = Matrix(currentTransform);
         shapes.push_back(s);
 
       }
@@ -271,7 +275,7 @@ Scene::Scene(std::string file) {
         currentTransform = currentTransform * m;
 
         Matrix n = Matrix();
-        n.invtranslate(m);
+        n.translate(-x, -y, -z);
         currentInverse = n * currentInverse;
       }
       //rotate x y z angle
@@ -288,8 +292,8 @@ Scene::Scene(std::string file) {
         currentTransform = currentTransform * m;
 
         Matrix n = Matrix();
-        n.invrotate(m);
-        currentInverse = m * currentInverse;
+        n.rotate(x, y, z, -1.0 * angle);
+        currentInverse = n * currentInverse;
       }
       //scale x y z
       //  Scale by the corresponding amount in each axis (a non-uniform scaling).
@@ -304,7 +308,7 @@ Scene::Scene(std::string file) {
         currentTransform = currentTransform * m;
 
         Matrix n = Matrix();
-        n.invscale(m);
+        n.scale(1.0/x, 1.0/y, 1.0/z);
         currentInverse = n * currentInverse;
       }
       //pushTransform

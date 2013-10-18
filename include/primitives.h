@@ -77,7 +77,7 @@ class Matrix {
         Point operator* (Point);
         Vector operator* (Vector);
         Matrix operator* (Matrix);
-        
+        void print();
 };
 
 class LocalGeo {
