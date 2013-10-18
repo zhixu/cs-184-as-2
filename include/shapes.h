@@ -6,6 +6,8 @@
 class Shape {
     public:
         Brdf brdf;
+        Matrix objectToWorld, worldToObject;
+        // worldToObject is what you multiply a Ray by to get it into the perspective of the unit sphere
         virtual bool intersect(Ray ray, float &t_hit, LocalGeo &local) = 0;
 
 };

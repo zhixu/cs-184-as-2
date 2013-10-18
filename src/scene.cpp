@@ -86,9 +86,11 @@ Scene::Scene(std::string file) {
   } else {
     std::string line;
     //MatrixStack mst;
-    std::stack< Matrix* > transformsStack;
+    std::stack< Matrix* > transformsStack, inverseStack;
     Matrix currentTransform = Matrix();
+    Matrix currentInverse = Matrix();
     currentTransform.identity();
+    currentInverse.identity();
 
     while(inpfile.good()) {
       std::vector<std::string> splitline;
@@ -235,6 +237,8 @@ Scene::Scene(std::string file) {
         //   Store current top of matrix stack
         Shape* s = new Triangle(*points[v1], *points[v2], *points[v3]);
         s->brdf = Brdf(diffuse, specular, ambient, emission, sp);
+        s->worldToObject = Matrix(currentInverse);
+        s->objectToWorld = Matrix(currentTransform);
         shapes.push_back(s);
 
       }
@@ -265,6 +269,10 @@ Scene::Scene(std::string file) {
         Matrix m = Matrix();
         m.translate(x, y, z);
         currentTransform = currentTransform * m;
+
+        Matrix n = Matrix();
+        n.invtranslate(m);
+        currentInverse = n * currentInverse;
       }
       //rotate x y z angle
       //  Rotate by angle (in degrees) about the given axis as in OpenGL.
@@ -278,6 +286,10 @@ Scene::Scene(std::string file) {
         Matrix m = Matrix();
         m.rotate(x, y, z, angle);
         currentTransform = currentTransform * m;
+
+        Matrix n = Matrix();
+        n.invrotate(m);
+        currentInverse = m * currentInverse;
       }
       //scale x y z
       //  Scale by the corresponding amount in each axis (a non-uniform scaling).
@@ -290,6 +302,10 @@ Scene::Scene(std::string file) {
         Matrix m = Matrix();
         m.scale(x, y, z);
         currentTransform = currentTransform * m;
+
+        Matrix n = Matrix();
+        n.invscale(m);
+        currentInverse = n * currentInverse;
       }
       //pushTransform
       //  Push the current modeling transform on the stack as in OpenGL. 
@@ -298,6 +314,8 @@ Scene::Scene(std::string file) {
       else if(!splitline[0].compare("pushTransform")) {
           Matrix* savedTransform = new Matrix(currentTransform);
             transformsStack.push(savedTransform);
+          Matrix* savedInverse = new Matrix(currentInverse);
+          inverseStack.push(savedInverse);
       }
       //popTransform
       //  Pop the current transform from the stack as in OpenGL. 
@@ -311,6 +329,11 @@ Scene::Scene(std::string file) {
             transformsStack.pop();
             currentTransform = *topTransform;
             delete topTransform;
+
+            Matrix* topInverse = inverseStack.top();
+            inverseStack.pop();
+            currentInverse = *topInverse;
+            delete topInverse;
         } else {
             std::cerr << "Tried to popTransform when there was nothing on the transform stack" << std::endl;
         }
