@@ -14,9 +14,9 @@ size 640 480
 
 # There are 3 camera positions.  Make images for all 3
 
-#camera -2 -2 2 0 0 0 1 1 2 60
+camera -2 -2 2 0 0 0 1 1 2 60
 #camera +2 +2 2 0 0 0 -1 -1 2 60
-camera -2 -2 -2 0 0 0 -1 -1 2 60
+#camera -2 -2 -2 0 0 0 -1 -1 2 60
 
 
 # Now specify the geometry.  First the cube, then the spheres
@@ -40,28 +40,28 @@ vertex -1 +1 +1
 ambient 0 0 0
 emission .5 0 .5 
 # face -Y
-tri 0 1 5 
-tri 0 5 4 
+#tri 0 1 5 
+#tri 0 5 4 
 emission .5 1 .5 
 # face +Y
-tri 3 7 6
-tri 3 6 2
+#tri 3 7 6
+#tri 3 6 2
 emission 1 .5 .5 
 # face +X
-tri 1 2 6
-tri 1 6 5 
+#tri 1 2 6
+#tri 1 6 5 
 emission 0 .5 .5 
 # face -X
-tri 0 7 3 
-tri 0 4 7 
+#tri 0 7 3 
+tri 0 4 7
 emission .5 .5 0
 # face -Z
-tri 0 3 2 
-tri 0 2 1
+# tri 0 3 2 
+# tri 0 2 1
 emission .5 .5 1
 # face +Z
-tri 4 5 6 
-tri 4 6 7 
+tri 4 5 6
+tri 4 6 7
 
 # Make spheres
 emission 1 1 1

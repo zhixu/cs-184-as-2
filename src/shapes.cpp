@@ -128,6 +128,7 @@ bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &local) {
     
     Point position = e + d*t;
     Vector n = normal;
+    t_hit = t;
     /*
     printf("position ");
     position.print();
@@ -140,10 +141,6 @@ bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &local) {
     } else if (d.dot(normal2) >= 0) {
         //printf("normal2\n");
         normal = normal2;
-    } if (d.dot(normal1) >= 0 && (d.dot(normal2) >=0)) {
-        printf("shit's so fucked\n");
-    } else if (d.dot(normal) < 0 && (d.dot(normal2) < 0)) {
-        printf("seppukus\n");
     }
     
     local = LocalGeo(position, n);
