@@ -243,6 +243,12 @@ Scene::Scene(std::string file) {
         //   Store current top of matrix stack
         Shape* s = new Triangle(*points[v1], *points[v2], *points[v3]);
         s->brdf = Brdf(diffuse, specular, ambient, emission, sp);
+        s->worldToObject = Matrix(currentInverse);
+        s->objectToWorld = Matrix(currentTransform);
+        printf("Current Inverse:\n");
+        currentInverse.print();
+        printf("Current transform:\n");
+        currentTransform.print();
         shapes.push_back(s);
 
       }

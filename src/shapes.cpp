@@ -95,8 +95,8 @@ Triangle::Triangle(Point x, Point y, Point z) {
 bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &local) {
     float a2, b2, c2, d2, e2, f, g, h, i, j, k, l;
     
-    Point e = ray.position;
-    Vector d = ray.direction;
+    Point e = worldToObject * ray.position;
+    Vector d = worldToObject * ray.direction;
     
     a2 = a.x - b.x;
     b2 = a.y - b.y;
@@ -147,7 +147,7 @@ bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &local) {
         normal = normal2;
     }
     
-    local = LocalGeo(position, n);
+    local = LocalGeo(objectToWorld * position, objectToWorld * n);
     
     
     return 1;
