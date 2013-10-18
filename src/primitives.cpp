@@ -56,9 +56,6 @@ Vector Vector::normalize() {
 }
 
 Vector Vector::cross(Vector b) {
-    /*Vector w = Vector(z*b.y - y*b.z,
-                -(x*b.z - z*b.x),
-                x*b.y - y*b.x);*/
                 
     Vector w = Vector(y*b.z - z*b.y,
                         z*b.x-x*b.z,
@@ -281,17 +278,17 @@ Matrix Matrix::transpose(){
  
  Point Matrix::operator* (Point v) {
      Point u = Point();
-     u.x = mat[0][0]*v.x + mat[0][1]*v.y + mat[0][2]*v.z;
-     u.y = mat[1][0]*v.x + mat[1][1]*v.y + mat[1][2]*v.z;
-     u.z = mat[2][0]*v.x + mat[2][1]*v.y + mat[2][2]*v.z;
+     u.x = mat[0][0]*v.x + mat[0][1]*v.y + mat[0][2]*v.z + mat[0][3]*v.a;
+     u.y = mat[1][0]*v.x + mat[1][1]*v.y + mat[1][2]*v.z + mat[1][3]*v.a;
+     u.z = mat[2][0]*v.x + mat[2][1]*v.y + mat[2][2]*v.z + mat[2][3]*v.a;
      return u;
  }
  
   Vector Matrix::operator* (Vector v) {
      Vector u = Vector();
-     u.x = mat[0][0]*v.x + mat[0][1]*v.y + mat[0][2]*v.z;
-     u.y = mat[1][0]*v.x + mat[1][1]*v.y + mat[1][2]*v.z;
-     u.z = mat[2][0]*v.x + mat[2][1]*v.y + mat[2][2]*v.z;
+     u.x = mat[0][0]*v.x + mat[0][1]*v.y + mat[0][2]*v.z + mat[0][3]*v.a;
+     u.y = mat[1][0]*v.x + mat[1][1]*v.y + mat[1][2]*v.z + mat[1][3]*v.a;
+     u.z = mat[2][0]*v.x + mat[2][1]*v.y + mat[2][2]*v.z + mat[2][3]*v.a;
      return u;
  }
 

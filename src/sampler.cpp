@@ -33,18 +33,6 @@ Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
     x = (z.cross(up)).normalize();
     y = (x.cross(z)).normalize();
     
-    printf("x y z\t");
-    x.print();
-    y.print();
-    z.print();
-    
-    
-    /*
-    printf("basis x: %f %f %f\n", x.x, x.y, x.z);
-    printf("basis y: %f %f %f\n", y.x, y.y, y.z);
-    printf("basis z: %f %f %f\n", z.x, z.y, z.z);
-    */
-    
     double theta = fov/2;
     float dd = d.dot(d);
     float halfHeight = tan(theta/180)*dd;
@@ -53,14 +41,7 @@ Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
     //BASIS FOR IMAGE PLANE
     u = x*halfWidth;
     v = y*halfHeight;
-    
-    /*
-    printf("halfwidth: %f      halfheight %f\n", halfWidth, halfHeight);
-    printf("basis u: %f %f %f\n", u.x, u.y, u.z);
-    printf("basis v: %f %f %f\n", v.x, v.y, v.z);
-        
-    printf("width: %d height: %d\n", width, height);
-    */
+
 }
 
 
@@ -73,8 +54,6 @@ Point Sample::getSample(int x, int y) {
     Vector d = u*alpha + v*beta - z;
     
     Point p = Point(d.x, d.y, d.z);
-    
-    //printf("position vec x %f   y %f  z %f\n", p.x, p.y, p.z);
     
     return p;
     

@@ -49,9 +49,6 @@ int main (int argc, char* argv[]) {
             Color c = Color(0, 0, 0);
             p = sampleGenerator.getSample(x, y);
             r.direction = p - scene.lookFrom;
-            //printf("Scene color: r %f  g %f  b %f \n", c.r, c.g, c.b);
-            //printf("coords width %d  y %d   ", y, x);
-            //printf("direction x: %f  y: %f z: %f\n", r.direction.x, r.direction.y, r.direction.z);
             
             rayTracer.trace(r, scene.maxDepth, c);
 

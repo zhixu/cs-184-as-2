@@ -29,9 +29,7 @@ void Film::commit(int x, int y, Color color){
     x = floor(x + 0.5);
     y = floor(y + 0.5);
     
-    *colors[y][x] += color; //is this how arrays work ?? D:
-    
-    //printf("Film final color?? r %f  g %f  b %f \n", colors[x][y]->r, colors[x][y]->g, colors[x][y]->b);
+    *colors[y][x] += color;
 }
 
 void Film::write(char* filename){
