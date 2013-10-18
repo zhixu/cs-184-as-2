@@ -71,13 +71,12 @@ class Matrix {
         void rotate(float, float, float, float);
         void scale(float, float, float);
         void translate(float, float, float);
-        Matrix invrotate(Matrix);
-        Matrix invscale(Matrix);
-        Matrix invtranslate(Matrix);
+        Matrix transpose ();
         Point operator* (Point);
         Vector operator* (Vector);
         Matrix operator* (Matrix);
         void print();
+
 };
 
 class LocalGeo {

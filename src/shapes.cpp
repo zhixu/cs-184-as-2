@@ -15,7 +15,7 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     
     //printf("circle middle: x %f  y %f  z %f  radius: %f\n", c.x, c.y, c.z, r);
     Point e = worldToObject * ray.position;
-    Vector d = worldToObject * ray.direction;
+    Vector d = (worldToObject * ray.direction).normalize();
     
     float A = d.dot(d);
     float B = 2*(d.dot(e-c));
@@ -68,7 +68,7 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
         //Vector n = normal.normalize();
         //printf("normalized x %f y %f z %f\n", n.x, n.y, n.z);
     }
-    local = LocalGeo(objectToWorld * position, objectToWorld * normal);
+    local = LocalGeo(objectToWorld * position, (objectToWorld.transpose() * normal).normalize());
 
 //    printf("(%f, %f, %f) disc=%f denom=%f\n", e.x, e.y, e.z, disc, denom);
 //    printf("(%f, %f, %f)\n", ray.position.x, ray.position.y, ray.position.z);
@@ -147,7 +147,7 @@ bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &local) {
         normal = normal2;
     }
     
-    local = LocalGeo(objectToWorld * position, objectToWorld * n);
+    local = LocalGeo(objectToWorld * position, (objectToWorld.transpose() * n).normalize());
     
     
     return 1;

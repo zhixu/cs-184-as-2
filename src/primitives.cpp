@@ -268,34 +268,16 @@ void Matrix::translate(float x, float y, float z) {
     mat[3][3] = 1.0;
 
  }
- 
- Matrix Matrix::invrotate(Matrix m) {
-     Matrix n = Matrix(mat[0][0], mat[1][0], mat[2][0], mat[3][0],
-                            mat[0][1], mat[1][1], mat[2][1], mat[3][1],
-                            mat[0][2], mat[1][2], mat[2][2], mat[3][2],
-                            mat[0][3], mat[1][3], mat[2][3], mat[3][3]);
-     
-     return n;
- }
- 
- Matrix Matrix::invscale(Matrix m) {
-     
-     Matrix n = Matrix(1/mat[0][0], 1/mat[0][1], 1/mat[0][2], 1/mat[0][3],
-                            1/mat[1][0], 1/mat[1][1], 1/mat[1][2], 1/mat[1][3],
-                            1/mat[2][0], 1/mat[2][1], 1/mat[2][2], 1/mat[2][3],
-                            1/mat[3][0], 1/mat[3][1], 1/mat[3][2], 1/mat[3][3]);
-     return n;
- }
- 
- Matrix Matrix::invtranslate(Matrix m) {
-     
-     Matrix n = Matrix(-mat[0][0], -mat[0][1], -mat[0][2], -mat[0][3],
-                            -mat[1][0], -mat[1][1], -mat[1][2], -mat[1][3],
-                            -mat[2][0], -mat[2][1], -mat[2][2], -mat[2][3],
-                            -mat[3][0], -mat[3][1], -mat[3][2], -mat[3][3]);
-     return n;
-     
- }
+
+Matrix Matrix::transpose(){
+    Matrix res = Matrix();
+    for(int r=0;r<4;r++){
+        for(int c=0;c<4;c++){
+            res.mat[r][c] = mat[c][r];
+        }
+    }
+    return res;
+}
  
  Point Matrix::operator* (Point v) {
      Point u = Point();
