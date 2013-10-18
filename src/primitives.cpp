@@ -154,6 +154,14 @@ void Ray::print(){
          }
      }
  }
+
+Matrix::Matrix(const Matrix& orig){
+    for(int r=0;r<4;r++){
+        for(int c=0;c<4;c++){
+            mat[r][c] = orig.mat[r][c];
+        }
+    }
+}
  
  Matrix::Matrix(float a1, float a2, float a3, float a4,
                 float b1, float b2, float b3, float b4,
@@ -178,15 +186,67 @@ void Ray::print(){
                     mat[3][3] = d4;
 
 }
- 
- // how to rotation matrix
- void Matrix::rotate(float x, float y, float z) {
- 
-    mat[0][0] = x;
-    mat[1][1] = y;
-    mat[2][2] = z;
-    mat[3][3] = 1.0;
 
+void Matrix::identity(){
+    for(int row=0; row<4; row++){
+        for(int col=0; col<4; col++){
+            if(row == col){
+                mat[row][col] = 1;
+            } else {
+                mat[row][col] = 0;
+            }
+        }
+    }
+}
+
+ // how to rotation matrix
+ void Matrix::rotate(float x, float y, float z, float angle) {
+    // using formulas from:
+    // http://www.cs.princeton.edu/~gewang/projects/darth/stuff/quat_faq.html#Q54
+    
+    Vector axis = Vector(x, y, z).normalize();
+    float sin_a = sin(angle/2.0);
+    float cos_a = cos(angle/2.0);
+
+    // the quaternion
+    float X = axis.x * sin_a;
+    float Y = axis.y * sin_a;
+    float Z = axis.z * sin_a;
+    float W = cos_a;
+
+    // the matrix values
+    float xx, xy, xz, xw, yy, yz, yw, zz, zw;
+    xx = X * X;
+    xy = X * Y;
+    xz = X * Z;
+    xw = X * W;
+
+    yy = Y * Y;
+    yz = Y * Z;
+    yw = Y * W;
+
+    zz = Z * Z;
+    zw = Z * W;
+
+    mat[0][0] = 1 - 2 * (yy+zz);
+    mat[0][1] =     2 * (xy+zw);
+    mat[0][2] =     2 * (xz-yw);
+    mat[0][3] = 0;
+
+    mat[1][0] =     2 * (xy-zw);
+    mat[1][1] = 1 - 2 * (xx+zz);
+    mat[1][2] =     2 * (yz+xw);
+    mat[1][3] = 0;
+
+    mat[2][0] =     2 * (xz+yw);
+    mat[2][1] =     2 * (yz-xw);
+    mat[2][2] = 1 - 2 * (xx+yy);
+    mat[2][3] = 0;
+
+    mat[3][0] = 0;
+    mat[3][1] = 0;
+    mat[3][2] = 0;
+    mat[3][3] = 1;
  }
  
 void Matrix::scale(float x, float y, float z) {
@@ -252,6 +312,18 @@ void Matrix::translate(float x, float y, float z) {
      
      return u;
  }
+
+Matrix Matrix::operator* (Matrix o){
+    Matrix result = Matrix();
+    for(int row=0; row < 4; row++){
+        for(int col=0; col < 4; col++){
+            for(int k=0; k<4; k++){
+                result.mat[row][col] += mat[row][k] * o.mat[k][col];
+            }
+        }
+    }
+    return result;
+}
  
 /*
  * LocalGeo class member functions
