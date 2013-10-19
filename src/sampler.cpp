@@ -35,7 +35,7 @@ Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
     
     double theta = fov/2;
     float dd = d.dot(d);
-    float halfHeight = tan(theta/180)*dd;
+    float halfHeight = tan(theta * 3.141592653 /180.0)*sqrt(dd);
     float halfWidth = (halfHeight*film.width)/film.height;
     
     //BASIS FOR IMAGE PLANE
