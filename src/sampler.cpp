@@ -30,8 +30,8 @@ Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
     z = d.normalize(); //camera looks in -z direction*/
     
     z = d.normalize();
-    x = (z.cross(up)).normalize();
-    y = (x.cross(z)).normalize();
+    x = (up.cross(z)).normalize();
+    y = (z.cross(x)).normalize();
     
     double theta = fov/2;
     float dd = d.dot(d);
