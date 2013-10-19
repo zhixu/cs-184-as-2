@@ -131,24 +131,15 @@ bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &local) {
     if (beta < 0 || beta > 1 - gamma) { return 0; }
     
     Point position = e + d*t;
-    Vector n = normal;
     t_hit = t;
-    /*
-    printf("position ");
-    position.print();
-    printf("normal ");
-    n.print();
-    */
-    if (d.dot(normal1) >= 0) {
-        //printf("normal1\n");
+    
+    if (d.dot(normal1) <= 0) {
         normal = normal1;
-    } else if (d.dot(normal2) >= 0) {
-        //printf("normal2\n");
+    } else if (d.dot(normal2) < 0) {
         normal = normal2;
     }
     
-    local = LocalGeo(objectToWorld * position, (objectToWorld.transpose() * n).normalize());
-    
+    local = LocalGeo(objectToWorld * position, (objectToWorld.transpose() * normal).normalize());
     
     return 1;
 }

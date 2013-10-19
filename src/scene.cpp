@@ -323,6 +323,7 @@ Scene::Scene(std::string file) {
             transformsStack.push(savedTransform);
           Matrix* savedInverse = new Matrix(currentInverse);
           inverseStack.push(savedInverse);
+          printf("pushtransfomr\n");
       }
       //popTransform
       //  Pop the current transform from the stack as in OpenGL. 

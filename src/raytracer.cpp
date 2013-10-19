@@ -133,8 +133,8 @@ void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf
     Vector R = (N*2*LN - L).normalize();
     Vector V = (lookAt - local.position).normalize();
     float RV = R.dot(V);
-    //printf("LN %f\n", LN);
-    //printf("RV %f\n", RV);
+    //printf("normal in illuminate\t");
+    //N.print();
         
     /* --------------------------- ambient --------------------------- */
     ambient = brdf.ka * light->color;
@@ -145,7 +145,7 @@ void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf
 
     diffuse = brdf.kd * light->color * LN;
     //printf("diffuse\t\t"); diffuse.print();
-    //printf("LN2 %f\n", LN);
+    //printf("LN %f\n", LN);
     
     /* --------------------------- specular --------------------------- */
 
@@ -157,8 +157,16 @@ void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf
     color += diffuse;
     if(LN > 0){ // prevents adding a specular component to the wrong side of the object
         color += specular;
+        /*printf("specular\t");
+        specular.print();*/
     }
     
+    /*printf("triangle colors\t");
+    color.print();
+    printf("ambient\t");
+    ambient.print();
+    printf("diffuse\t");
+    diffuse.print();*/
     //printf("illum colors r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
     //printf("phong\t\t"); color.print();
 }
