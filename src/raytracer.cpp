@@ -24,7 +24,7 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
     // shadow ray intersecting blocker
     // Lets make variable names that differentiate between the two
 
-    float objectHitT;//, blockerHitT;
+    float distanceToObject;
     LocalGeo objectIntersection, blockerIntersection;
     Shape *object;//, *blocker;
     bool hitObject = false; // did the camera ray hit an object?
@@ -34,7 +34,7 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
 
     // variables for use while looking over objects
     Shape *tempObject;
-    float tempObjectHitT;
+    float tempObjectHitT, tempDistance;
     LocalGeo tempObjectIntersection;
     bool hitTemp;
 
@@ -43,17 +43,17 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
         tempObject = shapes[i];
         hitTemp = tempObject->intersect(ray, tempObjectHitT, tempObjectIntersection);
         if(hitTemp){
+            tempDistance = (tempObjectIntersection.position - ray.position).magnitude();
             if(!hitObject){
                 //this is the first object to be hit
                 objectIntersection = tempObjectIntersection;
                 object = tempObject;
-                objectHitT = tempObjectHitT;
                 hitObject = true;
-            } else if(tempObjectHitT < objectHitT){
+                distanceToObject = tempDistance;
+            } else if (tempDistance < distanceToObject){
                 // we found a closer object hit!
                 objectIntersection = tempObjectIntersection;
                 object = tempObject;
-                objectHitT = tempObjectHitT;
             }
         }
     }

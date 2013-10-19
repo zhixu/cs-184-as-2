@@ -76,6 +76,10 @@ void Vector::print(){
     printf("Vector(%f, %f, %f)\n", x, y, z);
 }
 
+float Vector::magnitude(){
+    return sqrt(x*x + y*y + z*z);
+}
+
 /*
  * Point class member functions
  */

@@ -16,6 +16,7 @@ class Vector {
         Vector cross(Vector);
         float dot(Vector);
         void print();
+        float magnitude();
 };
 
 /*
