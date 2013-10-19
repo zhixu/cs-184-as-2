@@ -21,8 +21,7 @@ Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
     width = film.width;
     height = film.height;
 
-    
-    Vector d = lookAt-lookFrom;
+    Vector d = lookFrom - lookAt;
     
     //ORTHONORMAL BASIS FOR CAMERA
 /*    x = (d.cross(up)).normalize();
@@ -41,7 +40,6 @@ Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
     //BASIS FOR IMAGE PLANE
     u = x*halfWidth;
     v = y*halfHeight;
-
 }
 
 

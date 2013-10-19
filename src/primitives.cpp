@@ -204,6 +204,9 @@ void Matrix::identity(){
  void Matrix::rotate(float x, float y, float z, float angle) {
     // using formulas from:
     // http://www.cs.princeton.edu/~gewang/projects/darth/stuff/quat_faq.html#Q54
+    //
+    // note that we negate the angle
+    angle = -1.0 * angle;
     
     Vector axis = Vector(x, y, z).normalize();
     float sin_a = sin(angle/2.0);
