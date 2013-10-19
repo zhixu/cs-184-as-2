@@ -59,11 +59,11 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     if (distance1 < distance2) {
         thit = t1;
         position = p1;
-        normal = (p1-c)/r;
+        normal = (p1-c);
     } else {
         thit = t2;
         position = p2;
-        normal = (p2-c)/r;
+        normal = (p2-c);
         //printf("normal x %f y %f z %f\n", normal.x, normal.y, normal.z);
         //Vector n = normal.normalize();
         //printf("normalized x %f y %f z %f\n", n.x, n.y, n.z);
