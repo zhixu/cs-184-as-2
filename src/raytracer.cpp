@@ -54,6 +54,7 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
                 // we found a closer object hit!
                 objectIntersection = tempObjectIntersection;
                 object = tempObject;
+                distanceToObject = tempDistance;
             }
         }
     }
@@ -181,5 +182,5 @@ Ray RayTracer::createReflectRay(LocalGeo intersection, Ray ray){
     //r.print();
     //d.print();
     //printf("\n\n");
-    return Ray(intersection.position, r, 0.05, 0);
+    return Ray(intersection.position, r, 0.01, 0);
 }
