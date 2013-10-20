@@ -85,10 +85,8 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
             if(tempObject == object){ continue; }
 
             hitTemp = tempObject->intersect(shadowRay, tempObjectHitT, tempObjectIntersection);
-            printf("tmax before the loop %f\n", shadowRay.t_max);
             if(hitTemp){
                 if (shadowRay.t_max < 1) {
-                    printf("blocked tmax %f\n", shadowRay.t_max);
                     hitBlocker = true;
                     break;
                 }
