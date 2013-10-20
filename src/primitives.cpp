@@ -207,6 +207,7 @@ void Matrix::identity(){
     //
     // note that we negate the angle
     angle = -1.0 * angle;
+    angle = angle * 3.14159253 / 180.0;
     
     Vector axis = Vector(x, y, z).normalize();
     float sin_a = sin(angle/2.0);
