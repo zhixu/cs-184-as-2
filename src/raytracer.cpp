@@ -26,7 +26,7 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
 
     float distanceToObject;
     LocalGeo objectIntersection, blockerIntersection;
-    Shape *object;//, *blocker;
+    Shape *object;
     bool hitObject = false; // did the camera ray hit an object?
 
     bool hitBlocker; // did the shadow ray for an object hit a blocker?
@@ -67,14 +67,11 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
     // at this point, we know the camera ray hit an object
     // now we need to see which lights manage to hit it
 
-    Brdf brdf = object->brdf;
-    //printf("OUTSIDE brdf ka r: %f  g: %f  b: %f\n", brdf.ka.r, brdf.ka.g, brdf.ka.b);
-
-    color += brdf.emission;
-
     Light* light;
     Ray shadowRay;
-
+    Brdf brdf = object->brdf;
+    color += brdf.emission;
+        
     for(std::vector<int>::size_type i=0; i != lights.size(); i++){
         light = lights[i];
         light->generateShadowRay(objectIntersection, shadowRay, light->color); // sets shadowRay
@@ -85,23 +82,15 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
 
         for(std::vector<int>::size_type j=0; hitBlocker == false && j != shapes.size(); j++){
             tempObject = shapes[j];
-            if(tempObject == object){
-                continue;
-            }
+            if(tempObject == object){ continue; }
 
             hitTemp = tempObject->intersect(shadowRay, tempObjectHitT, tempObjectIntersection);
             if(hitTemp){
                 hitBlocker = true;
-                //blocker = tempObject;
-                //blockerHitT = tempObjectHitT;
-
                 break;
             }
         }
-
         if(hitBlocker){
-            // we still need to account for ambient light
-            //color += brdf.ka * light->color;
             break;
         } else {
             // do the full phong illumination!
@@ -134,42 +123,42 @@ void RayTracer::illuminate(Color& color, Point lookAt, LocalGeo local, Brdf brdf
     Vector R = (N*2*LN - L).normalize();
     Vector V = (lookAt - local.position).normalize();
     float RV = R.dot(V);
-    //printf("normal in illuminate\t");
-    //N.print();
+    
         
     /* --------------------------- ambient --------------------------- */
     ambient = brdf.ka * light->color;
-    //printf("ambient\t\t"); ambient.print();
-    //printf("brdf ka r: %f  g: %f  b: %f\n", brdf.ka.r, brdf.ka.g, brdf.ka.b);
     
     /* --------------------------- diffuse --------------------------- */
 
     diffuse = brdf.kd * light->color * LN;
-    //printf("diffuse\t\t"); diffuse.print();
-    //printf("LN %f\n", LN);
     
     /* --------------------------- specular --------------------------- */
 
     specular = brdf.ks * light->color * pow(RV, brdf.sp);
-    //printf("specular\t"); specular.print();
-    //printf("RV %f\n", RV);
 
     color += ambient;
     color += diffuse;
     if(LN > 0){ // prevents adding a specular component to the wrong side of the object
         color += specular;
-        /*printf("specular\t");
-        specular.print();*/
+        //printf("specular\t");
+        //specular.print();
     }
-    
-    /*printf("triangle colors\t");
-    color.print();
+    /*
+    printf("normal in illuminate\t");
+    N.print();
+    printf("light position\t");
+    L.print();
+    printf("LN \t %f\n", LN);
+    printf("R \t");
+    R.print();
+    printf("V \t");
+    V.print();
+    printf("RV \t %f\n", RV);
     printf("ambient\t");
     ambient.print();
     printf("diffuse\t");
-    diffuse.print();*/
-    //printf("illum colors r: %f  g: %f  b: %f\n", color.r, color.g, color.b);
-    //printf("phong\t\t"); color.print();
+    diffuse.print();
+    */
 }
 
 Ray RayTracer::createReflectRay(LocalGeo intersection, Ray ray){

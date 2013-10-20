@@ -359,7 +359,10 @@ Scene::Scene(std::string file) {
         b = atof(splitline[6].c_str());
         Point p = Point(x, y, z);
         Color c = Color(r, g, b);
-        lights.push_back(new DirectionalLight(p, c));
+        Light *light = new DirectionalLight();
+        light->position = p;
+        light->color = c;
+        lights.push_back(light);
       }
       //point x y z r g b
       //  The location of a point source and the color, as in OpenGL.
@@ -373,7 +376,10 @@ Scene::Scene(std::string file) {
         b = atof(splitline[6].c_str());
         Point p = Point(x, y, z);
         Color c = Color(r, g, b);
-        lights.push_back(new PointLight(p, c));
+        Light *light = new PointLight();
+        light->position = p;
+        light->color = c;
+        lights.push_back(light);
       }
       //attenuation const linear quadratic
       //  Sets the constant, linear and quadratic attenuations 

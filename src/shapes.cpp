@@ -13,24 +13,25 @@ Sphere::Sphere (Point p, float radius) {
 
 bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     
-    //printf("circle middle: x %f  y %f  z %f  radius: %f\n", c.x, c.y, c.z, r);
     Point e = worldToObject * ray.position;
     Vector d = (worldToObject * ray.direction).normalize();
     
-    float A = d.dot(d);
+    /*float A = d.dot(d);
     float B = 2*(d.dot(e-c));
     float C = (e-c).dot(e-c)-r*r;
     
-    float disc = B*B - 4*A*C;
+    float disc = B*B - 4*A*C;*/
+    
+    float disc = pow(d.dot(e-c), 2) - d.dot(d)*((e-c).dot(e-c) - r*r);
     //printf("discriminant: %f\n", disc);
-    if (disc <= 0) {
+    if (disc < 0) {
         //printf("no intersection\n");
         return 0;
     }
     
     disc = sqrt(disc);
     float pt1 = -(d.dot(e-c));
-    float denom = A;
+    float denom = d.dot(d);
     
     float t1 = (pt1 + disc)/denom;
     float t2 = (pt1 - disc)/denom;
@@ -59,11 +60,11 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     if (distance1 < distance2) {
         thit = t1;
         position = p1;
-        normal = (p1-c);
+        normal = (p1-c)*2;
     } else {
         thit = t2;
         position = p2;
-        normal = (p2-c);
+        normal = (p2-c)*2;
         //printf("normal x %f y %f z %f\n", normal.x, normal.y, normal.z);
         //Vector n = normal.normalize();
         //printf("normalized x %f y %f z %f\n", n.x, n.y, n.z);
