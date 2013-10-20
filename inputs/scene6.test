@@ -1,7 +1,6 @@
 #Not-Cornell Box
 size 640 480
 camera 0 0 1 0 0 -1 0 1 0 45
-output scene6.png
 
 maxdepth 5
 

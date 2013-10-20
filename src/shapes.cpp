@@ -47,7 +47,7 @@ bool Sphere::intersect (Ray &ray, float &thit, LocalGeo &local) {
     if (distance1 < distance2) {
         thit = t1;
         position = p1;
-        normal = (p1-c)*2;
+        normal = (p1-c);
         ray.t_max = t1;
         if (t1 < 1) {
             printf("NEW T_MAX \t %f\n", t1);
@@ -55,7 +55,7 @@ bool Sphere::intersect (Ray &ray, float &thit, LocalGeo &local) {
     } else {
         thit = t2;
         position = p2;
-        normal = (p2-c)*2;
+        normal = (p2-c);
         ray.t_max = t2;
         if (t2 < 1) {
             printf("NEW T_MAX \t %f\n", t2);
@@ -66,7 +66,16 @@ bool Sphere::intersect (Ray &ray, float &thit, LocalGeo &local) {
     objectToWorld.print();
     printf("WORLD TO OBJECT MATRIX TRANSPOSE\n");
     objectToWorld.transpose().print();*/
-    local = LocalGeo(objectToWorld * position, (objectToWorld.transpose() * normal).normalize());
+     local = LocalGeo(objectToWorld * position, (worldToObject.transpose() * normal).normalize());
+=======
+        normal = (p1-c);
+    } else {
+        thit = t2;
+        position = p2;
+        normal = (p2-c);
+    }
+    
+    local = LocalGeo(objectToWorld * position, (worldToObject.transpose() * normal).normalize());
     
     return 1;
 }
@@ -137,7 +146,7 @@ bool Triangle::intersect(Ray &ray, float &t_hit, LocalGeo &local) {
         normal = norm2;
     }
     
-    local = LocalGeo(position, normal);
+    local = LocalGeo(objectToWorld * position, (worldToObject.transpose() * normal).normalize());
     
     return 1;
 }

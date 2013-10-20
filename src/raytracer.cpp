@@ -88,7 +88,7 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
             printf("tmax before the loop %f\n", shadowRay.t_max);
             if(hitTemp){
                 if (shadowRay.t_max < 1) {
-                    printf("dickblocked tmax %f\n", shadowRay.t_max);
+                    printf("blocked tmax %f\n", shadowRay.t_max);
                     hitBlocker = true;
                     break;
                 }

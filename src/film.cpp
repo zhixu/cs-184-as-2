@@ -34,9 +34,9 @@ void Film::commit(int x, int y, Color color){
 
 void Film::write(char* filename){
     FILE *fp;
-    png_structp png_ptr;
-    png_infop info_ptr;
-    png_bytep row;
+    png_structp png_ptr = NULL;
+    png_infop info_ptr = NULL;
+    png_bytep row = NULL;
 
     fp = fopen(filename, "wb");
     if(fp == NULL){
