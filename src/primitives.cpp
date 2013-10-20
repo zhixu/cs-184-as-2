@@ -200,7 +200,6 @@ void Matrix::identity(){
     }
 }
 
- // how to rotation matrix
  void Matrix::rotate(float x, float y, float z, float angle) {
     // using formulas from:
     // http://www.cs.princeton.edu/~gewang/projects/darth/stuff/quat_faq.html#Q54
@@ -540,12 +539,9 @@ Vector PointLight::getLm(Point p) {
 void PointLight::generateShadowRay(LocalGeo local, Ray &shadowRay, Color lightColor){
     Vector vector = position - local.position;
     
-    Point p = local.position + vector*0.01;
+    Point p = local.position;
     
-    float tmax = sqrt(vector.dot(vector));
-    
-    shadowRay = Ray(p, vector, 0.001, tmax);
-    //shadowRay = Ray(local.position, vector, 0.001, 900);
+    shadowRay = Ray(p, vector, 0.01, 900);
     lightColor = color;
 }
 
@@ -561,11 +557,8 @@ void DirectionalLight::generateShadowRay(LocalGeo local, Ray &shadowRay, Color l
                                 position.y,
                                 position.z);
     
-    Point p = local.position + vector*0.01;
+    Point p = local.position;
     
-    float tmax = sqrt(vector.dot(vector));
-    
-    shadowRay = Ray(p, vector, 0.001, tmax);
-    //shadowRay = Ray(local.position, vector, 0.001, 900);
+    shadowRay = Ray(p, vector, 0.01, 900);
     lightColor = color;
 }

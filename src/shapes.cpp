@@ -11,14 +11,16 @@ Sphere::Sphere (Point p, float radius) {
 }
 
 
-bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
+bool Sphere::intersect (Ray &ray, float &thit, LocalGeo &local) {
     
     Point e = worldToObject * ray.position;
-    Vector d = (worldToObject * ray.direction).normalize();
+    Vector d = (worldToObject * ray.direction);
     
     float disc = pow(d.dot(e-c), 2) - d.dot(d)*((e-c).dot(e-c) - r*r);
     
-    if (disc < 0) { return 0; }
+    if (disc < 0) { 
+        return 0; 
+    }
     
     disc = sqrt(disc);
     float pt1 = -(d.dot(e-c));
@@ -28,13 +30,9 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     float t2 = (pt1 - disc)/denom;
     
     if(t1 < ray.t_min && t2 < ray.t_min){
-        //printf("t1=%f\tt2=%f\tmin=%f\tmax=%f\n", t1, t2, ray.t_min, ray.t_max);
-        //printf("Hit but lower than t_min");
         return 0;
     }
    if(t1 > ray.t_max && t2 > ray.t_max){
-        //printf("t1=%f\t t2=%f\t min=%f\t max=%f\n", t1, t2, ray.t_min, ray.t_max);
-        //printf("Hit but higher than t_max");
         return 0;
     }
 
@@ -50,12 +48,24 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
         thit = t1;
         position = p1;
         normal = (p1-c)*2;
+        ray.t_max = t1;
+        if (t1 < 1) {
+            printf("NEW T_MAX \t %f\n", t1);
+        }
     } else {
         thit = t2;
         position = p2;
         normal = (p2-c)*2;
+        ray.t_max = t2;
+        if (t2 < 1) {
+            printf("NEW T_MAX \t %f\n", t2);
+        }
     }
     
+    /*printf("OBJECT TO WORLD MATRIX\n");
+    objectToWorld.print();
+    printf("WORLD TO OBJECT MATRIX TRANSPOSE\n");
+    objectToWorld.transpose().print();*/
     local = LocalGeo(objectToWorld * position, (objectToWorld.transpose() * normal).normalize());
     
     return 1;
@@ -76,11 +86,11 @@ Triangle::Triangle(Point x, Point y, Point z) {
     
 }
 
-bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &local) {
+bool Triangle::intersect(Ray &ray, float &t_hit, LocalGeo &local) {
     float a2, b2, c2, d2, e2, f, g, h, i, j, k, l;
     
     Point e = worldToObject * ray.position;
-    Vector d = worldToObject * ray.direction;
+    Vector d = (worldToObject * ray.direction);
     
     a2 = a.x - b.x;
     b2 = a.y - b.y;
@@ -114,16 +124,20 @@ bool Triangle::intersect(Ray ray, float &t_hit, LocalGeo &local) {
     float beta = (beta_t.dot(m_beta))/M;
     if (beta < 0 || beta > 1 - gamma) { return 0; }
     
-    Point position = e + d*t;
+    Point position = objectToWorld*(e + d*t);
     t_hit = t;
+    ray.t_max = t;
     
-    if (d.dot(normal1) <= 0) {
-        normal = normal1;
-    } else if (d.dot(normal2) < 0) {
-        normal = normal2;
+    Vector norm1 = objectToWorld.transpose() * normal1;
+    Vector norm2 = objectToWorld.transpose() * normal2;
+    
+    if (d.dot(norm1) <= 0) {
+        normal = norm1;
+    } else if (d.dot(norm2) <= 0) {
+        normal = norm2;
     }
     
-    local = LocalGeo(objectToWorld * position, (objectToWorld.transpose() * normal).normalize());
+    local = LocalGeo(position, normal);
     
     return 1;
 }
