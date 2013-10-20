@@ -15,7 +15,9 @@ class Sample {
         Sample();
         Sample(Point, Point, Vector, float, Film);
         Point getSample(int, int);
-        Vector ll, ul, lr, ur;
-};    
+        Vector w, u, v;
+        float tanHalfY, tanHalfX;
+        float halfWidth, halfHeight;
+};
 
 #endif

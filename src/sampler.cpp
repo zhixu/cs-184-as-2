@@ -22,40 +22,22 @@ Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
     height = film.height;
 
     Vector d = lookFrom - lookAt;
-    Vector w, u, v;
     w = d.normalize(); // points from camera to image plane
-    u = w.cross(up).normalize(); // points right
-    v = u.cross(w).normalize();
+    u = up.cross(w).normalize(); // points right
+    v = w.cross(u).normalize();
 
-    double theta = fov/2;
-    float distanceToImagePlane = sqrt(d.dot(d));
-    float halfHeight = tan(theta * 3.141592653 /180.0) * distanceToImagePlane;
-    float halfWidth = (halfHeight*film.width)/film.height;
+    tanHalfY = tan((fov/2.0) * (3.141592653/180.0));
+    tanHalfX = tanHalfY * ((float) width) / ((float) height);
 
-    float pixelHeight, pixelWidth;
-    pixelHeight = (halfHeight *2) / height;
-    pixelWidth = (halfWidth * 2) / width;
-
-    printf("distanceToImagePlane: %f\n", distanceToImagePlane);
-    printf("halfHeight: %f\n", halfHeight);
-    printf("halfWidth: %f\n", halfWidth);
-
-    Vector center;
-    center = d;
-    ul = center + v * halfHeight - u * halfWidth;
-    ur = center + v * halfHeight + u * halfWidth;
-    ll = center - v * halfHeight - u * halfWidth;
-    lr = center - v * halfHeight + u * halfWidth;
+    halfWidth = (float) width / 2.0;
+    halfHeight = (float) height / 2.0;
 }
 
 
 Point Sample::getSample(int x, int y) {
-    float u = (width - x+0.5)/width;
-    float v = (y+0.5 - height)/height;
-
-    printf("x=%d, y=%d\tu=%f, v=%f\n", x, y, u, v);
-    Vector temp = (ll*v + ul*(1-v))*u +
-        (lr*v + ur*(1-v))*(1-u);
+    float alpha = tanHalfX * ((x - halfWidth)/halfWidth);
+    float beta = tanHalfY * ((halfHeight - y)/halfHeight);
+    Vector temp = (u * alpha + v * beta - w);
     Point p = Point(temp.x, temp.y, temp.z);
     return p;
 }

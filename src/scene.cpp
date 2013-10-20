@@ -48,8 +48,7 @@ int main (int argc, char* argv[]) {
         for(y=0; y<scene.height; y++){
             Color c = Color(0, 0, 0);
             p = sampleGenerator.getSample(x, y);
-            r.direction = p - scene.lookFrom;
-            
+            r.direction = (p - Point(0,0,0) );
             rayTracer.trace(r, scene.maxDepth, c);
 
            film.commit(x, y, c);
@@ -133,7 +132,7 @@ Scene::Scene(std::string file) {
       //camera lookfromx lookfromy lookfromz lookatx lookaty lookatz upx upy upz fov
       //  speciﬁes the camera in the standard way, as in homework 2.
       else if(!splitline[0].compare("camera")) {
-          int x, y, z;
+          float x, y, z;
         // lookfrom:
             x = atof(splitline[1].c_str());
             y = atof(splitline[2].c_str());
