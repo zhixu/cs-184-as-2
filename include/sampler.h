@@ -11,12 +11,11 @@ class Sample {
         Point lookFrom, lookAt;
         Vector up;
         float fov;
-        Vector x, y, z, u, v;
         int width, height;
         Sample();
         Sample(Point, Point, Vector, float, Film);
         Point getSample(int, int);
-
+        Vector ll, ul, lr, ur;
 };    
 
 #endif
