@@ -94,6 +94,7 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
             break;
         } else {
             // do the full phong illumination!
+            //printf("phong pong");
             illuminate(color, ray.position, objectIntersection, brdf, light);
         }
     }
@@ -171,5 +172,5 @@ Ray RayTracer::createReflectRay(LocalGeo intersection, Ray ray){
     //r.print();
     //d.print();
     //printf("\n\n");
-    return Ray(intersection.position, r, 0.01, 0);
+    return Ray(intersection.position, r, 0.001, 900);
 }

@@ -539,12 +539,13 @@ Vector PointLight::getLm(Point p) {
 
 void PointLight::generateShadowRay(LocalGeo local, Ray &shadowRay, Color lightColor){
     Vector vector = position - local.position;
-    /*printf("DIRECTION OF SHADOW RAY\t");
-    vector.print();
-    printf("POSITION OF SHADOW RAY\t");
-    local.position.print();*/
     
-    shadowRay = Ray(local.position, vector, 0.0001, 900);
+    Point p = local.position + vector*0.01;
+    
+    float tmax = sqrt(vector.dot(vector));
+    
+    shadowRay = Ray(p, vector, 0.001, tmax);
+    //shadowRay = Ray(local.position, vector, 0.001, 900);
     lightColor = color;
 }
 
@@ -559,12 +560,12 @@ void DirectionalLight::generateShadowRay(LocalGeo local, Ray &shadowRay, Color l
     Vector vector = Vector(position.x,
                                 position.y,
                                 position.z);
-    /*
-    printf("DIRECTION OF SHADOW RAY\t");
-    vector.print();
-    printf("POSITION OF SHADOW RAY\t");
-    local.position.print();*/
     
-    shadowRay = Ray(local.position, vector, 0.0001, 900);
+    Point p = local.position + vector*0.01;
+    
+    float tmax = sqrt(vector.dot(vector));
+    
+    shadowRay = Ray(p, vector, 0.001, tmax);
+    //shadowRay = Ray(local.position, vector, 0.001, 900);
     lightColor = color;
 }
