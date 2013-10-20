@@ -16,18 +16,9 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     Point e = worldToObject * ray.position;
     Vector d = (worldToObject * ray.direction).normalize();
     
-    /*float A = d.dot(d);
-    float B = 2*(d.dot(e-c));
-    float C = (e-c).dot(e-c)-r*r;
-    
-    float disc = B*B - 4*A*C;*/
-    
     float disc = pow(d.dot(e-c), 2) - d.dot(d)*((e-c).dot(e-c) - r*r);
-    //printf("discriminant: %f\n", disc);
-    if (disc < 0) {
-        //printf("no intersection\n");
-        return 0;
-    }
+    
+    if (disc < 0) { return 0; }
     
     disc = sqrt(disc);
     float pt1 = -(d.dot(e-c));
@@ -36,15 +27,14 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     float t1 = (pt1 + disc)/denom;
     float t2 = (pt1 - disc)/denom;
     
-//    if (t1 < ray.t_min && t2 < ray.t_min && t1 > ray.t_max && t2 > ray.t_max) { return 0; }
     if(t1 < ray.t_min && t2 < ray.t_min){
         //printf("t1=%f\tt2=%f\tmin=%f\tmax=%f\n", t1, t2, ray.t_min, ray.t_max);
-       // printf("Hit but lower than t_min");
+        //printf("Hit but lower than t_min");
         return 0;
     }
-    if(t1 > ray.t_max && t2 > ray.t_max){
-        //printf("t1=%f\tt2=%f\tmin=%f\tmax=%f\n", t1, t2, ray.t_min, ray.t_max);
-       // printf("Hit but higher than t_max");
+   if(t1 > ray.t_max && t2 > ray.t_max){
+        //printf("t1=%f\t t2=%f\t min=%f\t max=%f\n", t1, t2, ray.t_min, ray.t_max);
+        //printf("Hit but higher than t_max");
         return 0;
     }
 
@@ -54,7 +44,6 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
     float distance1 = (p1-e).dot(p1-e);
     float distance2 = (p2-e).dot(p2-e);
     
-
     Point position;
     Vector normal;
     if (distance1 < distance2) {
@@ -65,15 +54,9 @@ bool Sphere::intersect (Ray ray, float &thit, LocalGeo &local) {
         thit = t2;
         position = p2;
         normal = (p2-c)*2;
-        //printf("normal x %f y %f z %f\n", normal.x, normal.y, normal.z);
-        //Vector n = normal.normalize();
-        //printf("normalized x %f y %f z %f\n", n.x, n.y, n.z);
     }
-    local = LocalGeo(objectToWorld * position, (objectToWorld.transpose() * normal).normalize());
-
-//    printf("(%f, %f, %f) disc=%f denom=%f\n", e.x, e.y, e.z, disc, denom);
-//    printf("(%f, %f, %f)\n", ray.position.x, ray.position.y, ray.position.z);
     
+    local = LocalGeo(objectToWorld * position, (objectToWorld.transpose() * normal).normalize());
     
     return 1;
 }
