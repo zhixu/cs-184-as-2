@@ -56,6 +56,8 @@ int main (int argc, char* argv[]) {
     printf("x=%d\ny=%d\np=", x, y);
     p.print();
     printf("\n");
+    r.direction = p - scene.lookFrom;
+    printf("direction=");r.direction.print(); printf("\n");
 
     printf("Top right corner\n");
     x = film.width;
@@ -64,6 +66,8 @@ int main (int argc, char* argv[]) {
     printf("x=%d\ny=%d\np=", x, y);
     p.print();
     printf("\n");
+    r.direction = p - scene.lookFrom;
+    printf("direction=");r.direction.print(); printf("\n");
 
 
     printf("Bottom left corner\n");
@@ -73,6 +77,8 @@ int main (int argc, char* argv[]) {
     printf("x=%d\ny=%d\np=", x, y);
     p.print();
     printf("\n");
+    r.direction = p - scene.lookFrom;
+    printf("direction=");r.direction.print(); printf("\n");
 
     printf("Bottom right corner\n");
     x = film.width;
@@ -81,6 +87,8 @@ int main (int argc, char* argv[]) {
     printf("x=%d\ny=%d\np=", x, y);
     p.print();
     printf("\n");
+    r.direction = p - scene.lookFrom;
+    printf("direction=");r.direction.print(); printf("\n");
 
 
 
