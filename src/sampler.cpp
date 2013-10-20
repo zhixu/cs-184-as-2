@@ -22,37 +22,22 @@ Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
     height = film.height;
 
     Vector d = lookFrom - lookAt;
-    
-    //ORTHONORMAL BASIS FOR CAMERA
-/*    x = (d.cross(up)).normalize();
-    y = up.normalize();
-    z = d.normalize(); //camera looks in -z direction*/
-    
-    z = d.normalize();
-    x = (up.cross(z)).normalize();
-    y = (z.cross(x)).normalize();
-    
-    double theta = fov/2;
-    float dd = d.dot(d);
-    float halfHeight = tan(theta * 3.141592653 /180.0)*sqrt(dd);
-    float halfWidth = (halfHeight*film.width)/film.height;
-    
-    //BASIS FOR IMAGE PLANE
-    u = x*halfWidth;
-    v = y*halfHeight;
+    w = d.normalize(); // points from camera to image plane
+    u = up.cross(w).normalize(); // points right
+    v = w.cross(u).normalize();
+
+    tanHalfY = tan((fov/2.0) * (3.141592653/180.0));
+    tanHalfX = tanHalfY * ((float) width) / ((float) height);
+
+    halfWidth = (float) width / 2.0;
+    halfHeight = (float) height / 2.0;
 }
 
 
 Point Sample::getSample(int x, int y) {
-    
-    
-    float alpha = 2*(x + 0.5)/width -1;
-    float beta = 1 - 2*(y+0.5)/height;
-    
-    Vector d = u*alpha + v*beta - z;
-    
-    Point p = Point(d.x, d.y, d.z);
-    
+    float alpha = tanHalfX * ((x - halfWidth)/halfWidth);
+    float beta = tanHalfY * ((halfHeight - y)/halfHeight);
+    Vector temp = (u * alpha + v * beta - w);
+    Point p = Point(temp.x, temp.y, temp.z);
     return p;
-    
 }

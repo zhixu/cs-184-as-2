@@ -14,9 +14,6 @@
 #include "scene.h"
 #include "raytracer.h"
 
-
-
-
 int main (int argc, char* argv[]) {
     if(argc < 2){
         // we need an input filename, so print error and exit program
@@ -36,7 +33,6 @@ int main (int argc, char* argv[]) {
 
     int x, y;
     Point p;
-    
     Ray r = Ray();
 
     r.t_min = 0;
@@ -44,21 +40,58 @@ int main (int argc, char* argv[]) {
 
     r.position = scene.lookFrom;
 
-    for(x=0; x<scene.width; x++){
-        for(y=0; y<scene.height; y++){
-            Color c = Color(0, 0, 0);
-            p = sampleGenerator.getSample(x, y);
-            r.direction = (p - Point(0,0,0) );
-            rayTracer.trace(r, scene.maxDepth, c);
+    printf("Look From: "); scene.lookFrom.print(); printf("\n");
+    printf("Look At:   "); scene.lookAt.print(); printf("\n");
+    printf("Up:        "); scene.up.print(); printf("\n");
+    printf("Fov:       %f\n", scene.fov);
+    printf("Width:     %d\n", film.width);
+    printf("Height:    %d\n", film.height);
 
-           film.commit(x, y, c);
-        }
-    }
+    printf("\n\n");
 
-    printf("%d %d\n", scene.width, scene.height);
+    printf("Top left corner\n");
+    x = 0;
+    y = film.height;
+    p = sampleGenerator.getSample(x, y);
+    printf("x=%d\ny=%d\np=", x, y);
+    p.print();
+    printf("\n");
+    r.direction = p - scene.lookFrom;
+    printf("direction=");r.direction.print(); printf("\n");
 
-    film.write((char *)scene.outputFilename.c_str());
-    
+    printf("Top right corner\n");
+    x = film.width;
+    y = film.height;
+    p = sampleGenerator.getSample(x, y);
+    printf("x=%d\ny=%d\np=", x, y);
+    p.print();
+    printf("\n");
+    r.direction = p - scene.lookFrom;
+    printf("direction=");r.direction.print(); printf("\n");
+
+
+    printf("Bottom left corner\n");
+    x = 0;
+    y = 0;
+    p = sampleGenerator.getSample(x, y);
+    printf("x=%d\ny=%d\np=", x, y);
+    p.print();
+    printf("\n");
+    r.direction = p - scene.lookFrom;
+    printf("direction=");r.direction.print(); printf("\n");
+
+    printf("Bottom right corner\n");
+    x = film.width;
+    y = 0;
+    p = sampleGenerator.getSample(x, y);
+    printf("x=%d\ny=%d\np=", x, y);
+    p.print();
+    printf("\n");
+    r.direction = p - scene.lookFrom;
+    printf("direction=");r.direction.print(); printf("\n");
+
+
+
     return 0;
 }
 
@@ -358,10 +391,7 @@ Scene::Scene(std::string file) {
         b = atof(splitline[6].c_str());
         Point p = Point(x, y, z);
         Color c = Color(r, g, b);
-        Light *light = new DirectionalLight();
-        light->position = p;
-        light->color = c;
-        lights.push_back(light);
+        lights.push_back(new DirectionalLight(p, c));
       }
       //point x y z r g b
       //  The location of a point source and the color, as in OpenGL.
@@ -375,10 +405,7 @@ Scene::Scene(std::string file) {
         b = atof(splitline[6].c_str());
         Point p = Point(x, y, z);
         Color c = Color(r, g, b);
-        Light *light = new PointLight();
-        light->position = p;
-        light->color = c;
-        lights.push_back(light);
+        lights.push_back(new PointLight(p, c));
       }
       //attenuation const linear quadratic
       //  Sets the constant, linear and quadratic attenuations 
