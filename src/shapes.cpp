@@ -14,7 +14,7 @@ Sphere::Sphere (Point p, float radius) {
 bool Sphere::intersect (Ray &ray, float &thit, LocalGeo &local) {
     
     Point e = worldToObject * ray.position;
-    Vector d = (worldToObject * ray.direction).normalize();
+    Vector d = (worldToObject * ray.direction);
     
     float disc = pow(d.dot(e-c), 2) - d.dot(d)*((e-c).dot(e-c) - r*r);
     
