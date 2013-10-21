@@ -1,0 +1,15 @@
+Command Ran
+===========
+./a.out images/input-08
+
+Time Took
+=========
+$ time ./a.out images/input-08
+
+real    4m0.117s
+user    3m58.172s
+sys     0m0.252s
+
+Features
+========
+- Same thing as input-07, but with antialiasing (25 rays per pixel)
