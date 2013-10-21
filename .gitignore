@@ -1,6 +1,7 @@
 *.out
 *.png
 *.bmp
+*~
 
 # Compiled Object files
 *.slo
