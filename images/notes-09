@@ -1,0 +1,17 @@
+Command Ran
+===========
+./a.out images/input-09
+
+Time Took
+=========
+$ time ./a.out images/input-09 
+
+real    0m1.026s
+user    0m1.016s
+sys     0m0.004s
+
+Features
+========
+- Directional light
+- Point light
+- Reflection

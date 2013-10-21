@@ -1,5 +1,5 @@
 size 640 480
-output tiles.png
+output image-09.png
 
 camera 0 3 3 0 2 0 0 1 0 60
 
