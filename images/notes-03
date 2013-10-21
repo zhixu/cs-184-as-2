@@ -1,0 +1,15 @@
+Command Ran
+===========
+./a.out images/input-03
+
+Time Took
+=========
+$ time ./a.out images/input-03
+
+real    0m0.750s
+user    0m0.736s
+sys     0m0.012s
+
+Features
+========
+- Same dice as in input-02, but different camera angle
