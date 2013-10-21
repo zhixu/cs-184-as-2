@@ -96,7 +96,6 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
             break;
         } else {
             // do the full phong illumination!
-            //printf("phong pong");
             illuminate(color, ray.position, objectIntersection, brdf, light);
         }
     }
@@ -168,11 +167,19 @@ Ray RayTracer::createReflectRay(LocalGeo intersection, Ray ray){
     Vector r, d, n;
     d = ray.direction.normalize();
     n = intersection.normal.normalize();
+    
+    /*printf("EYE RAY DIRECTION \t");
+    d.print();
+    printf("NORMAL \t");
+    n.print();*/
 
-    r = d - ((n * 2) * d.dot(n));
+    r = (d - (n * 2 * d.dot(n))).normalize();
+    
+    //printf("REFLECTION DIRECTION \t");
+    //r.print();
 
     //r.print();
     //d.print();
     //printf("\n\n");
-    return Ray(intersection.position, r, 0.001, 900);
+    return Ray(intersection.position, r, 0.0001, 900);
 }

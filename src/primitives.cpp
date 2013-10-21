@@ -540,7 +540,7 @@ Vector PointLight::getLm(Point p) {
 void PointLight::generateShadowRay(LocalGeo local, Ray &shadowRay, Color lightColor){
     Vector vector = position - local.position;
     
-    Point p = local.position; //+ vector*0.01;
+    Point p = local.position+ vector*0.00001;
     
     shadowRay = Ray(p, vector, 0.001, 900);
     lightColor = color;
@@ -558,7 +558,7 @@ void DirectionalLight::generateShadowRay(LocalGeo local, Ray &shadowRay, Color l
                                 position.y,
                                 position.z);
     
-    Point p = local.position;// + vector*0.01;
+    Point p = local.position + vector*0.00001;
     
     shadowRay = Ray(p, vector, 0.001, 900);
     lightColor = color;

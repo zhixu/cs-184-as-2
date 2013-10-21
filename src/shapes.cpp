@@ -26,17 +26,6 @@ bool Sphere::intersect (Ray &ray, float &thit, LocalGeo &local) {
     
     float t1 = (pt1 + disc)/denom;
     float t2 = (pt1 - disc)/denom;
-    
-    /*if(t1 < ray.t_min && t2 < ray.t_min){
-        //printf("t1=%f\tt2=%f\tmin=%f\tmax=%f\n", t1, t2, ray.t_min, ray.t_max);
-        //printf("Hit but lower than t_min");
-        return 0;
-    }
-   if(t1 > ray.t_max && t2 > ray.t_max){
-        //printf("t1=%f\t t2=%f\t min=%f\t max=%f\n", t1, t2, ray.t_min, ray.t_max);
-        //printf("Hit but higher than t_max");
-        return 0;
-    }*/
 
     Point p1 = e + d*t1;
     Point p2 = e + d*t2;
