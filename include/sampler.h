@@ -13,11 +13,12 @@ class Sample {
         float fov;
         int width, height;
         Sample();
-        Sample(Point, Point, Vector, float, Film);
+        Sample(Point, Point, Vector, float, Film, int);
         Point getSample(int, int);
         Vector w, u, v;
         float tanHalfY, tanHalfX;
         float halfWidth, halfHeight;
+        int raysPerPixel;
 };
 
 #endif

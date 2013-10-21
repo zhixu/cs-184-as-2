@@ -11,13 +11,14 @@
 Sample::Sample() {
 }
 
-Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
+Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film, int rpp) {
    
     lookFrom = lf;
     lookAt = la;
     up = upv;
     fov = angle;
-    
+    raysPerPixel = rpp;
+
     width = film.width;
     height = film.height;
 
@@ -35,8 +36,17 @@ Sample::Sample(Point lf, Point la, Vector upv, float angle, Film film) {
 
 
 Point Sample::getSample(int x, int y) {
-    float alpha = tanHalfX * ((x - halfWidth)/halfWidth);
-    float beta = tanHalfY * ((halfHeight - y)/halfHeight);
+    float alpha, beta;
+    float offsetX, offsetY;
+    if(raysPerPixel > 1){
+        offsetX = (float) rand() / RAND_MAX;
+        offsetY = (float) rand() / RAND_MAX;
+    } else {
+        offsetX = 0.5;
+        offsetY = 0.5;
+    }
+    alpha = tanHalfX * ((x + offsetX - halfWidth)/halfWidth);
+    beta = tanHalfY * ((halfHeight - (y + offsetY))/halfHeight);
     Vector temp = (u * alpha + v * beta - w);
     Point p = Point(temp.x, temp.y, temp.z);
     return p;

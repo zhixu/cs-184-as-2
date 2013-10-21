@@ -32,7 +32,8 @@ int main (int argc, char* argv[]) {
                                     scene.lookAt,
                                     scene.up,
                                     scene.fov,
-                                    film);
+                                    film,
+                                    scene.raysPerPixel);
 
     int x, y;
     Point p;
@@ -44,14 +45,27 @@ int main (int argc, char* argv[]) {
 
     r.position = scene.lookFrom;
 
+    float final_r, final_g, final_b;
+    int i;
+    Color rayColor, finalColor;
     for(x=0; x<scene.width; x++){
         for(y=0; y<scene.height; y++){
-            Color c = Color(0, 0, 0);
-            p = sampleGenerator.getSample(x, y);
-            r.direction = (p - Point(0,0,0) );
-            rayTracer.trace(r, scene.maxDepth, c);
-
-           film.commit(x, y, c);
+            final_r = 0;
+            final_g = 0;
+            final_b = 0;
+            for(i=0; i<scene.raysPerPixel; i++){
+                rayColor = Color(0, 0, 0);
+                p = sampleGenerator.getSample(x, y);
+                r.direction = (p - Point(0,0,0) );
+                rayTracer.trace(r, scene.maxDepth, rayColor);
+                final_r += rayColor.r;
+                final_g += rayColor.g;
+                final_b += rayColor.b;
+            }
+            finalColor = Color(final_r / scene.raysPerPixel,
+                               final_g / scene.raysPerPixel,
+                               final_b / scene.raysPerPixel);
+           film.commit(x, y, finalColor);
         }
     }
 
@@ -73,7 +87,7 @@ Scene::Scene(std::string file) {
     Color specular = Color(0, 0, 0);
     Color ambient = Color(0.2, 0.2, 0.2);
     Color emission = Color(0, 0, 0);
-
+    raysPerPixel = 1;
 
 
   std::ifstream inpfile(file.c_str());
@@ -127,6 +141,10 @@ Scene::Scene(std::string file) {
       //  output file to write image to 
       else if(!splitline[0].compare("output")) {
         outputFilename = splitline[1];
+      }
+
+      else if(!splitline[0].compare("antialias")){
+        raysPerPixel = atoi(splitline[1].c_str());
       }
 
       //camera lookfromx lookfromy lookfromz lookatx lookaty lookatz upx upy upz fov

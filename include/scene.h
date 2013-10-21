@@ -7,6 +7,7 @@ class Scene {
     public:
         int width, height;
         int maxDepth;
+        int raysPerPixel;
         std::string outputFilename;
 
         // camera stuff
