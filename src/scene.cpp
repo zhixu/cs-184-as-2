@@ -69,7 +69,7 @@ int main (int argc, char* argv[]) {
         }
     }
 
-    printf("%d %d\n", scene.width, scene.height);
+//    printf("%d %d\n", scene.width, scene.height);
 
     film.write((char *)scene.outputFilename.c_str());
     
@@ -110,7 +110,7 @@ Scene::Scene(std::string file) {
       std::stringstream ss(line);
       
 
-    printf("Processing: %s\n", line.c_str());
+//    printf("Processing: %s\n", line.c_str());
 
       while (ss >> buf) {
         splitline.push_back(buf);
@@ -179,7 +179,7 @@ Scene::Scene(std::string file) {
         y = atof(splitline[2].c_str());
         z = atof(splitline[3].c_str());
         Point center = Point(x, y, z);
-        printf("circle parse middle: x %f  y %f  z %f\n", x, y, z);
+//        printf("circle parse middle: x %f  y %f  z %f\n", x, y, z);
         r = atof(splitline[4].c_str());
 
         // TODO: all of these fancy things. just storing shape dimensions for now
@@ -191,10 +191,10 @@ Scene::Scene(std::string file) {
         s->brdf = Brdf(diffuse, specular, ambient, emission, sp);
         s->worldToObject = Matrix(currentInverse);
         s->objectToWorld = Matrix(currentTransform);
-        printf("Current Inverse:\n");
-        currentInverse.print();
-        printf("Current transform:\n");
-        currentTransform.print();
+ ////       printf("Current Inverse:\n");
+ //       currentInverse.print();
+ //  //     printf("Current transform:\n");
+ //       currentTransform.print();
         shapes.push_back(s);
       }
       //maxverts number
@@ -259,10 +259,10 @@ Scene::Scene(std::string file) {
         s->brdf = Brdf(diffuse, specular, ambient, emission, sp);
         s->worldToObject = Matrix(currentInverse);
         s->objectToWorld = Matrix(currentTransform);
-        printf("Current Inverse:\n");
-        currentInverse.print();
-        printf("Current transform:\n");
-        currentTransform.print();
+//       printf("Current Inverse:\n");
+//        currentInverse.print();
+//        printf("Current transform:\n");
+//        currentTransform.print();
         shapes.push_back(s);
 
       }
@@ -340,7 +340,7 @@ Scene::Scene(std::string file) {
             transformsStack.push(savedTransform);
           Matrix* savedInverse = new Matrix(currentInverse);
           inverseStack.push(savedInverse);
-          printf("pushtransfomr\n");
+//          printf("pushtransfomr\n");
       }
       //popTransform
       //  Pop the current transform from the stack as in OpenGL. 
