@@ -86,10 +86,10 @@ void RayTracer::trace(Ray ray, int depth, Color& color) {
 
             hitTemp = tempObject->intersect(shadowRay, tempObjectHitT, tempObjectIntersection);
             if(hitTemp){
-                if (shadowRay.t_max < 1) {
+ //               if (tempObjectHitT < 1) {
                     hitBlocker = true;
                     break;
-                }
+   //             }
             }
         }
         if(hitBlocker){
